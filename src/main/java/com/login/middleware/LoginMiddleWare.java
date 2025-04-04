@@ -7,14 +7,13 @@ import com.App;
 import com.login.controller.DAO_Usuario;
 import com.login.model.Usuario;
 import com.main_menu.middleware.MainMiddleWare;
-import com.utilities.MiddleWare;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 
-public class LoginMiddleWare{
+public class LoginMiddleWare {
 
     // OBJETO APP
     // Entre otras cosas, contiene la conexion a BD
