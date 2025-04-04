@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  
+  <!-- VERSION MAVEN -->
+
+  <modelVersion>4.0.0</modelVersion>
+  
+  <!-- ATRIBUTOS PROYECTO -->
+
+  <groupId>com</groupId>
+  <artifactId>woshman</artifactId>
+  <version>0.0.1</version>
+  <name>woshman</name>
+
+  <!-- FIXME change it to the project's website
+  <url>http://www.example.com</url>
+  -->
+
+  <!-- PROPIEDADES JAVA -->
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>21</maven.compiler.source>
+    <maven.compiler.target>21</maven.compiler.target>
+  </properties>
+
+  <!-- DEPENDENCIAS -->
+
+  <dependencies>
+    <!---->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.11</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- Conectarse a MySQL 8.0 -->
+    <!-- https://mvnrepository.com/artifact/com.mysql/mysql-connector-j -->
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>8.0.33</version>
+    </dependency>
+    <!-- Recopilar datos base en programa java (JDBC) -->
+    <!-- https://mvnrepository.com/artifact/commons-dbcp/commons-dbcp/1.4 -->
+    <dependency>
+      <groupId>commons-dbcp</groupId>
+      <artifactId>commons-dbcp</artifactId>
+      <version>1.4</version>
+    </dependency>
+    <!-- javaFX (base) -->
+    <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-base/21.0.6 -->
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-base</artifactId>
+      <version>21.0.6</version>
+    </dependency>
+    <!-- javaFX (controladores) -->
+    <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-controls/21.0.6 -->
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-controls</artifactId>
+      <version>21.0.6</version>
+    </dependency>
+    <!-- javaFX (archivos FXML) -->
+    <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-fxml/21.0.6 -->
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-fxml</artifactId>
+      <version>21.0.6</version>
+    </dependency>
+    <!-- javaFX (graficos 2D ¿3D tambien?) -->
+    <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-graphics/21.0.6 -->
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-graphics</artifactId>
+      <version>21.0.6</version>
+    </dependency>
+    <!-- javaFX (multimedia) -->
+    <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-media/21.0.6 -->
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-media</artifactId>
+      <version>21.0.6</version>
+    </dependency>
+    <!-- javaFX (webview) -->
+    <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-web/21.0.6 -->
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-web</artifactId>
+      <version>21</version>
+    </dependency>
+    <!-- javaFX (swing) -->
+    <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-swing/21.0.6 -->
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-swing</artifactId>
+      <version>21.0.6</version>
+    </dependency>
+  </dependencies>
+
+  <!-- PLUGINS -->
+
+  <build>
+    <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+      <plugins>
+        <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
+        <plugin>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>3.1.0</version>
+        </plugin>
+        <!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
+        <plugin>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>3.0.2</version>
+        </plugin>
+        <!---->
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.9.0</version>
+        </plugin>
+        <!---->
+        <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.22.1</version>
+        </plugin>
+        <!---->
+        <plugin>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.0.2</version>
+        </plugin>
+        <!---->
+        <plugin>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>2.5.2</version>
+        </plugin>
+        <!---->
+        <plugin>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>2.8.2</version>
+        </plugin>
+        <!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
+        <plugin>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>3.7.1</version>
+        </plugin>
+        <!---->
+        <plugin>
+          <artifactId>maven-project-info-reports-plugin</artifactId>
+          <version>3.0.0</version>
+        </plugin>
+        <!---->
+        <plugin>
+          <groupId>org.openjfx</groupId>
+          <artifactId>javafx-maven-plugin</artifactId>
+          <version>0.0.8</version>
+          <executions>
+            <execution>
+              <!-- Default configuration for running -->
+              <!-- Usage: mvn clean javafx:run -->
+              <id>default-cli</id>
+              <configuration>
+                <mainClass>com.App</mainClass>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+</project>
