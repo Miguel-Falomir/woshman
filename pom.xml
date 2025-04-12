@@ -29,7 +29,8 @@
   <!-- DEPENDENCIAS -->
 
   <dependencies>
-    <!---->
+    <!-- Framework JUnit para pruebas de ejecucion -->
+    <!-- https://mvnrepository.com/artifact/junit/junit -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -39,9 +40,9 @@
     <!-- Conectarse a MySQL 8.0 -->
     <!-- https://mvnrepository.com/artifact/com.mysql/mysql-connector-j -->
     <dependency>
-      <groupId>mysql</groupId>
-      <artifactId>mysql-connector-java</artifactId>
-      <version>8.0.33</version>
+        <groupId>com.mysql</groupId>
+        <artifactId>mysql-connector-j</artifactId>
+        <version>8.0.33</version>
     </dependency>
     <!-- Recopilar datos base en programa java (JDBC) -->
     <!-- https://mvnrepository.com/artifact/commons-dbcp/commons-dbcp/1.4 -->
@@ -90,7 +91,7 @@
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-web</artifactId>
-      <version>21</version>
+      <version>21.0.6</version>
     </dependency>
     <!-- javaFX (swing) -->
     <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-swing/21.0.6 -->
