@@ -23,3 +23,5 @@ module com {
     // Exportar paquetes
     exports com;
 }
+
+// cambio de prueba para comprobar que el proyecto se actualice desde un segundo equipo
