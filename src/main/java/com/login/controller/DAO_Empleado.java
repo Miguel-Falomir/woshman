@@ -5,10 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import com.login.model.Usuario;
+import com.login.model.Empleado;
 import com.utilities.DAO;
 
-public class DAO_Usuario implements DAO<Usuario, Long> {
+public class DAO_Empleado implements DAO<Empleado, Long> {
 
     // CONEXION
 
@@ -16,41 +16,41 @@ public class DAO_Usuario implements DAO<Usuario, Long> {
 
     // CONSTRUCTOR
 
-    public DAO_Usuario(Connection connect){
+    public DAO_Empleado(Connection connect){
         this.connect = connect;
     }
 
     // METODOS CRUD
 
     @Override
-    public void insert(Usuario obj) {
+    public void insert(Empleado obj) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'insert'");
     }
 
     @Override
-    public void update(Usuario obj) {
+    public void update(Empleado obj) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'update'");
     }
 
     @Override
-    public void delete(Usuario obj) {
+    public void delete(Empleado obj) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'delete'");
     }
 
     @Override
-    public Usuario search(Long id) {
+    public Empleado search(Long id) {
         // variables internas
         PreparedStatement stat = null;
         ResultSet resultado = null;
-        Usuario respuesta = null;
+        Empleado respuesta = null;
 
         // (intentar) ejecutar busqueda
         try {
             // consulta SQL
-            stat = connect.prepareStatement("SELECT * FROM usuario u WHERE u.idusuario = ?;");
+            stat = connect.prepareStatement("SELECT * FROM empleado e WHERE e.id_empleado = ?;");
             stat.setLong(1, id);
             // acceder a BD
             resultado = stat.executeQuery();
@@ -60,10 +60,13 @@ public class DAO_Usuario implements DAO<Usuario, Long> {
             }
             resultado.next();
             // guardar primera fila en 'resultado'
-            respuesta = new Usuario(
+            respuesta = new Empleado(
                 resultado.getLong(1),
-                resultado.getString(2),
-                resultado.getString(3)
+                resultado.getInt(2),
+                resultado.getString(3),
+                resultado.getString(4),
+                resultado.getString(5),
+                resultado.getString(6)
             );
         // manejar excepciones
         } catch (SQLException e){
@@ -86,21 +89,21 @@ public class DAO_Usuario implements DAO<Usuario, Long> {
     }
 
     @Override
-    public List<Usuario> searchAll() {
+    public List<Empleado> searchAll() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'searchAll'");
     }
 
-    public Usuario searchByNombre(String nombre){
+    public Empleado searchByNombre(String nombre){
         // variables internas
         PreparedStatement stat = null;
         ResultSet resultado = null;
-        Usuario respuesta = null;
+        Empleado respuesta = null;
 
         // (intentar) ejecutar busqueda
         try {
             // consulta SQL
-            stat = connect.prepareStatement("SELECT * FROM usuario u WHERE u.nombre = ?;");
+            stat = connect.prepareStatement("SELECT * FROM empleado e WHERE e.username = ?;");
             stat.setString(1, nombre);
             // acceder a BD
             resultado = stat.executeQuery();
@@ -110,10 +113,13 @@ public class DAO_Usuario implements DAO<Usuario, Long> {
             }
             resultado.next();
             // guardar primera fila en 'resultado'
-            respuesta = new Usuario(
+            respuesta = new Empleado(
                 resultado.getLong(1),
-                resultado.getString(2),
-                resultado.getString(3)
+                resultado.getInt(2),
+                resultado.getString(3),
+                resultado.getString(4),
+                resultado.getString(5),
+                resultado.getString(6)
             );
         // manejar excepciones
         } catch (SQLException e){

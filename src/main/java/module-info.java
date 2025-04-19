@@ -22,6 +22,5 @@ module com {
 
     // Exportar paquetes
     exports com;
+    exports com.login.model;
 }
-
-// cambio de prueba para comprobar que el proyecto se actualice desde un segundo equipo

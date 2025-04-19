@@ -4,8 +4,8 @@ package com.login.middleware;
 //import java.sql.Connection;
 
 import com.App;
-import com.login.controller.DAO_Usuario;
-import com.login.model.Usuario;
+import com.login.controller.DAO_Empleado;
+import com.login.model.Empleado;
 import com.main_menu.middleware.MainMiddleWare;
 
 import javafx.fxml.FXML;
@@ -22,19 +22,19 @@ public class LoginMiddleWare {
 
     // OBJETOS ALMACENAR DATOS ENTRADA
 
-    Usuario auxUser = new Usuario();
+    Empleado auxUser = new Empleado();
     String auxUsername = "";
     String auxPassword = "";
 
     // DAOs
 
-    public DAO_Usuario dao = null;
+    public DAO_Empleado dao = null;
 
     // CONSTRUCTOR
 
     public LoginMiddleWare(App app){
         this.app = app;
-        this.dao = new DAO_Usuario(this.app.getConnection());
+        this.dao = new DAO_Empleado(this.app.getConnection());
     }
 
     // ELEMENTOS UI
@@ -68,8 +68,10 @@ public class LoginMiddleWare {
         // mostrar si 'auxUsername' y 'auxPassword' coinciden
         if(auxUser == null){
             System.out.println("Usuario " + auxUsername + " no existe o no se encuentra");
-        } else if (auxUser.getContrasenya().equals(auxPassword)){
-            System.out.println("Contraseña correcta. Bienvenid@ de nuevo, " + auxUsername);
+        } else if (auxUser.getPassword().equals(auxPassword)){
+            String text = auxUser.getNombre() + " " + auxUser.getApellidos();
+            System.out.println("Contraseña correcta. Bienvenid@ de nuevo, " + text);
+            app.setUser(auxUser);
             app.changeStage("main_menu", "main", "LOGIN", 720, 540, true, MainMiddleWare.class);
         } else {
             System.out.println("Contraseña incorrecta. Repita la contraseña o cambie de usuario");

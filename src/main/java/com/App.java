@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.Connection;
 
 import com.login.middleware.LoginMiddleWare;
+import com.login.model.Empleado;
 import com.main_menu.middleware.MainMiddleWare;
 import com.utilities.DB_Connector;
 
@@ -20,15 +21,20 @@ public class App extends Application {
     private static Scene mainScene;
     private static Stage mainStage;
     private static DB_Connector connector;
+    private static Empleado user;
 
     // GETTERS Y SETTERS
 
     public Connection getConnection(){
         /* No intentar definir private static Connection conn = connector.getConnection()
          * El constructor de los MiddleWare invocaria este metodo antes de que se pudiese
-         * inicializar 'conn', y lo recbirian como 'null'
+         * inicializar 'conn', y recibiria la conexion como 'null'
          */
         return connector.getConnection();
+    }
+
+    public void setUser(Empleado user){
+        App.user = user;
     }
 
     // METODO CAMBIAR DE VENTANA
@@ -55,8 +61,10 @@ public class App extends Application {
         try {
             // cerrar ventana actual
             mainStage.close();
+
             // cargar escena nueva en objeto 'Parent'
             Parent root = loader.load();
+
             // definir ventana
             mainScene.setRoot(root);
             mainStage.setScene(mainScene);
@@ -64,11 +72,17 @@ public class App extends Application {
             mainStage.setWidth(width);
             mainStage.setHeight(heigth);
             mainStage.setResizable(resize);
+
+            if (resize){
+                mainStage.setMinWidth(width);
+                mainStage.setMinHeight(heigth);
+            }
+
             mainStage.show();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     // INICIALIZAR RECURSOS
@@ -107,7 +121,7 @@ public class App extends Application {
         // inicializar 'connector'
         connector = new DB_Connector(
                 "com.mysql.cj.jdbc.Driver",
-                "jdbc:mysql://localhost:3306/prueba",
+                "jdbc:mysql://localhost:3306/taller_db",
                 "root",
                 "mysql");
 
