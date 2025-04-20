@@ -13,58 +13,63 @@
    <children>
       <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
+            <!-- BARRA MENU PRINCIPAL -->
             <HBox prefWidth="200.0">
                <children>
+                  <!-- MENU MODULOS -->
                   <MenuBar maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
                     <menus>
                       <Menu mnemonicParsing="false" text="Facturación">
                         <items>
-                          <MenuItem fx:id="Buton_Lista_Averias" mnemonicParsing="false" onAction="#OnAction_Buton_Lista_Averias" text="Lista Averias" />
-                              <MenuItem fx:id="Buton_Tipo_Averia" mnemonicParsing="false" onAction="#OnAction_Buton_Tipo_Averia" text="Tipo Averia" />
-                              <MenuItem fx:id="Buton_Estado_Averia" mnemonicParsing="false" onAction="#OnAction_Buton_Estado_Averia" text="Estado Averia" />
-                              <MenuItem fx:id="Buton_Lista_Ventas" mnemonicParsing="false" onAction="#OnAction_Buton_Lista_Ventas" text="Lista Ventas" />
-                              <MenuItem fx:id="Buton_Lista_Facturas" mnemonicParsing="false" onAction="#OnAction_Buton_Lista_Facturas" text="Lista Facturas" />
-                              <MenuItem fx:id="Buton_Lista_Clientes" mnemonicParsing="false" onAction="#OnAction_Buton_Lista_Clientes" text="Lista Clientes" />
+                           <MenuItem fx:id="Buton_Lista_Averias" mnemonicParsing="false" onAction="#OnAction_Buton_Lista_Averias" text="Lista Averias" disable="true" visible="false"/>
+                           <MenuItem fx:id="Buton_Tipo_Averia" mnemonicParsing="false" onAction="#OnAction_Buton_Tipo_Averia" text="Tipo Averia" disable="true" visible="false"/>
+                           <MenuItem fx:id="Buton_Estado_Averia" mnemonicParsing="false" onAction="#OnAction_Buton_Estado_Averia" text="Estado Averia" disable="true" visible="false"/>
+                           <MenuItem fx:id="Buton_Lista_Ventas" mnemonicParsing="false" onAction="#OnAction_Buton_Lista_Ventas" text="Lista Ventas" disable="true" visible="false"/>
+                           <MenuItem fx:id="Buton_Realizar_Venta" mnemonicParsing="false" onAction="#OnAction_Buton_Realizar_Venta" text="Realizar Venta" disable="true" visible="false"/>
+                           <MenuItem fx:id="Buton_Lista_Facturas" mnemonicParsing="false" onAction="#OnAction_Buton_Lista_Facturas" text="Lista Facturas" disable="true" visible="false"/>
+                           <MenuItem fx:id="Buton_Lista_Clientes" mnemonicParsing="false" onAction="#OnAction_Buton_Lista_Clientes" text="Lista Clientes" disable="true" visible="false"/>
                         </items>
                       </Menu>
                       <Menu mnemonicParsing="false" text="Almacen">
                         <items>
-                          <MenuItem fx:id="Buton_Lista_Piezas" mnemonicParsing="false" onAction="#OnAction_Buton_Lista_Piezas" text="Lista Piezas" />
-                              <MenuItem fx:id="Buton_Tipo_Pieza" mnemonicParsing="false" onAction="#OnAction_Buton_Tipo_Pieza" text="Tipo Pieza" />
-                              <MenuItem fx:id="Buton_Lista_Proveedores" mnemonicParsing="false" onAction="#OnAction_Buton_Lista_Proveedores" text="Lista Proveedores" />
-                              <MenuItem fx:id="Buton_Lista_Encargos" mnemonicParsing="false" onAction="#OnAction_Buton_Lista_Encargos" text="Lista Encargos" />
-                              <MenuItem fx:id="Buton_Lista_Albaranes" mnemonicParsing="false" onAction="#OnAction_Buton_Lista_Albaranes" text="Lista Albaranes" />
+                           <MenuItem fx:id="Buton_Lista_Piezas" mnemonicParsing="false" onAction="#OnAction_Buton_Lista_Piezas" text="Lista Piezas" disable="true" visible="false"/>
+                           <MenuItem fx:id="Buton_Tipo_Pieza" mnemonicParsing="false" onAction="#OnAction_Buton_Tipo_Pieza" text="Tipo Pieza" disable="true" visible="false"/>
+                           <MenuItem fx:id="Buton_Lista_Proveedores" mnemonicParsing="false" onAction="#OnAction_Buton_Lista_Proveedores" text="Lista Proveedores" disable="true" visible="false"/>
+                           <MenuItem fx:id="Buton_Lista_Encargos" mnemonicParsing="false" onAction="#OnAction_Buton_Lista_Encargos" text="Lista Encargos" disable="true" visible="false"/>
+                           <MenuItem fx:id="Buton_Lista_Albaranes" mnemonicParsing="false" onAction="#OnAction_Buton_Lista_Albaranes" text="Lista Albaranes" disable="true" visible="false"/>
                         </items>
                       </Menu>
                       <Menu mnemonicParsing="false" text="Vehiculos">
                         <items>
-                          <MenuItem fx:id="Buton_Lista_Vehiculos" mnemonicParsing="false" onAction="#OnAction_Buton_Lista_Vehiculos" text="Lista Vehiculos" />
-                              <MenuItem fx:id="Buton_Lista_Modelos" mnemonicParsing="false" onAction="#OnAction_Buton_Lista_Modelos" text="Lista Modelos" />
-                              <MenuItem fx:id="Buton_Lista_Marcas" mnemonicParsing="false" onAction="#OnAction_Buton_Lista_Marcas" text="Lista Marcas" />
-                              <MenuItem fx:id="Buton_Lista_Categorias" mnemonicParsing="false" onAction="#OnAction_Buton_Lista_Categorias" text="Lista Categorias" />
+                           <MenuItem fx:id="Buton_Lista_Vehiculos" mnemonicParsing="false" onAction="#OnAction_Buton_Lista_Vehiculos" text="Lista Vehiculos" disable="true" visible="false"/>
+                           <MenuItem fx:id="Buton_Lista_Modelos" mnemonicParsing="false" onAction="#OnAction_Buton_Lista_Modelos" text="Lista Modelos" disable="true" visible="false"/>
+                           <MenuItem fx:id="Buton_Lista_Marcas" mnemonicParsing="false" onAction="#OnAction_Buton_Lista_Marcas" text="Lista Marcas" disable="true" visible="false"/>
+                           <MenuItem fx:id="Buton_Lista_Categorias" mnemonicParsing="false" onAction="#OnAction_Buton_Lista_Categorias" text="Lista Categorias" disable="true" visible="false"/>
                         </items>
                       </Menu>
                         <Menu mnemonicParsing="false" text="Empleados">
                            <items>
-                              <MenuItem fx:id="Buton_Lista_Empleados" mnemonicParsing="false" onAction="#OnAction_Buton_Lista_Empleados" text="Lista Empleados" />
-                              <MenuItem fx:id="Buton_Lista_Roles" mnemonicParsing="false" onAction="#OnAction_Buton_Lista_Roles" text="Lista Roles" />
-                              <MenuItem fx:id="Buton_Lista_Permisos" mnemonicParsing="false" onAction="#OnAction_Buton_Lista_Permisos" text="Lista Permisos" />
+                              <MenuItem fx:id="Buton_Lista_Empleados" mnemonicParsing="false" onAction="#OnAction_Buton_Lista_Empleados" text="Lista Empleados" disable="true" visible="false"/>
+                              <MenuItem fx:id="Buton_Lista_Roles" mnemonicParsing="false" onAction="#OnAction_Buton_Lista_Roles" text="Lista Roles" disable="true" visible="false"/>
+                              <MenuItem fx:id="Buton_Lista_Permisos" mnemonicParsing="false" onAction="#OnAction_Buton_Lista_Permisos" text="Lista Permisos" disable="true" visible="false"/>
                            </items>
                         </Menu>
                     </menus>
                   </MenuBar>
+                  <!-- MENU USUARIO -->
                   <MenuBar maxHeight="1.7976931348623157E308">
                     <menus>
                       <Menu mnemonicParsing="false" text="Usuario">
                         <items>
-                          <MenuItem mnemonicParsing="false" text="Ajustes" />
-                              <MenuItem mnemonicParsing="false" text="Salir" />
+                           <MenuItem mnemonicParsing="false" text="Ajustes" />
+                           <MenuItem mnemonicParsing="false" text="Salir" />
                         </items>
                       </Menu>
                     </menus>
                   </MenuBar>
                </children>
             </HBox>
+            <!-- CONTENEDOR INTERFAZ GRAFICA -->
             <HBox fx:id="Central_Box" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                <children>
                   <Box depth="100" height="100" rotate="90.0" width="100.0">

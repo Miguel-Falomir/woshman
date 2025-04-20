@@ -2,6 +2,10 @@ package com;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.stream.events.Namespace;
 
 import com.login.middleware.LoginMiddleWare;
 import com.login.model.Empleado;
@@ -12,6 +16,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
 
 public class App extends Application {
@@ -33,6 +38,10 @@ public class App extends Application {
         return connector.getConnection();
     }
 
+    public Empleado getUser(){
+        return App.user;
+    }
+
     public void setUser(Empleado user){
         App.user = user;
     }
@@ -45,27 +54,90 @@ public class App extends Application {
             App.class.getResource(newModule + "/gui/" + newStage + ".fxml")
         );
 
-        // comparar variable 'MidWare' con clases paquete 'MiddleWare'
-        // al encontrar coincidencia, construir instancia
-        if (MidWare.equals(LoginMiddleWare.class)){
-            loader.setControllerFactory(lambda -> {
-                return new LoginMiddleWare(this);
-            });
-        } else if (MidWare.equals(MainMiddleWare.class)){
-            loader.setControllerFactory(lambda -> {
-                return new MainMiddleWare(this);
-            });
-        }
-
         // para imprimir ventana nueva:
         try {
             // cerrar ventana actual
             mainStage.close();
 
+            // elegir controlador para interfaz
+            if (MidWare.equals(LoginMiddleWare.class)){
+                loader.setControllerFactory(lambda -> {
+                    return new LoginMiddleWare(this);
+                });
+            } else if (MidWare.equals(MainMiddleWare.class)){
+                loader.setControllerFactory(lambda -> {
+                    return new MainMiddleWare(this, resize);
+                });
+            }
+
             // cargar escena nueva en objeto 'Parent'
             Parent root = loader.load();
 
-            // definir ventana
+            // los objetos con anotacion @FXML se inicializan al llegar a loader.load()
+            // por eso es aqui donde se les empieza a aplicar modificaciones especificas para cada ventana
+            
+            // para 'MainMiddleWare', activar botones modulos segun rol del usuario
+            if (MidWare.equals(MainMiddleWare.class)){
+                // variables internas
+                Integer rol = this.getUser().getId();
+                List<String> mitemsList = new ArrayList<String>();
+                MenuItem mitem = null;
+
+                // guardar nombres de elementos correspondientes al rol actual
+                switch (rol) {
+                    case 1: // mecanico
+                        mitemsList.add("Buton_Lista_Averias");
+                        mitemsList.add("Buton_Realizar_Venta");
+                        mitemsList.add("Buton_Lista_Piezas");
+                        mitemsList.add("Buton_Lista_Vehiculos");
+                        break;
+                    case 2: // encargado
+                        mitemsList.add("Buton_Lista_Averias");
+                        mitemsList.add("Buton_Lista_Ventas");
+                        mitemsList.add("Buton_Lista_Facturas");
+                        mitemsList.add("Buton_Lista_Clientes");
+                        mitemsList.add("Buton_Realizar_Venta");
+                        mitemsList.add("Buton_Lista_Piezas");
+                        mitemsList.add("Buton_Lista_Proveedores");
+                        mitemsList.add("Buton_Lista_Encargos");
+                        mitemsList.add("Buton_Lista_Albaranes");
+                        mitemsList.add("Buton_Lista_Vehiculos");
+                        mitemsList.add("Buton_Lista_Modelos");
+                        mitemsList.add("Buton_Lista_Marcas");
+                        mitemsList.add("Buton_Lista_Empleados");
+                        break;
+                    default: // admimistrador
+                        mitemsList.add("Buton_Lista_Averias");
+                        mitemsList.add("Buton_Tipo_Averia");
+                        mitemsList.add("Buton_Estado_Averia");
+                        mitemsList.add("Buton_Lista_Ventas");
+                        mitemsList.add("Buton_Lista_Facturas");
+                        mitemsList.add("Buton_Realizar_Venta");
+                        mitemsList.add("Buton_Lista_Clientes");
+                        mitemsList.add("Buton_Lista_Piezas");
+                        mitemsList.add("Buton_Tipo_Pieza");
+                        mitemsList.add("Buton_Lista_Proveedores");
+                        mitemsList.add("Buton_Lista_Encargos");
+                        mitemsList.add("Buton_Lista_Albaranes");
+                        mitemsList.add("Buton_Lista_Vehiculos");
+                        mitemsList.add("Buton_Lista_Modelos");
+                        mitemsList.add("Buton_Lista_Marcas");
+                        mitemsList.add("Buton_Lista_Categorias");
+                        mitemsList.add("Buton_Lista_Empleados");
+                        mitemsList.add("Buton_Lista_Roles");
+                        mitemsList.add("Buton_Lista_Permisos");
+                        break;
+                }
+
+                // activar elementos guardados
+                for (String itemName : mitemsList) {
+                    mitem = (MenuItem) loader.getNamespace().get(itemName);
+                    mitem.setDisable(false);
+                    mitem.setVisible(true);
+                }
+            }
+
+            // definir dimensiones ventana
             mainScene.setRoot(root);
             mainStage.setScene(mainScene);
             mainStage.setTitle(title);
@@ -78,12 +150,15 @@ public class App extends Application {
                 mainStage.setMinHeight(heigth);
             }
 
+            // mostrar ventana
             mainStage.show();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    // METODO 
 
     // INICIALIZAR RECURSOS
 

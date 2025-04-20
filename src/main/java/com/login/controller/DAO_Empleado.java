@@ -4,11 +4,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import com.login.model.Empleado;
+import com.login.model.Permiso;
+import com.login.model.Rol;
 import com.utilities.DAO;
 
-public class DAO_Empleado implements DAO<Empleado, Long> {
+public class DAO_Empleado implements DAO<Empleado, Integer> {
 
     // CONEXION
 
@@ -41,43 +44,85 @@ public class DAO_Empleado implements DAO<Empleado, Long> {
     }
 
     @Override
-    public Empleado search(Long id) {
+    public Empleado search(Integer id) {
         // variables internas
-        PreparedStatement stat = null;
+        PreparedStatement statement = null;
         ResultSet resultado = null;
         Empleado respuesta = null;
+        Rol auxRol = null;
+        List<Permiso> auxPermisos = new ArrayList<Permiso>();
 
         // (intentar) ejecutar busqueda
         try {
-            // consulta SQL
-            stat = connect.prepareStatement("SELECT * FROM empleado e WHERE e.id_empleado = ?;");
-            stat.setLong(1, id);
-            // acceder a BD
-            resultado = stat.executeQuery();
+            // consulta 1: Buscar usuario
+            statement = connect.prepareStatement("SELECT * FROM empleado e WHERE e.id_empleado = ?;");
+            statement.setLong(1, id);
+
+            // ejecutar consulta
+            resultado = statement.executeQuery();
+
             // forzar que 'resultado' apunte a la primera fila
             if (!resultado.isBeforeFirst()){
                 resultado.beforeFirst();
             }
             resultado.next();
+
             // guardar primera fila en 'resultado'
             respuesta = new Empleado(
-                resultado.getLong(1),
-                resultado.getInt(2),
+                resultado.getInt(1),
                 resultado.getString(3),
                 resultado.getString(4),
                 resultado.getString(5),
                 resultado.getString(6)
             );
+
+            // consulta 2: Buscar rol del usuario
+            statement = connect.prepareStatement("SELECT * FROM rol r WHERE r.id_rol = ?");
+            statement.setLong(1, resultado.getInt(2));
+
+            // ejecutar consulta
+            resultado = statement.executeQuery();
+            
+            // forzar que 'resultado' apunte a la primera fila
+            if (!resultado.isBeforeFirst()){
+                resultado.beforeFirst();
+            }
+            resultado.next();
+
+            // guardar primera fila en variable auxiliar
+            auxRol = new Rol(
+                resultado.getInt(1),
+                resultado.getString(2),
+                resultado.getString(3)
+            );
+
+            // consulta 3: Buscar permisos del rol
+            statement = connect.prepareStatement("SELECT p.* FROM permiso p JOIN rol_has_permiso h ON p.id_permiso = h.permiso JOIN rol r ON h.rol = r.id_rol WHERE r.id_rol = ?");
+            statement.setLong(1, auxRol.getId());
+
+            // ejecutar consulta
+            resultado = statement.executeQuery();
+
+            // asegurar que 'resultado' apunte antes de la primera fila
+            if (!resultado.isBeforeFirst()){
+                resultado.beforeFirst();
+            }
+
+            while(resultado.next()){
+                System.err.println(resultado.getString(2));
+            }
+
         // manejar excepciones
         } catch (SQLException e){
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
+
         // pase lo que pase, cerrar 'stat'
         } finally {
-            if (stat != null){
+            if (statement != null){
                 try {
-                    stat.close();
+                    statement.close();
                 } catch (SQLException e){
                     e.printStackTrace();
                 }
@@ -96,31 +141,80 @@ public class DAO_Empleado implements DAO<Empleado, Long> {
 
     public Empleado searchByNombre(String nombre){
         // variables internas
-        PreparedStatement stat = null;
+        PreparedStatement statement = null;
         ResultSet resultado = null;
         Empleado respuesta = null;
+        Rol auxRol = null;
+        List<Permiso> auxPermisos = new ArrayList<Permiso>();
 
         // (intentar) ejecutar busqueda
         try {
-            // consulta SQL
-            stat = connect.prepareStatement("SELECT * FROM empleado e WHERE e.username = ?;");
-            stat.setString(1, nombre);
-            // acceder a BD
-            resultado = stat.executeQuery();
+            // consulta SQL: Buscar usuario
+            statement = connect.prepareStatement("SELECT * FROM empleado e WHERE e.username = ?;");
+            statement.setString(1, nombre);
+
+            // ejecutar consulta
+            resultado = statement.executeQuery();
+
             // forzar que 'resultado' apunte a la primera fila
             if (!resultado.isBeforeFirst()){
                 resultado.beforeFirst();
             }
             resultado.next();
+
             // guardar primera fila en 'resultado'
             respuesta = new Empleado(
-                resultado.getLong(1),
-                resultado.getInt(2),
+                resultado.getInt(1),
                 resultado.getString(3),
                 resultado.getString(4),
                 resultado.getString(5),
                 resultado.getString(6)
             );
+
+            // consulta SQL: Buscar rol
+            statement = connect.prepareStatement("SELECT * FROM rol r WHERE r.id_rol = ?");
+            statement.setLong(1, resultado.getInt(2));
+            
+            // ejecutar consulta
+            resultado = statement.executeQuery();
+
+            // forzar que 'resultado' apunte a la primera fila
+            if (!resultado.isBeforeFirst()){
+                resultado.beforeFirst();
+            }
+            resultado.next();
+            
+            // guardar primera fila en variable auxiliar
+            auxRol = new Rol(
+                resultado.getInt(1),
+                resultado.getString(2),
+                resultado.getString(3)
+            );
+
+            // consulta 3: Buscar permisos del rol
+            statement = connect.prepareStatement("SELECT p.* FROM permiso p JOIN rol_has_permiso h ON p.id_permiso = h.permiso JOIN rol r ON h.rol = r.id_rol WHERE r.id_rol = ?");
+            statement.setLong(1, auxRol.getId());
+        
+            // ejecutar consulta
+            resultado = statement.executeQuery();
+
+            // asegurar que 'resultado' apunte antes de la primera fila
+            if (!resultado.isBeforeFirst()){
+                resultado.beforeFirst();
+            }
+
+            // agregar todas las respuestas a lista 'auxPermisos'
+            while(resultado.next()){
+                auxPermisos.add( new Permiso(
+                    resultado.getInt(1),
+                    resultado.getString(2)
+                ));
+            }
+
+            // asignar permisos al rol, y rol al usuario
+            auxRol.setListaPermisos(auxPermisos);
+            respuesta.setRol(auxRol);
+
         // manejar excepciones
         } catch (SQLException e){
             e.printStackTrace();
@@ -128,9 +222,9 @@ public class DAO_Empleado implements DAO<Empleado, Long> {
             e.printStackTrace();
         // pase lo que pase, cerrar 'stat'
         } finally {
-            if (stat != null){
+            if (statement != null){
                 try {
-                    stat.close();
+                    statement.close();
                 } catch (SQLException e){
                     e.printStackTrace();
                 }

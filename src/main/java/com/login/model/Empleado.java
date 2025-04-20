@@ -4,8 +4,8 @@ public class Empleado {
 
     // ATRIBUTOS
 
-    private Long id;
-    private Integer rol;
+    private Integer id;
+    private Rol rol;
     private String nombre;
     private String apellidos;
     private String username;
@@ -20,13 +20,15 @@ public class Empleado {
         this.password = contrasenya;
     }
     
-    public Empleado(Long id, String nombre, String contrasenya) {
+    public Empleado(Integer id, String nombre, String apellidos, String username, String password) {
         this.id = id;
-        this.username = nombre;
-        this.password = contrasenya;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.username = username;
+        this.password = password;
     }
 
-    public Empleado(Long id, Integer rol, String nombre, String apellidos, String username, String password) {
+    public Empleado(Integer id, Rol rol, String nombre, String apellidos, String username, String password) {
         this.id = id;
         this.rol = rol;
         this.nombre = nombre;
@@ -37,19 +39,19 @@ public class Empleado {
     
     // GETTERS Y SETTERS
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public Integer getRol(){
+    public Rol getRol(){
         return rol;
     }
 
-    public void setRol(Integer rol){
+    public void setRol(Rol rol){
         this.rol = rol;
     }
 
