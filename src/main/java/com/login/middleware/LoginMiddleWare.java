@@ -6,7 +6,7 @@ package com.login.middleware;
 import com.App;
 import com.login.controller.DAO_Empleado;
 import com.login.model.Empleado;
-import com.main_menu.middleware.MainMiddleWare;
+import com.menu.middleware.MainMiddleWare;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -51,13 +51,15 @@ public class LoginMiddleWare {
     // EVENTOS
 
     @FXML
-    void Buton_Enter_OnMouseClick(MouseEvent event) {
+    void OnMouseClicked_Buton_Enter(MouseEvent event) {
         Func_User_Login();
     }
 
     // METODOS
 
     private void Func_User_Login(){
+        // variable auxiliar
+        String text = "";
         // recopilar datos de los inputs
         auxUsername = Input_Username.getText();
         auxPassword = Input_Password.getText();
@@ -67,12 +69,13 @@ public class LoginMiddleWare {
 
         // mostrar si 'auxUsername' y 'auxPassword' coinciden
         if(auxUser == null){
-            System.out.println("Usuario " + auxUsername + " no existe o no se encuentra");
+            text = String.format("Usuario %s no existe o no se encuentra", auxUsername.isBlank()? "[empty]" : auxUsername);
+            System.out.println(text);
         } else if (auxUser.getPassword().equals(auxPassword)){
-            String text = auxUser.getNombre() + " " + auxUser.getApellidos();
-            System.out.println("Contraseña correcta. Bienvenid@ de nuevo, " + text);
+            text = String.format("Contraseña correcta. Bienvenid@ de nuevo, %s", auxUser.getNombre() + " " + auxUser.getApellidos());
+            System.out.println(text);
             app.setUser(auxUser);
-            app.changeStage("main_menu", "main", "LOGIN", 720, 540, true, MainMiddleWare.class);
+            app.changeStage("menu", "main", "LOGIN", 720, 540, true, MainMiddleWare.class);
         } else {
             System.out.println("Contraseña incorrecta. Repita la contraseña o cambie de usuario");
         }

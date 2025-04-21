@@ -9,13 +9,14 @@ import javax.xml.stream.events.Namespace;
 
 import com.login.middleware.LoginMiddleWare;
 import com.login.model.Empleado;
-import com.main_menu.middleware.MainMiddleWare;
+import com.menu.middleware.MainMiddleWare;
 import com.utilities.DB_Connector;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
 
@@ -86,46 +87,50 @@ public class App extends Application {
                 // guardar nombres de elementos correspondientes al rol actual
                 switch (rol) {
                     case 1: // mecanico
-                        mitemsList.add("Buton_Lista_Averias");
-                        mitemsList.add("Buton_Realizar_Venta");
-                        mitemsList.add("Buton_Lista_Piezas");
-                        mitemsList.add("Buton_Lista_Vehiculos");
+                        mitemsList.add("Mitem_Lista_Averias");
+                        mitemsList.add("Mitem_Realizar_Venta");
+                        mitemsList.add("Mitem_Lista_Piezas");
+                        mitemsList.add("Mitem_Lista_Vehiculos");
+                        // como no tiene acceso a ninguna funcionalidad,
+                        // se le deshabilita todo el modulo "Empleados"
+                        Menu Empleados = (Menu) loader.getNamespace().get("Menu_Empleados");
+                        Empleados.setDisable(true);
                         break;
                     case 2: // encargado
-                        mitemsList.add("Buton_Lista_Averias");
-                        mitemsList.add("Buton_Lista_Ventas");
-                        mitemsList.add("Buton_Lista_Facturas");
-                        mitemsList.add("Buton_Lista_Clientes");
-                        mitemsList.add("Buton_Realizar_Venta");
-                        mitemsList.add("Buton_Lista_Piezas");
-                        mitemsList.add("Buton_Lista_Proveedores");
-                        mitemsList.add("Buton_Lista_Encargos");
-                        mitemsList.add("Buton_Lista_Albaranes");
-                        mitemsList.add("Buton_Lista_Vehiculos");
-                        mitemsList.add("Buton_Lista_Modelos");
-                        mitemsList.add("Buton_Lista_Marcas");
-                        mitemsList.add("Buton_Lista_Empleados");
+                        mitemsList.add("Mitem_Lista_Averias");
+                        mitemsList.add("Mitem_Lista_Ventas");
+                        mitemsList.add("Mitem_Lista_Facturas");
+                        mitemsList.add("Mitem_Lista_Clientes");
+                        mitemsList.add("Mitem_Realizar_Venta");
+                        mitemsList.add("Mitem_Lista_Piezas");
+                        mitemsList.add("Mitem_Lista_Proveedores");
+                        mitemsList.add("Mitem_Lista_Encargos");
+                        mitemsList.add("Mitem_Lista_Albaranes");
+                        mitemsList.add("Mitem_Lista_Vehiculos");
+                        mitemsList.add("Mitem_Lista_Modelos");
+                        mitemsList.add("Mitem_Lista_Marcas");
+                        mitemsList.add("Mitem_Lista_Empleados");
                         break;
                     default: // admimistrador
-                        mitemsList.add("Buton_Lista_Averias");
-                        mitemsList.add("Buton_Tipo_Averia");
-                        mitemsList.add("Buton_Estado_Averia");
-                        mitemsList.add("Buton_Lista_Ventas");
-                        mitemsList.add("Buton_Lista_Facturas");
-                        mitemsList.add("Buton_Realizar_Venta");
-                        mitemsList.add("Buton_Lista_Clientes");
-                        mitemsList.add("Buton_Lista_Piezas");
-                        mitemsList.add("Buton_Tipo_Pieza");
-                        mitemsList.add("Buton_Lista_Proveedores");
-                        mitemsList.add("Buton_Lista_Encargos");
-                        mitemsList.add("Buton_Lista_Albaranes");
-                        mitemsList.add("Buton_Lista_Vehiculos");
-                        mitemsList.add("Buton_Lista_Modelos");
-                        mitemsList.add("Buton_Lista_Marcas");
-                        mitemsList.add("Buton_Lista_Categorias");
-                        mitemsList.add("Buton_Lista_Empleados");
-                        mitemsList.add("Buton_Lista_Roles");
-                        mitemsList.add("Buton_Lista_Permisos");
+                        mitemsList.add("Mitem_Lista_Averias");
+                        mitemsList.add("Mitem_Tipo_Averia");
+                        mitemsList.add("Mitem_Estado_Averia");
+                        mitemsList.add("Mitem_Lista_Ventas");
+                        mitemsList.add("Mitem_Lista_Facturas");
+                        mitemsList.add("Mitem_Realizar_Venta");
+                        mitemsList.add("Mitem_Lista_Clientes");
+                        mitemsList.add("Mitem_Lista_Piezas");
+                        mitemsList.add("Mitem_Tipo_Pieza");
+                        mitemsList.add("Mitem_Lista_Proveedores");
+                        mitemsList.add("Mitem_Lista_Encargos");
+                        mitemsList.add("Mitem_Lista_Albaranes");
+                        mitemsList.add("Mitem_Lista_Vehiculos");
+                        mitemsList.add("Mitem_Lista_Modelos");
+                        mitemsList.add("Mitem_Lista_Marcas");
+                        mitemsList.add("Mitem_Lista_Categorias");
+                        mitemsList.add("Mitem_Lista_Empleados");
+                        mitemsList.add("Mitem_Lista_Roles");
+                        mitemsList.add("Mitem_Lista_Permisos");
                         break;
                 }
 
@@ -182,7 +187,7 @@ public class App extends Application {
         // inicializar 'Parent'
         mainScene = new Scene(root);
         mainStage = primaryStage;
-        mainStage.setTitle("STYLESHEET_CASPIAN");
+        mainStage.setTitle("login");
         mainStage.setWidth(400);
         mainStage.setHeight(300);
         mainStage.setResizable(false);

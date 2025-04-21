@@ -32,7 +32,7 @@
             </Text>
             <TextField fx:id="Input_Username" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
             <TextField fx:id="Input_Password" layoutX="144.0" layoutY="147.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" />
-            <Button fx:id="Buton_Enter" mnemonicParsing="false" onMouseClicked="#Buton_Enter_OnMouseClick" text="Enter" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
+            <Button fx:id="Buton_Enter" mnemonicParsing="false" onMouseClicked="#OnMouseClicked_Buton_Enter" text="Enter" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="username" GridPane.rowIndex="1" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="password" GridPane.rowIndex="2" />
             <Button mnemonicParsing="false" text="Sign up" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="3" />

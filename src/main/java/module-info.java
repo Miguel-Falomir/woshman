@@ -17,7 +17,7 @@ module com {
     opens com.login.middleware to javafx.fxml;
     opens com.login.controller to javafx.fxml;
     //main_menu
-    opens com.main_menu.middleware to javafx.fxml;
+    opens com.menu.middleware to javafx.fxml;
     //opens com.main_menu.controller to javafx.fxml;
 
     // Exportar paquetes
