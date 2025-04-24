@@ -2,6 +2,7 @@ package com.menu.middleware;
 
 import com.App;
 import com.login.middleware.LoginMiddleWare;
+import com.utilities.MenuWare;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,7 +19,7 @@ public class MainMiddleWare {
 
     // OBJETOS ALMACENAR DATOS ENTRADA
 
-    //
+    MenuWare MidWare = null;
 
     // DAOs
 
@@ -26,7 +27,7 @@ public class MainMiddleWare {
 
     // CONSTRUCTOR
 
-    public MainMiddleWare(App app, Boolean bool) {
+    public MainMiddleWare(App app) {
         this.app = app;
     }
 
@@ -160,7 +161,7 @@ public class MainMiddleWare {
 
     @FXML
     void OnAction_Mitem_Lista_Piezas(ActionEvent event) {
-
+        app.changeScene(Central_Box, "almacen", "grid_1", "prueba", getClass());
     }
 
     @FXML
@@ -205,18 +206,8 @@ public class MainMiddleWare {
 
     @FXML
     void OnAction_Mitem_Salir(ActionEvent event){
-        Func_Close_Session();
-    }
-
-    // METODOS
-
-    private void Func_Close_Session(){
         app.setUser(null);
         app.changeStage("login", "login", "login", 400, 300, false, LoginMiddleWare.class);
-    }
-
-    private void Func_Change_Menu(){
-        Central_Box.getChildren().clear();
     }
 
 }

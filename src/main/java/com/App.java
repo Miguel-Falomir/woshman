@@ -18,6 +18,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 public class App extends Application {
@@ -67,7 +68,7 @@ public class App extends Application {
                 });
             } else if (MidWare.equals(MainMiddleWare.class)){
                 loader.setControllerFactory(lambda -> {
-                    return new MainMiddleWare(this, resize);
+                    return new MainMiddleWare(this);
                 });
             }
 
@@ -163,7 +164,30 @@ public class App extends Application {
         }
     }
 
-    // METODO 
+    // METODO CAMBIAR ESCENA
+
+    public void changeScene(HBox Central_Box, String newModule, String newStage, String title, Class<?> MidWare){
+        // englobar todo el proceso en un try-catch
+        // de esta forma, si surge un fallo al generar la nueva pantalla,
+        // aborta tambien el proceso de limpiar la pantalla vieja
+        try {
+            // limpiar contenedor
+            Central_Box.getChildren().clear();
+    
+            // preparar archivo .fxml
+            FXMLLoader loader = new FXMLLoader(
+                App.class.getResource(newModule + "/gui/" + newStage + ".fxml")
+            );
+
+            // cargar archivo .fxml
+            Parent root = loader.load();
+
+            // agregar archivo al panel central
+            Central_Box.getChildren().add(root);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     // INICIALIZAR RECURSOS
 
