@@ -207,7 +207,7 @@ public class MainMiddleWare {
     @FXML
     void OnAction_Mitem_Salir(ActionEvent event){
         app.setUser(null);
-        app.changeStage("login", "login", "login", 400, 300, false, LoginMiddleWare.class);
+        app.changeStage("login", "login_form", "login", 400, 300, false, LoginMiddleWare.class);
     }
 
 }

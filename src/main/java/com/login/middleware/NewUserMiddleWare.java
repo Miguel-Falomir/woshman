@@ -106,7 +106,7 @@ public class NewUserMiddleWare {
 
             // navegar a menu principal con nuevo usuario
             app.setUser(emp);
-            app.changeStage("menu", "main", "LOGIN", 720, 540, true, MainMiddleWare.class);
+            app.changeStage("menu", "main", "WOSHMAN", 720, 540, true, MainMiddleWare.class);
         } else {
             // configurar alerta tipo ERROR
             a.setAlertType(AlertType.ERROR);

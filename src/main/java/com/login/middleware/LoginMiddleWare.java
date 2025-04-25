@@ -83,7 +83,7 @@ public class LoginMiddleWare {
             text = String.format("Contraseña correcta. Bienvenid@ de nuevo, %s", auxUser.getNombre() + " " + auxUser.getApellidos());
             System.out.println(text);
             app.setUser(auxUser);
-            app.changeStage("menu", "main", "LOGIN", 720, 540, true, MainMiddleWare.class);
+            app.changeStage("menu", "main", "WOSHMAN", 960, 540, true, MainMiddleWare.class);
         } else {
             System.out.println("Contraseña incorrecta. Repita la contraseña o cambie de usuario");
         }
