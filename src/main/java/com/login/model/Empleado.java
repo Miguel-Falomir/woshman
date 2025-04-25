@@ -19,6 +19,13 @@ public class Empleado {
         this.username = nombre;
         this.password = contrasenya;
     }
+
+    public Empleado(String nombre, String apellidos, String username, String password) {
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.username = username;
+        this.password = password;
+    }
     
     public Empleado(Integer id, String nombre, String apellidos, String username, String password) {
         this.id = id;

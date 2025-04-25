@@ -43,6 +43,9 @@ public class LoginMiddleWare {
     private Button Buton_Enter;
 
     @FXML
+    private Button Buton_SignUp;
+
+    @FXML
     private TextField Input_Password;
 
     @FXML
@@ -53,6 +56,11 @@ public class LoginMiddleWare {
     @FXML
     void OnMouseClicked_Buton_Enter(MouseEvent event) {
         Func_User_Login();
+    }
+
+    @FXML
+    void OnMouseClicked_Buton_SignUp(MouseEvent event) {
+        app.changeStage("login", "new_user_form", "REGISTRO", 480, 360, false, NewUserMiddleWare.class);
     }
 
     // METODOS

@@ -10,9 +10,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="400.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.login.middleware.LoginMiddleWare">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.login.middleware.LoginMiddleWare">
    <children>
-      <GridPane alignment="CENTER" hgap="10.0" layoutX="100.0" layoutY="105.0" vgap="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <GridPane alignment="CENTER" hgap="20.0" layoutX="100.0" layoutY="105.0" vgap="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
           <ColumnConstraints halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
@@ -35,7 +35,7 @@
             <Button fx:id="Buton_Enter" mnemonicParsing="false" onMouseClicked="#OnMouseClicked_Buton_Enter" text="Enter" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="username" GridPane.rowIndex="1" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="password" GridPane.rowIndex="2" />
-            <Button mnemonicParsing="false" text="Sign up" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="3" />
+            <Button fx:id="Buton_SignUp" mnemonicParsing="false" onMouseClicked="#OnMouseClicked_Buton_SignUp" text="Sign up" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="3" />
          </children>
       </GridPane>
    </children>

@@ -8,6 +8,7 @@ import java.util.List;
 import javax.xml.stream.events.Namespace;
 
 import com.login.middleware.LoginMiddleWare;
+import com.login.middleware.NewUserMiddleWare;
 import com.login.model.Empleado;
 import com.menu.middleware.MainMiddleWare;
 import com.utilities.DB_Connector;
@@ -62,6 +63,7 @@ public class App extends Application {
             mainStage.close();
 
             // elegir controlador para interfaz
+            // no se implementa switch-case porque Class<?> es un tipo de variable delicado de manejar
             if (MidWare.equals(LoginMiddleWare.class)){
                 loader.setControllerFactory(lambda -> {
                     return new LoginMiddleWare(this);
@@ -69,6 +71,10 @@ public class App extends Application {
             } else if (MidWare.equals(MainMiddleWare.class)){
                 loader.setControllerFactory(lambda -> {
                     return new MainMiddleWare(this);
+                });
+            } else if (MidWare.equals(NewUserMiddleWare.class)){
+                loader.setControllerFactory(lambda -> {
+                    return new NewUserMiddleWare(this);
                 });
             }
 
@@ -195,7 +201,7 @@ public class App extends Application {
     public void start(Stage primaryStage) throws Exception {
         // declarar ventana login
         FXMLLoader loader = new FXMLLoader(
-            App.class.getResource("login/gui/login.fxml")
+            App.class.getResource("login/gui/login_form.fxml")
         );
 
         // declarar un constructor personalizado para crear el controlador del login.
