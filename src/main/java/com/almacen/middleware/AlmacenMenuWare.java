@@ -1,11 +1,9 @@
 package com.almacen.middleware;
 
-import com.utilities.MenuWare;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
-public class AlmacenMenuWare extends MenuWare {
+public class AlmacenMenuWare {
 
     // CONSTRUCTOR
 
@@ -24,5 +22,9 @@ public class AlmacenMenuWare extends MenuWare {
     void OnAction_Buton_Click(){
         System.out.println("AUCH: Don't press me that hard >:´(");
     }
+
+    // METODOS
+
+    
 
 }

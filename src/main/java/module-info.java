@@ -21,6 +21,7 @@ module com {
     ///opens com.menu.controller to javafx.fxml;
     //almacen
     opens com.almacen.middleware to javafx.fxml;
+    opens com.vehiculos.middleware to javafx.fxml;
 
     // Exportar paquetes
     exports com;

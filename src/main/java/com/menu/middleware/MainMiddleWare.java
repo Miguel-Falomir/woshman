@@ -1,11 +1,19 @@
 package com.menu.middleware;
 
+import java.io.IOException;
+import java.util.List;
+
 import com.App;
 import com.login.middleware.LoginMiddleWare;
-import com.utilities.MenuWare;
+import com.utilities.DAO;
+import com.utilities.SubMenuWare;
+import com.vehiculos.controller.DAO_Vehiculo;
+import com.vehiculos.middleware.ListaVehiculosMenuWare;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.HBox;
@@ -19,16 +27,26 @@ public class MainMiddleWare {
 
     // OBJETOS ALMACENAR DATOS ENTRADA
 
-    MenuWare MidWare = null;
+    SubMenuWare subMenuWare;
 
     // DAOs
 
-    //
+    DAO dao;
 
     // CONSTRUCTOR
 
     public MainMiddleWare(App app) {
         this.app = app;
+    }
+
+    // GETTERS Y SETTERS
+
+    public DAO getDao(){
+        return dao;
+    }
+
+    public void setDao(DAO dao){
+        this.dao = dao;
     }
 
     // ELEMENTOS UI
@@ -161,7 +179,7 @@ public class MainMiddleWare {
 
     @FXML
     void OnAction_Mitem_Lista_Piezas(ActionEvent event) {
-        app.changeScene(Central_Box, "almacen", "grid_1", "prueba", getClass());
+        //app.changeScene(Central_Box, "almacen", "grid_1", "prueba");
     }
 
     @FXML
@@ -176,7 +194,7 @@ public class MainMiddleWare {
 
     @FXML
     void OnAction_Mitem_Lista_Vehiculos(ActionEvent event) {
-
+        changeScene("vehiculos", "listview_arbol", "Lista Vehiculos", ListaVehiculosMenuWare.class);
     }
 
     @FXML
@@ -208,6 +226,47 @@ public class MainMiddleWare {
     void OnAction_Mitem_Salir(ActionEvent event){
         app.setUser(null);
         app.changeStage("login", "login_form", "login", 400, 300, false, LoginMiddleWare.class);
+    }
+
+    // METODO CAMBIAR ESCENA
+
+    public void changeScene(String newModule, String newStage, String title, Class<?> menuWareClass){
+        // englobar todo el proceso en un try-catch
+        // de esta forma, si surge un fallo al generar la nueva pantalla,
+        // aborta tambien el proceso de limpiar la pantalla vieja
+        try {
+            // limpiar contenedor
+            Central_Box.getChildren().clear();
+    
+            // preparar archivo .fxml
+            FXMLLoader loader = new FXMLLoader(
+                App.class.getResource(newModule + "/gui/" + newStage + ".fxml")
+            );
+
+            // cargar archivo .fxml
+            Parent root = loader.load();
+
+            // obtener SubMenuWare del archivo .fxml
+            subMenuWare = loader.getController();
+
+            // asignar MainMiddleWare al SubMenuWare actual
+            if (menuWareClass.equals(ListaVehiculosMenuWare.class)){
+                subMenuWare.setMainController(this);
+            }
+
+            // asignar MiddleWare del menu principal al MenuWare
+
+            //
+            if (newModule.equals("vehiculos")){
+                dao = new DAO_Vehiculo(app.getConnection());
+            }
+
+            // agregar archivo al panel central
+            Central_Box.getChildren().add(root);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

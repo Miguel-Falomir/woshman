@@ -10,8 +10,9 @@ import com.login.model.Empleado;
 import com.login.model.Permiso;
 import com.login.model.Rol;
 import com.utilities.DAO;
+import com.utilities.DAO_Interface;
 
-public class DAO_Empleado implements DAO<Empleado, Integer> {
+public class DAO_Empleado extends DAO implements DAO_Interface<Empleado, Integer> {
 
     // CONEXION
 

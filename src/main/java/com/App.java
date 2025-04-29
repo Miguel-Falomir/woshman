@@ -5,7 +5,7 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.stream.events.Namespace;
+// import javax.xml.stream.events.Namespace;
 
 import com.login.middleware.LoginMiddleWare;
 import com.login.middleware.NewUserMiddleWare;
@@ -19,7 +19,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 public class App extends Application {
@@ -51,7 +50,7 @@ public class App extends Application {
 
     // METODO CAMBIAR DE VENTANA
 
-    public void changeStage(String newModule, String newStage, String title, int width, int heigth, Boolean resize, Class<?> MidWare){
+    public void changeStage(String newModule, String newStage, String title, int width, int heigth, Boolean resize, Class<?> midWare){
         // preparar archivo .fxml
         FXMLLoader loader = new FXMLLoader(
             App.class.getResource(newModule + "/gui/" + newStage + ".fxml")
@@ -62,17 +61,17 @@ public class App extends Application {
             // cerrar ventana actual
             mainStage.close();
 
-            // elegir controlador para interfaz
+            // elegir controlador 'MidWare' para interfaz
             // no se implementa switch-case porque Class<?> es un tipo de variable delicado de manejar
-            if (MidWare.equals(LoginMiddleWare.class)){
+            if (midWare.equals(LoginMiddleWare.class)){
                 loader.setControllerFactory(lambda -> {
                     return new LoginMiddleWare(this);
-                });
-            } else if (MidWare.equals(MainMiddleWare.class)){
+                }); // metodo lambda => valor -> {[codigo para devolver el valor]}
+            } else if (midWare.equals(MainMiddleWare.class)){
                 loader.setControllerFactory(lambda -> {
                     return new MainMiddleWare(this);
                 });
-            } else if (MidWare.equals(NewUserMiddleWare.class)){
+            } else if (midWare.equals(NewUserMiddleWare.class)){
                 loader.setControllerFactory(lambda -> {
                     return new NewUserMiddleWare(this);
                 });
@@ -85,7 +84,7 @@ public class App extends Application {
             // por eso es aqui donde se les empieza a aplicar modificaciones especificas para cada ventana
             
             // para 'MainMiddleWare', activar botones modulos segun rol del usuario
-            if (MidWare.equals(MainMiddleWare.class)){
+            if (midWare.equals(MainMiddleWare.class)){
                 // variables internas
                 Integer rol = this.getUser().getId();
                 List<String> mitemsList = new ArrayList<String>();
@@ -165,31 +164,6 @@ public class App extends Application {
             // mostrar ventana
             mainStage.show();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    // METODO CAMBIAR ESCENA
-
-    public void changeScene(HBox Central_Box, String newModule, String newStage, String title, Class<?> MidWare){
-        // englobar todo el proceso en un try-catch
-        // de esta forma, si surge un fallo al generar la nueva pantalla,
-        // aborta tambien el proceso de limpiar la pantalla vieja
-        try {
-            // limpiar contenedor
-            Central_Box.getChildren().clear();
-    
-            // preparar archivo .fxml
-            FXMLLoader loader = new FXMLLoader(
-                App.class.getResource(newModule + "/gui/" + newStage + ".fxml")
-            );
-
-            // cargar archivo .fxml
-            Parent root = loader.load();
-
-            // agregar archivo al panel central
-            Central_Box.getChildren().add(root);
         } catch (IOException e) {
             e.printStackTrace();
         }
