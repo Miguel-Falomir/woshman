@@ -1,11 +1,9 @@
 package com.menu.middleware;
 
 import java.io.IOException;
-import java.util.List;
 
 import com.App;
 import com.login.middleware.LoginMiddleWare;
-import com.utilities.DAO;
 import com.utilities.SubMenuWare;
 import com.vehiculos.controller.DAO_Vehiculo;
 import com.vehiculos.middleware.ListaVehiculosMenuWare;
@@ -29,24 +27,10 @@ public class MainMiddleWare {
 
     SubMenuWare subMenuWare;
 
-    // DAOs
-
-    DAO dao;
-
     // CONSTRUCTOR
 
     public MainMiddleWare(App app) {
         this.app = app;
-    }
-
-    // GETTERS Y SETTERS
-
-    public DAO getDao(){
-        return dao;
-    }
-
-    public void setDao(DAO dao){
-        this.dao = dao;
     }
 
     // ELEMENTOS UI
@@ -230,36 +214,31 @@ public class MainMiddleWare {
 
     // METODO CAMBIAR ESCENA
 
-    public void changeScene(String newModule, String newStage, String title, Class<?> menuWareClass){
+    public void changeScene(String newModule, String newScene, String title, Class<?> menuWareClass){
         // englobar todo el proceso en un try-catch
         // de esta forma, si surge un fallo al generar la nueva pantalla,
         // aborta tambien el proceso de limpiar la pantalla vieja
         try {
             // limpiar contenedor
             Central_Box.getChildren().clear();
-    
+            
             // preparar archivo .fxml
             FXMLLoader loader = new FXMLLoader(
-                App.class.getResource(newModule + "/gui/" + newStage + ".fxml")
+                App.class.getResource(newModule + "/gui/" + newScene + ".fxml")
             );
+
+            // generar controlador correspondiente al submenu
+            if (menuWareClass.equals(ListaVehiculosMenuWare.class)){
+                loader.setControllerFactory(lambda -> {
+                    return new ListaVehiculosMenuWare(this, new DAO_Vehiculo(app.getConnection()));
+                });
+            }
 
             // cargar archivo .fxml
             Parent root = loader.load();
 
             // obtener SubMenuWare del archivo .fxml
             subMenuWare = loader.getController();
-
-            // asignar MainMiddleWare al SubMenuWare actual
-            if (menuWareClass.equals(ListaVehiculosMenuWare.class)){
-                subMenuWare.setMainController(this);
-            }
-
-            // asignar MiddleWare del menu principal al MenuWare
-
-            //
-            if (newModule.equals("vehiculos")){
-                dao = new DAO_Vehiculo(app.getConnection());
-            }
 
             // agregar archivo al panel central
             Central_Box.getChildren().add(root);
