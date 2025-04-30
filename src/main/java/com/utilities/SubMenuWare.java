@@ -6,14 +6,16 @@ public abstract class SubMenuWare {
 
     // ATRIBUTOS
 
-    private MainMiddleWare mainController;
+    protected MainMiddleWare mainController;
+    protected DAO dao;
 
     // CONSTRUCTORES
 
     public SubMenuWare(){}
 
-    public SubMenuWare(MainMiddleWare mainController){
+    public SubMenuWare(MainMiddleWare mainController, DAO dao){
         this.mainController = mainController;
+        this.dao = dao;
     }
 
     // METODO CAMBIAR CONTROLADOR PRINCIPAL
