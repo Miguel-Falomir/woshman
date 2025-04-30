@@ -7,13 +7,14 @@ import com.utilities.DAO;
 import com.utilities.SubMenuWare;
 import com.vehiculos.controller.DAO_Vehiculo;
 import com.vehiculos.model.Vehiculo;
+import com.vehiculos.model.VehiculoCellFactory;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
 
 public class ListaVehiculosMenuWare extends SubMenuWare {
 
@@ -36,31 +37,46 @@ public class ListaVehiculosMenuWare extends SubMenuWare {
     private Button Buton_Click;
 
     @FXML
-    private ListView<Vehiculo> Lview_Vehiculos;
+    private Button Buton_Agregar;
+
+    @FXML
+    private ListView<Vehiculo> ListV_Vehiculos;
 
     // EVENTOS
 
     @FXML
-    void OnAction_Buton_Click(){}
+    void OnAction_Buton_Click(ActionEvent event){
+
+    }
+
+    @FXML
+    void OnAction_Buton_Agregar(ActionEvent event) {
+
+    }
 
     // INICIALIZAR
 
     public void initialize(){
         // inicializar lista observable
-        obserVehiculos = FXCollections.observableArrayList(prueba());
+        DAO_Vehiculo daoVehiculo = (DAO_Vehiculo) dao;
+        List<Vehiculo> lista = daoVehiculo.searchAll();
+        obserVehiculos = FXCollections.observableArrayList(lista);
 
         // asignar lista observable a ListView interfaz
-        Lview_Vehiculos.setItems(obserVehiculos);
+        ListV_Vehiculos.setItems(obserVehiculos);
+
+        // definir formato de las celdas de ListView
+        ListV_Vehiculos.setCellFactory(lambda -> {
+            return new VehiculoCellFactory();
+        });
+
+        // si se trata de un 'mecanico', deshabilitar 'Buton_Agregar'
+        Integer rol = this.mainController.getCurrentRol();
+        if(rol == 1){
+            Buton_Agregar.setVisible(false);
+        }
     }
 
     // METODO LISTAR VEHICULOS
-
-    public List<Vehiculo> prueba(){
-        DAO_Vehiculo daoVehiculo = (DAO_Vehiculo) dao;
-
-        List<Vehiculo> listaVehiculos = daoVehiculo.searchAll();
-
-        return listaVehiculos;
-    }
 
 }

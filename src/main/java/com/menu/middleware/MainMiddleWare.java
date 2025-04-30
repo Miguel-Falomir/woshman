@@ -178,7 +178,7 @@ public class MainMiddleWare {
 
     @FXML
     void OnAction_Mitem_Lista_Vehiculos(ActionEvent event) {
-        changeScene("vehiculos", "listview_arbol", "Lista Vehiculos", ListaVehiculosMenuWare.class);
+        changeScene("vehiculos", "lista_vehiculos", "Lista Vehiculos", ListaVehiculosMenuWare.class);
     }
 
     @FXML
@@ -210,6 +210,12 @@ public class MainMiddleWare {
     void OnAction_Mitem_Salir(ActionEvent event){
         app.setUser(null);
         app.changeStage("login", "login_form", "login", 400, 300, false, LoginMiddleWare.class);
+    }
+
+    // METODO ENVIAR ROL USUARIO (se utiliza principalmente para que los submenus ejecuten restricciones concretas)
+
+    public Integer getCurrentRol(){
+        return app.getUser().getRol().getId();
     }
 
     // METODO CAMBIAR ESCENA

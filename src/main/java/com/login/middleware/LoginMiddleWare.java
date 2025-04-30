@@ -60,7 +60,7 @@ public class LoginMiddleWare {
 
     @FXML
     void OnMouseClicked_Buton_SignUp(MouseEvent event) {
-        app.changeStage("login", "new_user_form", "REGISTRO", 480, 360, false, NewUserMiddleWare.class);
+        app.changeStage("login", "nuevo_usuario_form", "REGISTRO", 480, 360, false, NuevoUsuarioMiddleWare.class);
     }
 
     // METODOS

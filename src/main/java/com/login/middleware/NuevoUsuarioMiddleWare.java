@@ -13,7 +13,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 
-public class NewUserMiddleWare {
+public class NuevoUsuarioMiddleWare {
 
     // OBJETO APP
     // Entre otras cosas, contiene la conexion a BD
@@ -34,7 +34,7 @@ public class NewUserMiddleWare {
 
     // CONSTRUCTOR
 
-    public NewUserMiddleWare(App app){
+    public NuevoUsuarioMiddleWare(App app){
         this.app = app;
         this.dao = new DAO_Empleado(this.app.getConnection());
     }

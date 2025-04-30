@@ -8,7 +8,7 @@ import java.util.List;
 // import javax.xml.stream.events.Namespace;
 
 import com.login.middleware.LoginMiddleWare;
-import com.login.middleware.NewUserMiddleWare;
+import com.login.middleware.NuevoUsuarioMiddleWare;
 import com.login.model.Empleado;
 import com.menu.middleware.MainMiddleWare;
 import com.utilities.DB_Connector;
@@ -71,9 +71,9 @@ public class App extends Application {
                 loader.setControllerFactory(lambda -> {
                     return new MainMiddleWare(this);
                 });
-            } else if (midWare.equals(NewUserMiddleWare.class)){
+            } else if (midWare.equals(NuevoUsuarioMiddleWare.class)){
                 loader.setControllerFactory(lambda -> {
-                    return new NewUserMiddleWare(this);
+                    return new NuevoUsuarioMiddleWare(this);
                 });
             }
 
