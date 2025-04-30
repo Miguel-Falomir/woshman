@@ -7,9 +7,9 @@ import java.util.List;
 
 // import javax.xml.stream.events.Namespace;
 
-import com.login.middleware.LoginMiddleWare;
-import com.login.middleware.NuevoUsuarioMiddleWare;
-import com.login.model.Empleado;
+import com.empleados.middleware.LoginMiddleWare;
+import com.empleados.middleware.NuevoUsuarioMiddleWare;
+import com.empleados.model.Empleado;
 import com.menu.middleware.MainMiddleWare;
 import com.utilities.DB_Connector;
 
@@ -175,7 +175,7 @@ public class App extends Application {
     public void start(Stage primaryStage) throws Exception {
         // declarar ventana login
         FXMLLoader loader = new FXMLLoader(
-            App.class.getResource("login/gui/login_form.fxml")
+            App.class.getResource("empleados/gui/login_form.fxml")
         );
 
         // declarar un constructor personalizado para crear el controlador del login.

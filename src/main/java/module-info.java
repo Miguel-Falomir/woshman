@@ -14,8 +14,8 @@ module com {
     //com
     opens com to javafx.fxml;
     //login
-    opens com.login.middleware to javafx.fxml;
-    opens com.login.controller to javafx.fxml;
+    opens com.empleados.middleware to javafx.fxml;
+    opens com.empleados.controller to javafx.fxml;
     //menu
     opens com.menu.middleware to javafx.fxml;
     ///opens com.menu.controller to javafx.fxml;
@@ -25,5 +25,5 @@ module com {
 
     // Exportar paquetes
     exports com;
-    exports com.login.model;
+    exports com.empleados.model;
 }

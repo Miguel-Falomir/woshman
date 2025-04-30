@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import com.App;
-import com.login.middleware.LoginMiddleWare;
+import com.empleados.middleware.LoginMiddleWare;
 import com.utilities.DAO;
 import com.utilities.SubMenuWare;
 import com.vehiculos.controller.DAO_Marca;
@@ -213,7 +213,7 @@ public class MainMiddleWare {
     @FXML
     void OnAction_Mitem_Salir(ActionEvent event){
         app.setUser(null);
-        app.changeStage("login", "login_form", "login", 400, 300, false, LoginMiddleWare.class);
+        app.changeStage("empleados", "login_form", "login", 400, 300, false, LoginMiddleWare.class);
     }
 
     // METODO ENVIAR ROL USUARIO (se utiliza principalmente para que los submenus ejecuten restricciones concretas)
