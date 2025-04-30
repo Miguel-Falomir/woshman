@@ -1,5 +1,7 @@
 package com.utilities;
 
+import java.util.HashMap;
+
 import com.menu.middleware.MainMiddleWare;
 
 public abstract class SubMenuWare {
@@ -7,15 +9,15 @@ public abstract class SubMenuWare {
     // ATRIBUTOS
 
     protected MainMiddleWare mainController;
-    protected DAO dao;
+    protected HashMap<String, DAO> daoHashMap;
 
     // CONSTRUCTORES
 
     public SubMenuWare(){}
 
-    public SubMenuWare(MainMiddleWare mainController, DAO dao){
+    public SubMenuWare(MainMiddleWare mainController, HashMap<String, DAO> daoHashMap){
         this.mainController = mainController;
-        this.dao = dao;
+        this.daoHashMap = daoHashMap;
     }
 
     // METODO CAMBIAR CONTROLADOR PRINCIPAL

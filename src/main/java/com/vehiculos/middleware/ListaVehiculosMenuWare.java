@@ -1,5 +1,6 @@
 package com.vehiculos.middleware;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.menu.middleware.MainMiddleWare;
@@ -26,9 +27,9 @@ public class ListaVehiculosMenuWare extends SubMenuWare {
 
     public ListaVehiculosMenuWare(){}
 
-    public ListaVehiculosMenuWare(MainMiddleWare mainController, DAO dao){
+    public ListaVehiculosMenuWare(MainMiddleWare mainController, HashMap<String, DAO> daoHashMap){
         this.mainController = mainController;
-        this.dao = dao;
+        this.daoHashMap = daoHashMap;
     }
 
     // ELEMENTOS UI
@@ -58,7 +59,7 @@ public class ListaVehiculosMenuWare extends SubMenuWare {
 
     public void initialize(){
         // inicializar lista observable
-        DAO_Vehiculo daoVehiculo = (DAO_Vehiculo) dao;
+        DAO_Vehiculo daoVehiculo = (DAO_Vehiculo) daoHashMap.get("vehiculo");
         List<Vehiculo> lista = daoVehiculo.searchAll();
         obserVehiculos = FXCollections.observableArrayList(lista);
 

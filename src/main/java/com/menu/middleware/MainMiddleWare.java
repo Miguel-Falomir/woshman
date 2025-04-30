@@ -1,10 +1,14 @@
 package com.menu.middleware;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import com.App;
 import com.login.middleware.LoginMiddleWare;
+import com.utilities.DAO;
 import com.utilities.SubMenuWare;
+import com.vehiculos.controller.DAO_Marca;
+import com.vehiculos.controller.DAO_Modelo;
 import com.vehiculos.controller.DAO_Vehiculo;
 import com.vehiculos.middleware.ListaVehiculosMenuWare;
 
@@ -234,9 +238,14 @@ public class MainMiddleWare {
             );
 
             // generar controlador correspondiente al submenu
+            // asignando DAOs necesarios
+            HashMap<String, DAO> daoHashMap = new HashMap<>();
             if (menuWareClass.equals(ListaVehiculosMenuWare.class)){
                 loader.setControllerFactory(lambda -> {
-                    return new ListaVehiculosMenuWare(this, new DAO_Vehiculo(app.getConnection()));
+                    daoHashMap.put("vehiculo", new DAO_Vehiculo(app.getConnection()));
+                    daoHashMap.put("modelo", new DAO_Modelo(app.getConnection()));
+                    daoHashMap.put("marca", new DAO_Marca(app.getConnection()));
+                    return new ListaVehiculosMenuWare(this, daoHashMap);
                 });
             }
 
