@@ -9,8 +9,12 @@ import com.empleados.model.Empleado;
 import com.menu.middleware.MainMiddleWare;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
 public class LoginMiddleWare {
@@ -40,10 +44,10 @@ public class LoginMiddleWare {
     // ELEMENTOS UI
 
     @FXML
-    private Button Buton_Enter;
+    private Button Buton_Entrar;
 
     @FXML
-    private Button Buton_SignUp;
+    private Button Buton_Registrarse;
 
     @FXML
     private TextField Input_Password;
@@ -54,20 +58,42 @@ public class LoginMiddleWare {
     // EVENTOS
 
     @FXML
-    void OnMouseClicked_Buton_Enter(MouseEvent event) {
+    void OnMouseClicked_Buton_Entrar(MouseEvent event) {
         Func_User_Login();
     }
 
     @FXML
-    void OnMouseClicked_Buton_SignUp(MouseEvent event) {
+    void OnKeyPressed_Buton_Entrar(KeyEvent event) {
+        KeyCode ke = event.getCode();
+        if (ke.equals(KeyCode.ENTER)) {
+            Func_User_Login();
+        } else {
+            System.out.println("Este método detecta cualquier tecla, pero le he dicho que solo realize la acción si el usuario pulsa ENTER / INTRO");
+        }
+    }
+
+    @FXML
+    void OnMouseClicked_Buton_Registrarse(MouseEvent event) {
         app.changeStage("empleados", "nuevo_usuario_form", "REGISTRO", 480, 360, false, NuevoUsuarioMiddleWare.class);
+    }
+
+        @FXML
+    void OnKeyPresed_Buton_Registrarse(KeyEvent event) {
+        KeyCode ke = event.getCode();
+        if (ke.equals(KeyCode.ENTER)) {
+            app.changeStage("empleados", "nuevo_usuario_form", "REGISTRO", 480, 360, false, NuevoUsuarioMiddleWare.class);
+        } else {
+            System.out.println("Este método detecta cualquier tecla, pero le he dicho que solo realize la acción si el usuario pulsa ENTER / INTRO");
+        }
     }
 
     // METODOS
 
     private void Func_User_Login(){
-        // variable auxiliar
+        // variables internas
         String text = "";
+        Alert a = new Alert(AlertType.ERROR);
+
         // recopilar datos de los inputs
         auxUsername = Input_Username.getText();
         auxPassword = Input_Password.getText();
@@ -78,14 +104,18 @@ public class LoginMiddleWare {
         // mostrar si 'auxUsername' y 'auxPassword' coinciden
         if(auxUser == null){
             text = String.format("Usuario %s no existe o no se encuentra", auxUsername.isBlank()? "[empty]" : auxUsername);
-            System.out.println(text);
+            a.setHeaderText("ACCESO DENEGADO");
+            a.setContentText(text);
+            a.show();
         } else if (auxUser.getPassword().equals(auxPassword)){
             text = String.format("Contraseña correcta. Bienvenid@ de nuevo, %s", auxUser.getNombre() + " " + auxUser.getApellidos());
             System.out.println(text);
             app.setUser(auxUser);
             app.changeStage("menu", "main", "WOSHMAN", 960, 540, true, MainMiddleWare.class);
         } else {
-            System.out.println("Contraseña incorrecta. Repita la contraseña o cambie de usuario");
+            a.setHeaderText("ACCESO DENEGADO");
+            a.setContentText("Contraseña incorrecta. Repita la contraseña o cambie de usuario");
+            a.show();
         }
     }
 

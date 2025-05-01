@@ -10,6 +10,7 @@ import java.util.List;
 import com.empleados.middleware.LoginMiddleWare;
 import com.empleados.middleware.NuevoUsuarioMiddleWare;
 import com.empleados.model.Empleado;
+import com.empleados.model.Permiso;
 import com.menu.middleware.MainMiddleWare;
 import com.utilities.DB_Connector;
 
@@ -48,6 +49,10 @@ public class App extends Application {
         App.user = user;
     }
 
+    public static List<Permiso> getUserPermissions(){
+        return App.user.getRol().getListaPermisos();
+    }
+
     // METODO CAMBIAR DE VENTANA
 
     public void changeStage(String newModule, String newStage, String title, int width, int heigth, Boolean resize, Class<?> midWare){
@@ -62,7 +67,7 @@ public class App extends Application {
             mainStage.close();
 
             // elegir controlador 'MidWare' para interfaz
-            // no se implementa switch-case porque Class<?> es un tipo de variable delicado de manejar
+            // no se implementa switch-case porque Class<?> parece no admitirlo
             if (midWare.equals(LoginMiddleWare.class)){
                 loader.setControllerFactory(lambda -> {
                     return new LoginMiddleWare(this);

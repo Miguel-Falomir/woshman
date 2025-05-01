@@ -16,6 +16,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 
 public class ListaVehiculosMenuWare extends SubMenuWare {
 
@@ -35,24 +36,27 @@ public class ListaVehiculosMenuWare extends SubMenuWare {
     // ELEMENTOS UI
 
     @FXML
-    private Button Buton_Click;
+    private Button Buton_Agregar;
 
     @FXML
-    private Button Buton_Agregar;
+    private Button Buton_Buscar;
 
     @FXML
     private ListView<Vehiculo> ListV_Vehiculos;
 
-    // EVENTOS
-
     @FXML
-    void OnAction_Buton_Click(ActionEvent event){
+    private TextField Input_Matricula;
 
-    }
+    // EVENTOS
 
     @FXML
     void OnAction_Buton_Agregar(ActionEvent event) {
 
+    }
+
+    @FXML
+    void OnAction_Buton_Buscar(ActionEvent event) {
+        System.out.println(Input_Matricula.getText());
     }
 
     // INICIALIZAR
@@ -72,10 +76,15 @@ public class ListaVehiculosMenuWare extends SubMenuWare {
         });
 
         // si se trata de un 'mecanico', deshabilitar 'Buton_Agregar'
+        /*
         Integer rol = this.mainController.getCurrentRol();
         if(rol == 1){
             Buton_Agregar.setVisible(false);
         }
+        */
+        Buton_Agregar.getParent().setVisible(false);
+        Buton_Agregar.getParent().setDisable(true);
+        Buton_Agregar.getParent().setManaged(false);
     }
 
     // METODO LISTAR VEHICULOS

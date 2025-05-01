@@ -216,12 +216,6 @@ public class MainMiddleWare {
         app.changeStage("empleados", "login_form", "login", 400, 300, false, LoginMiddleWare.class);
     }
 
-    // METODO ENVIAR ROL USUARIO (se utiliza principalmente para que los submenus ejecuten restricciones concretas)
-
-    public Integer getCurrentRol(){
-        return app.getUser().getRol().getId();
-    }
-
     // METODO CAMBIAR ESCENA
 
     public void changeScene(String newModule, String newScene, String title, Class<?> menuWareClass){
