@@ -1,6 +1,10 @@
 package com.vehiculos.controller;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.utilities.DAO;
@@ -47,8 +51,51 @@ public class DAO_Marca extends DAO implements DAO_Interface<Marca, Integer> {
 
     @Override
     public List<Marca> searchAll() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'searchAll'");
+        // variables internas
+        PreparedStatement statement = null;
+        ResultSet resultado = null;
+        List<Marca> respuesta = new ArrayList<Marca>();
+
+        // (intentar) ejecutar busqueda
+        try {
+            // consulta 1: Buscar todas las marcas //////////////////
+            statement = connect.prepareStatement("SELECT ma.id_marca, ma.nombre FROM marca ma ORDER BY ma.id_marca ASC;");
+
+            // ejecutar consulta
+            resultado = statement.executeQuery();
+
+            // asegurar que 'resultado' apunte antes de la primera fila
+            if (!resultado.isBeforeFirst()){
+                resultado.beforeFirst();
+            }
+
+            // agregar todas las respuestas a lista 'auxMarcas'
+            while(resultado.next()){
+                respuesta.add( new Marca(
+                    resultado.getInt(1),
+                    resultado.getString(2)
+                ));
+            }
+            
+        // manejar excepciones
+        } catch (SQLException e){
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        
+        // pase lo que pase, cerrar 'statement'
+        } finally {
+            if (statement != null){
+                try {
+                    statement.close();
+                } catch (SQLException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        // devolver respuesta
+        return respuesta;
     }
 
 }

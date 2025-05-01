@@ -26,7 +26,7 @@
             <Insets />
          </GridPane.margin>
          <children>
-            <TreeView prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+            <TreeView fx:id="TreeV_Marca_Modelo" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
          </children>
          <padding>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -36,7 +36,7 @@
          <children>
             <HBox prefWidth="200.0" VBox.vgrow="NEVER">
                <children>
-                  <TextField HBox.hgrow="ALWAYS" />
+                  <TextField promptText="5555 XXX" HBox.hgrow="ALWAYS" />
                   <Button fx:id="Buton_Buscar" mnemonicParsing="false" onAction="#OnAction_Buton_Buscar" text="Buscar">
                      <HBox.margin>
                         <Insets left="20.0" />

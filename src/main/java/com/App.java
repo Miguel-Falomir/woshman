@@ -5,6 +5,8 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.empleados.controller.DAO_Permiso;
+
 // import javax.xml.stream.events.Namespace;
 
 import com.empleados.middleware.LoginMiddleWare;
@@ -49,8 +51,13 @@ public class App extends Application {
         App.user = user;
     }
 
-    public static List<Permiso> getUserPermissions(){
-        return App.user.getRol().getListaPermisos();
+    // METODO COMPROBAR SI USUARIO TIENE X PERMISO
+
+    public static boolean checkPermiso(Integer id_perm){
+        DAO_Permiso dao = new DAO_Permiso(connector.getConnection());
+        Permiso perm = dao.search(id_perm);
+        List<Permiso> listaPermisos = user.getRol().getListaPermisos();
+        return listaPermisos.contains(perm);
     }
 
     // METODO CAMBIAR DE VENTANA

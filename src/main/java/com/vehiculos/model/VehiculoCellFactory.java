@@ -6,6 +6,7 @@ import com.App;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 
@@ -47,13 +48,23 @@ public class VehiculoCellFactory extends ListCell<Vehiculo> {
                 String marca = item.getModelo().getMarca().getNombre();
                 String modelo = item.getModelo().getNombre();
 
-                // cargar elementos Label
+                // cargar elementos UI
                 Label Label_Matricula = (Label) loader.getNamespace().get("Label_Matricula");
                 Label Label_Marca_Modelo = (Label) loader.getNamespace().get("Label_Marca_Modelo");
+                Button Buton_Editar = (Button) loader.getNamespace().get("Buton_Editar");
+                Button Buton_Borrar = (Button) loader.getNamespace().get("Buton_Borrar");
 
                 // asignar atributos a Labels
                 Label_Matricula.setText(matricula);
                 Label_Marca_Modelo.setText("[" + marca + " " + modelo + "]");
+
+                // desactivar botones 'editar' y 'borrar' si no se tienen permisos 26 y 27
+                if (!App.checkPermiso(26)) {
+                    Buton_Editar.setManaged(false);
+                }
+                if (!App.checkPermiso(27)) {
+                    Buton_Borrar.setManaged(false);
+                }
 
                 // asignar elemento root a la interfaz
                 setGraphic(root);

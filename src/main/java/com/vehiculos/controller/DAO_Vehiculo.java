@@ -164,7 +164,7 @@ public class DAO_Vehiculo extends DAO implements DAO_Interface<Vehiculo, Integer
             }
         }
 
-        // devolver resultado
+        // devolver respuesta
         return respuesta;
     }
 
