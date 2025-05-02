@@ -58,14 +58,11 @@ public class DAO_Vehiculo extends DAO implements DAO_Interface<Vehiculo, Integer
         PreparedStatement statement = null;
         ResultSet resultado = null;
         List<Vehiculo> respuesta = new ArrayList<Vehiculo>();
-        List<Marca> auxMarcas = new ArrayList<Marca>();
-        List<Categoria> auxCategorias = new ArrayList<Categoria>();
-        List<Modelo> auxModelos = new ArrayList<Modelo>();
 
         // (intentar) ejecutar busqueda
         try {
-            // consulta 1: Buscar todas las marcas //////////////////
-            statement = connect.prepareStatement("SELECT ma.id_marca, ma.nombre FROM marca ma ORDER BY ma.id_marca ASC;");
+            // consulta 1: buscar todos los datos de vehiculo, modelo, categoria y marca de una tajada
+            statement = connect.prepareStatement("SELECT veh.id_vehiculo, veh.matricula, mo.id_modelo, mo.nombre, cat.id_categoria, cat.nombre, cat.descripcion, ma.id_marca, ma.nombre FROM vehiculo veh JOIN modelo mo ON mo.id_modelo = veh.fk_modelo JOIN categoria cat ON mo.fk_categoria = cat.id_categoria JOIN marca ma ON ma.id_marca = mo.fk_marca ORDER BY veh.id_vehiculo ASC;");
 
             // ejecutar consulta
             resultado = statement.executeQuery();
@@ -75,76 +72,29 @@ public class DAO_Vehiculo extends DAO implements DAO_Interface<Vehiculo, Integer
                 resultado.beforeFirst();
             }
 
-            // agregar todas las respuestas a lista 'auxMarcas'
-            while(resultado.next()){
-                auxMarcas.add( new Marca(
-                    resultado.getInt(1),
-                    resultado.getString(2)
-                ));
-            }
-
-            // consulta 2: Buscar todas las categorias //////////////
-            statement = connect.prepareStatement("SELECT ca.id_categoria, ca.nombre, ca.descripcion FROM categoria ca ORDER BY ca.id_categoria ASC;");
-
-            // ejecutar consulta
-            resultado = statement.executeQuery();
-
-            // asegurar que 'resultado' apunte antes de la primera fila
-            if (!resultado.isBeforeFirst()){
-                resultado.beforeFirst();
-            }
-
-            // agregar todas las respuestas a lista 'auxCategorias'
-            while(resultado.next()){
-                auxCategorias.add( new Categoria(
-                    resultado.getInt(1),
-                    resultado.getString(2),
-                    (resultado.getString(3) == null) ? "": resultado.getString(3) // Operador Ternario -> (condicion) ? [valor_verdadero] : [valor_falso]
-                ));
-            }
-
-            // consulta 3: Buscar todos los modelos /////////////////
-            statement = connect.prepareStatement("SELECT mo.id_modelo, mo.nombre, mo.fk_marca, mo.fk_categoria FROM modelo mo ORDER BY mo.id_modelo ASC;");
-
-            // ejecutar consulta
-            resultado = statement.executeQuery();
-
-            // asegurar que 'resultado' apunte antes de la primera fila
-            if (!resultado.isBeforeFirst()){
-                resultado.beforeFirst();
-            }
-
-            // agregar todas las respuestas a lista 'auxModelos'
-            while(resultado.next()){
-                Marca marca = auxMarcas.get( resultado.getInt(3) );
-                Categoria categoria = auxCategorias.get( resultado.getInt(4) );
-                auxModelos.add( new Modelo(
-                    resultado.getInt(1),
-                    resultado.getString(2),
+            // agregar todos los resultado a lista 'respuesta'
+            while (resultado.next()){
+                Marca marca = new Marca(
+                    resultado.getInt(8),
+                    resultado.getString(9)
+                );
+                Categoria categoria = new Categoria(
+                    resultado.getInt(5),
+                    resultado.getString(6),
+                    (resultado.getString(7) == null) ? "": resultado.getString(7) // Operador Ternario -> (condicion) ? [valor_verdadero] : [valor_falso]
+                );
+                Modelo modelo = new Modelo(
+                    resultado.getInt(3),
+                    resultado.getString(4),
                     marca,
                     categoria
-                ));
-            }
-
-            // consulta 4: Buscar todos los vehiculos ///////////////
-            statement = connect.prepareStatement("SELECT v.id_vehiculo, v.matricula, v.fk_modelo FROM vehiculo v ORDER BY v.id_vehiculo ASC;");
-
-            // ejecutar consulta
-            resultado = statement.executeQuery();
-
-            // asegurar que 'resultado' apunte antes de la primera fila
-            if (!resultado.isBeforeFirst()){
-                resultado.beforeFirst();
-            }
-
-            // agregar todas las respuestas a lista 'listVehiculos'
-            while(resultado.next()){
-                Modelo modelo = auxModelos.get( resultado.getInt(3) );
-                respuesta.add( new Vehiculo(
-                    resultado.getInt(1), 
+                );
+                Vehiculo vehiculo = new Vehiculo(
+                    resultado.getInt(1),
                     resultado.getString(2),
                     modelo
-                ));
+                );
+                respuesta.add(vehiculo);
             }
 
         // manejar excepciones
@@ -163,24 +113,9 @@ public class DAO_Vehiculo extends DAO implements DAO_Interface<Vehiculo, Integer
                 }
             }
         }
-
+        
         // devolver respuesta
         return respuesta;
-    }
-
-    public List<Vehiculo> searchByMarca(){
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'searchAll'");
-    }
-
-    public List<Vehiculo> searchByModelo(){
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'searchAll'");
-    }
-
-    public List<Vehiculo> searchByMatricula(String matricula){
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'searchAll'");
     }
 
 }

@@ -12,6 +12,7 @@ import com.utilities.DAO_Interface;
 import com.vehiculos.model.Categoria;
 import com.vehiculos.model.Marca;
 import com.vehiculos.model.Modelo;
+import com.vehiculos.model.Vehiculo;
 
 public class DAO_Modelo extends DAO implements DAO_Interface<Modelo, Integer> {
 
@@ -57,13 +58,11 @@ public class DAO_Modelo extends DAO implements DAO_Interface<Modelo, Integer> {
         PreparedStatement statement = null;
         ResultSet resultado = null;
         List<Modelo> respuesta = new ArrayList<Modelo>();
-        List<Marca> auxMarcas = new ArrayList<Marca>();
-        List<Categoria> auxCategorias = new ArrayList<Categoria>();
 
         // (intentar) ejecutar busqueda
         try {
-            // consulta 1: Buscar todas las marcas //////////////////
-            statement = connect.prepareStatement("SELECT ma.id_marca, ma.nombre FROM marca ma ORDER BY ma.id_marca ASC;");
+            // consulta 1: buscar todos los datos de vehiculo, modelo, categoria y marca de una tajada
+            statement = connect.prepareStatement("SELECT mo.id_modelo, mo.nombre, cat.id_categoria, cat.nombre, cat.descripcion, ma.id_marca, ma.nombre FROM modelo mo JOIN categoria cat ON mo.fk_categoria = cat.id_categoria JOIN marca ma ON ma.id_marca = mo.fk_marca ORDER BY mo.id_modelo ASC;");
 
             // ejecutar consulta
             resultado = statement.executeQuery();
@@ -73,57 +72,26 @@ public class DAO_Modelo extends DAO implements DAO_Interface<Modelo, Integer> {
                 resultado.beforeFirst();
             }
 
-            // agregar todas las respuestas a lista 'auxMarcas'
-            while(resultado.next()){
-                auxMarcas.add( new Marca(
-                    resultado.getInt(1),
-                    resultado.getString(2)
-                ));
-            }
-
-            // consulta 2: Buscar todas las categorias //////////////
-            statement = connect.prepareStatement("SELECT ca.id_categoria, ca.nombre, ca.descripcion FROM categoria ca ORDER BY ca.id_categoria ASC;");
-
-            // ejecutar consulta
-            resultado = statement.executeQuery();
-
-            // asegurar que 'resultado' apunte antes de la primera fila
-            if (!resultado.isBeforeFirst()){
-                resultado.beforeFirst();
-            }
-
-            // agregar todas las respuestas a lista 'auxCategorias'
-            while(resultado.next()){
-                auxCategorias.add( new Categoria(
-                    resultado.getInt(1),
-                    resultado.getString(2),
-                    (resultado.getString(3) == null) ? "": resultado.getString(3) // Operador Ternario -> (condicion) ? [valor_verdadero] : [valor_falso]
-                ));
-            }
-
-            // consulta 3: Buscar todos los modelos /////////////////
-            statement = connect.prepareStatement("SELECT mo.id_modelo, mo.nombre, mo.fk_marca, mo.fk_categoria FROM modelo mo ORDER BY mo.id_modelo ASC;");
-
-            // ejecutar consulta
-            resultado = statement.executeQuery();
-
-            // asegurar que 'resultado' apunte antes de la primera fila
-            if (!resultado.isBeforeFirst()){
-                resultado.beforeFirst();
-            }
-
-            // agregar todas las respuestas a lista 'respuesta'
-            while(resultado.next()){
-                Marca marca = auxMarcas.get( resultado.getInt(3) );
-                Categoria categoria = auxCategorias.get( resultado.getInt(4) );
-                respuesta.add( new Modelo(
+            // agregar todos los resultado a lista 'respuesta'
+            while (resultado.next()){
+                Marca marca = new Marca(
+                    resultado.getInt(6),
+                    resultado.getString(7)
+                );
+                Categoria categoria = new Categoria(
+                    resultado.getInt(3),
+                    resultado.getString(4),
+                    (resultado.getString(5) == null) ? "": resultado.getString(7) // Operador Ternario -> (condicion) ? [valor_verdadero] : [valor_falso]
+                );
+                Modelo modelo = new Modelo(
                     resultado.getInt(1),
                     resultado.getString(2),
                     marca,
                     categoria
-                ));
+                );
+                respuesta.add(modelo);
             }
-            
+
         // manejar excepciones
         } catch (SQLException e){
             e.printStackTrace();
@@ -140,23 +108,22 @@ public class DAO_Modelo extends DAO implements DAO_Interface<Modelo, Integer> {
                 }
             }
         }
-
+        
         // devolver respuesta
         return respuesta;
     }
 
-    public List<Modelo> searchByMarca(Integer id_marca){
+    public List<Modelo> searchByMarca(Integer id){
         // variables internas
         PreparedStatement statement = null;
         ResultSet resultado = null;
         List<Modelo> respuesta = new ArrayList<Modelo>();
-        List<Marca> auxMarcas = new ArrayList<Marca>();
-        List<Categoria> auxCategorias = new ArrayList<Categoria>();
 
         // (intentar) ejecutar busqueda
         try {
-            // consulta 1: Buscar todas las marcas //////////////////
-            statement = connect.prepareStatement("SELECT ma.id_marca, ma.nombre FROM marca ma ORDER BY ma.id_marca ASC;");
+            // consulta 1: buscar todos los datos de vehiculo, modelo, categoria y marca de una tajada
+            statement = connect.prepareStatement("SELECT mo.id_modelo, mo.nombre, cat.id_categoria, cat.nombre, cat.descripcion, ma.id_marca, ma.nombre FROM modelo mo JOIN categoria cat ON mo.fk_categoria = cat.id_categoria JOIN marca ma ON ma.id_marca = mo.fk_marca WHERE ma.id_marca = ? ORDER BY mo.id_modelo ASC;");
+            statement.setInt(1, id);
 
             // ejecutar consulta
             resultado = statement.executeQuery();
@@ -166,58 +133,26 @@ public class DAO_Modelo extends DAO implements DAO_Interface<Modelo, Integer> {
                 resultado.beforeFirst();
             }
 
-            // agregar todas las respuestas a lista 'auxMarcas'
-            while(resultado.next()){
-                auxMarcas.add( new Marca(
-                    resultado.getInt(1),
-                    resultado.getString(2)
-                ));
-            }
-
-            // consulta 2: Buscar todas las categorias //////////////
-            statement = connect.prepareStatement("SELECT ca.id_categoria, ca.nombre, ca.descripcion FROM categoria ca ORDER BY ca.id_categoria ASC;");
-
-            // ejecutar consulta
-            resultado = statement.executeQuery();
-
-            // asegurar que 'resultado' apunte antes de la primera fila
-            if (!resultado.isBeforeFirst()){
-                resultado.beforeFirst();
-            }
-
-            // agregar todas las respuestas a lista 'auxCategorias'
-            while(resultado.next()){
-                auxCategorias.add( new Categoria(
-                    resultado.getInt(1),
-                    resultado.getString(2),
-                    (resultado.getString(3) == null) ? "": resultado.getString(3) // Operador Ternario -> (condicion) ? [valor_verdadero] : [valor_falso]
-                ));
-            }
-
-            // consulta 3: Buscar modelos de la marca ///////////////
-            statement = connect.prepareStatement("SELECT mo.id_modelo, mo.nombre, mo.fk_marca, mo.fk_categoria FROM modelo mo WHERE mo.fk_marca = ? ORDER BY mo.id_modelo ASC;");
-            statement.setInt(1, id_marca);
-
-            // ejecutar consulta
-            resultado = statement.executeQuery();
-
-            // asegurar que 'resultado' apunte antes de la primera fila
-            if (!resultado.isBeforeFirst()){
-                resultado.beforeFirst();
-            }
-
-            // agregar todas las respuestas a lista 'respuesta'
-            while(resultado.next()){
-                Marca marca = auxMarcas.get( resultado.getInt(3) );
-                Categoria categoria = auxCategorias.get( resultado.getInt(4) );
-                respuesta.add( new Modelo(
+            // agregar todos los resultado a lista 'respuesta'
+            while (resultado.next()){
+                Marca marca = new Marca(
+                    resultado.getInt(6),
+                    resultado.getString(7)
+                );
+                Categoria categoria = new Categoria(
+                    resultado.getInt(3),
+                    resultado.getString(4),
+                    (resultado.getString(5) == null) ? "": resultado.getString(7) // Operador Ternario -> (condicion) ? [valor_verdadero] : [valor_falso]
+                );
+                Modelo modelo = new Modelo(
                     resultado.getInt(1),
                     resultado.getString(2),
                     marca,
                     categoria
-                ));
+                );
+                respuesta.add(modelo);
             }
-            
+
         // manejar excepciones
         } catch (SQLException e){
             e.printStackTrace();
@@ -234,101 +169,7 @@ public class DAO_Modelo extends DAO implements DAO_Interface<Modelo, Integer> {
                 }
             }
         }
-
-        // devolver respuesta
-        return respuesta;
-    }
-
-    public List<Modelo> searchByCategoria(Integer id_cat){
-        // variables internas
-        PreparedStatement statement = null;
-        ResultSet resultado = null;
-        List<Modelo> respuesta = new ArrayList<Modelo>();
-        List<Marca> auxMarcas = new ArrayList<Marca>();
-        List<Categoria> auxCategorias = new ArrayList<Categoria>();
-
-        // (intentar) ejecutar busqueda
-        try {
-            // consulta 1: Buscar todas las marcas //////////////////
-            statement = connect.prepareStatement("SELECT ma.id_marca, ma.nombre FROM marca ma ORDER BY ma.id_marca ASC;");
-
-            // ejecutar consulta
-            resultado = statement.executeQuery();
-
-            // asegurar que 'resultado' apunte antes de la primera fila
-            if (!resultado.isBeforeFirst()){
-                resultado.beforeFirst();
-            }
-
-            // agregar todas las respuestas a lista 'auxMarcas'
-            while(resultado.next()){
-                auxMarcas.add( new Marca(
-                    resultado.getInt(1),
-                    resultado.getString(2)
-                ));
-            }
-
-            // consulta 2: Buscar todas las categorias //////////////
-            statement = connect.prepareStatement("SELECT ca.id_categoria, ca.nombre, ca.descripcion FROM categoria ca ORDER BY ca.id_categoria ASC;");
-
-            // ejecutar consulta
-            resultado = statement.executeQuery();
-
-            // asegurar que 'resultado' apunte antes de la primera fila
-            if (!resultado.isBeforeFirst()){
-                resultado.beforeFirst();
-            }
-
-            // agregar todas las respuestas a lista 'auxCategorias'
-            while(resultado.next()){
-                auxCategorias.add( new Categoria(
-                    resultado.getInt(1),
-                    resultado.getString(2),
-                    (resultado.getString(3) == null) ? "": resultado.getString(3) // Operador Ternario -> (condicion) ? [valor_verdadero] : [valor_falso]
-                ));
-            }
-
-            // consulta 3: Buscar modelos de la categoria ///////////
-            statement = connect.prepareStatement("SELECT mo.id_modelo, mo.fk_marca, mo.fk_categoria, mo.nombre FROM modelo mo WHERE mo.fk_categoria = ? ORDER BY mo.id_modelo ASC;");
-            statement.setInt(1, id_cat);
-
-            // ejecutar consulta
-            resultado = statement.executeQuery();
-
-            // asegurar que 'resultado' apunte antes de la primera fila
-            if (!resultado.isBeforeFirst()){
-                resultado.beforeFirst();
-            }
-
-            // agregar todas las respuestas a lista 'respuesta'
-            while(resultado.next()){
-                Marca marca = auxMarcas.get( resultado.getInt(3) );
-                Categoria categoria = auxCategorias.get( resultado.getInt(4) );
-                respuesta.add( new Modelo(
-                    resultado.getInt(1),
-                    resultado.getString(2),
-                    marca,
-                    categoria
-                ));
-            }
-            
-        // manejar excepciones
-        } catch (SQLException e){
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
         
-        // pase lo que pase, cerrar 'statement'
-        } finally {
-            if (statement != null){
-                try {
-                    statement.close();
-                } catch (SQLException e){
-                    e.printStackTrace();
-                }
-            }
-        }
-
         // devolver respuesta
         return respuesta;
     }
