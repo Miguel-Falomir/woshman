@@ -14,8 +14,8 @@
 
 <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.vehiculos.middleware.ListaVehiculosMenuWare">
   <columnConstraints>
-    <ColumnConstraints hgrow="NEVER" maxWidth="200.0" minWidth="10.0" prefWidth="200.0" />
-    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+    <ColumnConstraints hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="10.0" percentWidth="20.0" prefWidth="200.0" />
+    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="80.0" prefWidth="100.0" />
   </columnConstraints>
   <rowConstraints>
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
@@ -36,8 +36,14 @@
          <children>
             <HBox prefWidth="200.0" VBox.vgrow="NEVER">
                <children>
-                  <TextField fx:id="Input_Matricula" onKeyTyped="#OnKeyTyped_Input_Matricula" promptText="5555 XXX" HBox.hgrow="ALWAYS" />
-                  <Button fx:id="Buton_Buscar" mnemonicParsing="false" onAction="#OnAction_Buton_Buscar" text="Buscar">
+                  <TextField fx:id="Input_Matricula" onKeyTyped="#OnKeyTyped_Input_Matricula" promptText="5555 XXX" HBox.hgrow="ALWAYS">
+                     <font>
+                        <Font size="18.0" />
+                     </font></TextField>
+                  <Button fx:id="Buton_Agregar" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#OnAction_Buton_Agregar" text="Agregar">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
                      <HBox.margin>
                         <Insets left="20.0" />
                      </HBox.margin>
@@ -48,18 +54,6 @@
                </padding>
             </HBox>
             <ListView fx:id="ListV_Vehiculos" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-            <HBox alignment="CENTER_RIGHT" prefWidth="200.0" VBox.vgrow="NEVER">
-               <children>
-                  <Button fx:id="Buton_Agregar" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#OnAction_Buton_Agregar" text="Agregar">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Button>
-               </children>
-               <VBox.margin>
-                  <Insets top="20.0" />
-               </VBox.margin>
-            </HBox>
          </children>
          <padding>
             <Insets bottom="20.0" right="20.0" top="20.0" />

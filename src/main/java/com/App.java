@@ -23,6 +23,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class App extends Application {
     
@@ -62,7 +63,7 @@ public class App extends Application {
 
     // METODO CAMBIAR DE VENTANA
 
-    public void changeStage(String newModule, String newStage, String title, int width, int heigth, Boolean resize, Class<?> midWare){
+    public void changeStage(String newModule, String newStage, String title, int width, int heigth, Boolean resize, Class<?> midWareClass){
         // preparar archivo .fxml
         FXMLLoader loader = new FXMLLoader(
             App.class.getResource(newModule + "/gui/" + newStage + ".fxml")
@@ -75,15 +76,15 @@ public class App extends Application {
 
             // elegir controlador 'MidWare' para interfaz
             // no se implementa switch-case porque Class<?> parece no admitirlo
-            if (midWare.equals(LoginMiddleWare.class)){
+            if (midWareClass.equals(LoginMiddleWare.class)){
                 loader.setControllerFactory(lambda -> {
                     return new LoginMiddleWare(this);
                 }); // metodo lambda => valor -> {[codigo para devolver el valor]}
-            } else if (midWare.equals(MainMiddleWare.class)){
+            } else if (midWareClass.equals(MainMiddleWare.class)){
                 loader.setControllerFactory(lambda -> {
                     return new MainMiddleWare(this);
                 });
-            } else if (midWare.equals(NuevoUsuarioMiddleWare.class)){
+            } else if (midWareClass.equals(NuevoUsuarioMiddleWare.class)){
                 loader.setControllerFactory(lambda -> {
                     return new NuevoUsuarioMiddleWare(this);
                 });
@@ -96,7 +97,7 @@ public class App extends Application {
             // por eso es aqui donde se les empieza a aplicar modificaciones especificas para cada ventana
             
             // para 'MainMiddleWare', activar botones modulos segun rol del usuario
-            if (midWare.equals(MainMiddleWare.class)){
+            if (midWareClass.equals(MainMiddleWare.class)){
                 // variables internas
                 Integer rol = this.getUser().getId();
                 List<String> mitemsList = new ArrayList<String>();

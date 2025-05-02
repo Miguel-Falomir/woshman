@@ -30,8 +30,64 @@ public class DAO_Vehiculo extends DAO implements DAO_Interface<Vehiculo, Integer
 
     @Override
     public void insert(Vehiculo obj) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'insert'");
+        // variables internas
+        PreparedStatement statement = null;
+        ResultSet resultado = null;
+        int cantidadFilas;
+        boolean matriculaUnica;
+
+        // (intentar) ejecutar busqueda
+        try {
+            // consulta 1: contar cantidad filas
+            statement = connect.prepareStatement("SELECT count(*) FROM vehiculo;");
+
+            // ejecutar consulta
+            resultado = statement.executeQuery();
+
+            // asegurar que 'resultado' apunta a la primera fila
+            resultado.first();
+
+            // guardar resultado
+            cantidadFilas = resultado.getInt(1);
+
+            // consulta 2: buscar todos los vehiculos con v.matricula == obj.matricula
+            statement = connect.prepareStatement("SELECT count(*) FROM vehiculo v WHERE v.matricula = ?;");
+            statement.setString(1, obj.getMatricula());
+
+            // ejecutar consulta
+            resultado = statement.executeQuery();
+
+            // asegurar que 'resultado' apunta a la primera fila
+            resultado.first();
+
+            // agregar vehiculo nuevo a BD
+            matriculaUnica = (resultado.getInt(1) == 0);
+            if (matriculaUnica) {
+                statement = connect.prepareStatement("INSERT INTO vehiculo(id_vehiculo, fk_modelo, matricula) VALUES(?, ?, ?);");
+                statement.setInt(1, cantidadFilas);
+                statement.setInt(2, obj.getModelo().getId());
+                statement.setString(3, obj.getMatricula());
+                System.out.println("INSERTAR NUEVO VEHICULO: " + statement.executeUpdate());
+            } else {
+                System.out.println("ERROR: MATRÍCULA REPETIDA");
+            }
+
+        // manejar excepciones
+        } catch (SQLException e){
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        
+        // pase lo que pase, cerrar 'statement'
+        } finally {
+            if (statement != null){
+                try {
+                    statement.close();
+                } catch (SQLException e){
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     @Override

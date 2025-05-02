@@ -26,7 +26,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.KeyEvent;
 
 public class ListaVehiculosMenuWare extends SubMenuWare {
@@ -59,8 +58,8 @@ public class ListaVehiculosMenuWare extends SubMenuWare {
     @FXML
     private Button Buton_Agregar;
 
-    @FXML
-    private Button Buton_Buscar;
+    //@FXML
+    //private Button Buton_Buscar;
 
     @FXML
     private ListView<Vehiculo> ListV_Vehiculos;
@@ -75,13 +74,13 @@ public class ListaVehiculosMenuWare extends SubMenuWare {
 
     @FXML
     void OnAction_Buton_Agregar(ActionEvent event) {
-
+        mainController.openFormulary("vehiculos", "form_insertar_vehiculo", "INSERTAR VEHICULO", 480, 360, null);
     }
 
-    @FXML
-    void OnAction_Buton_Buscar(ActionEvent event) {
-        System.out.println(Input_Matricula.getText());
-    }
+    //@FXML
+    //void OnAction_Buton_Buscar(ActionEvent event) {
+    //    System.out.println(Input_Matricula.getText());
+    //}
 
     @FXML
     void OnKeyTyped_Input_Matricula(KeyEvent event) {
@@ -179,9 +178,9 @@ public class ListaVehiculosMenuWare extends SubMenuWare {
 
         // deshabilitar 'Buton_Agregar' si no se tiene permiso 25 (Insertar Vehiculo)
         if (!App.checkPermiso(25)){
-            Buton_Agregar.getParent().setVisible(false);
-            Buton_Agregar.getParent().setDisable(true);
-            Buton_Agregar.getParent().setManaged(false);
+            Buton_Agregar.setVisible(false);
+            Buton_Agregar.setDisable(true);
+            Buton_Agregar.setManaged(false);
         }
     }
 

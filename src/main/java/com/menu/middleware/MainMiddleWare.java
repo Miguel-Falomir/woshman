@@ -16,9 +16,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 
 public class MainMiddleWare {
 
@@ -251,6 +253,38 @@ public class MainMiddleWare {
 
             // agregar archivo al panel central
             Central_Box.getChildren().add(root);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // METODO ABRIR VENTANA FORMULARIO
+
+    public void openFormulary(String newModule, String newStage, String title, int width, int heigth, Class<?> midWareClass){
+        // preparar archivo .fxml
+        FXMLLoader loader = new FXMLLoader(
+            App.class.getResource(newModule + "/gui/" + newStage + ".fxml")
+        );
+
+        try {
+            // cargar escena y archivo .fxml
+            Stage formulary = new Stage();
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+
+            // elegir controlador
+            
+
+            // definir dimensiones ventana
+            formulary.setScene(scene);
+            formulary.setTitle(title);
+            formulary.setWidth(width);
+            formulary.setHeight(heigth);
+            formulary.setResizable(false);
+
+            // mostrar ventana
+            formulary.show();
 
         } catch (IOException e) {
             e.printStackTrace();

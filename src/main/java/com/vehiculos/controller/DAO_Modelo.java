@@ -12,7 +12,6 @@ import com.utilities.DAO_Interface;
 import com.vehiculos.model.Categoria;
 import com.vehiculos.model.Marca;
 import com.vehiculos.model.Modelo;
-import com.vehiculos.model.Vehiculo;
 
 public class DAO_Modelo extends DAO implements DAO_Interface<Modelo, Integer> {
 
@@ -173,5 +172,4 @@ public class DAO_Modelo extends DAO implements DAO_Interface<Modelo, Integer> {
         // devolver respuesta
         return respuesta;
     }
-
 }
