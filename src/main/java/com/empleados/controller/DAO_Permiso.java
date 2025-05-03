@@ -26,19 +26,19 @@ public class DAO_Permiso extends DAO implements DAO_Interface<Permiso, Integer>{
     // METODOS CRUD
 
     @Override
-    public void insert(Permiso obj) {
+    public boolean insert(Permiso obj) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'insert'");
     }
 
     @Override
-    public void update(Permiso obj) {
+    public boolean update(Permiso obj) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'update'");
     }
 
     @Override
-    public void delete(Permiso obj) {
+    public boolean delete(Permiso obj) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'delete'");
     }

@@ -9,19 +9,19 @@ import com.utilities.DAO_Interface;
 public class DAO_Rol extends DAO implements DAO_Interface<Rol, Integer> {
 
     @Override
-    public void insert(Rol obj) {
+    public boolean insert(Rol obj) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'insert'");
     }
 
     @Override
-    public void update(Rol obj) {
+    public boolean update(Rol obj) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'update'");
     }
 
     @Override
-    public void delete(Rol obj) {
+    public boolean delete(Rol obj) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'delete'");
     }

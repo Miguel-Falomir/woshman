@@ -9,19 +9,19 @@ import com.utilities.DAO_Interface;
 public class DAO_Factura extends DAO implements DAO_Interface<Factura, Integer> {
 
     @Override
-    public void insert(Factura obj) {
+    public boolean insert(Factura obj) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'insert'");
     }
 
     @Override
-    public void update(Factura obj) {
+    public boolean update(Factura obj) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'update'");
     }
 
     @Override
-    public void delete(Factura obj) {
+    public boolean delete(Factura obj) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'delete'");
     }

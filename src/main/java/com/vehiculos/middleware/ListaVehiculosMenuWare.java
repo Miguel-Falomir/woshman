@@ -53,6 +53,16 @@ public class ListaVehiculosMenuWare extends SubMenuWare {
         this.daoHashMap = daoHashMap;
     }
 
+    // GETTERS Y SETTERS
+
+    public DAO_Vehiculo getDaoVehiculo(){
+        return this.daoVehiculo;
+    }
+
+    public void setDaoVehiculo(DAO_Vehiculo daoVehiculo){
+        this.daoVehiculo = daoVehiculo;
+    }
+
     // ELEMENTOS UI
 
     @FXML
@@ -121,7 +131,7 @@ public class ListaVehiculosMenuWare extends SubMenuWare {
 
         // definir formato de las celdas de ListView
         ListV_Vehiculos.setCellFactory(lambda -> {
-            return new VehiculoCellFactory();
+            return new VehiculoCellFactory(this);
         });
 
         // rellenar TreeItem principal
@@ -184,6 +194,38 @@ public class ListaVehiculosMenuWare extends SubMenuWare {
         }
     }
 
-    // 
+    // METODO REINICIAR LISTA VEHICULOS
+
+    public void rebootObserVehiculos(){
+        // recopilar TODOS los vehiculos, modelos y marcas
+        listaVehiculos = daoVehiculo.searchAll();
+        listaModelos = daoModelo.searchAll();
+        listaMarcas = daoMarca.searchAllAlphabetically();
+
+        // forzar que 'undefined' no sea visible si no se tienen permisos:
+        // 25 (Insertar Vehiculos)
+        // 26 (Modificar Vehiculos)
+        // 27 (Eliminar Vehiculos)
+        if (!(App.checkPermiso(25) && App.checkPermiso(26) && App.checkPermiso(27))){
+            listaMarcas.removeIf(marca -> marca.getId() == 0); // sugerencia de chatGPT
+            listaModelos.removeIf(modelo -> modelo.getId() == 0);
+            listaVehiculos.removeIf(vehiculo -> vehiculo.getId() == 0);
+        }
+
+        // inicializar listas observables
+        obserVehiculos = FXCollections.observableArrayList(listaVehiculos);
+        filterVehiculos = new FilteredList<>(obserVehiculos);
+
+        // asignar lista observable a ListView interfaz
+        ListV_Vehiculos.setItems(filterVehiculos);
+
+        // definir formato de las celdas de ListView
+        ListV_Vehiculos.setCellFactory(lambda -> {
+            return new VehiculoCellFactory(this);
+        });
+
+        // refrescar ListView
+        ListV_Vehiculos.refresh();
+    }
 
 }

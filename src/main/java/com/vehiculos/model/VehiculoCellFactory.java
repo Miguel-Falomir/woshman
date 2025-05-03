@@ -3,6 +3,8 @@ package com.vehiculos.model;
 import java.io.IOException;
 
 import com.App;
+import com.vehiculos.middleware.ListaVehiculosMenuWare;
+import com.vehiculos.middleware.VehiculoCellWare;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,11 +21,32 @@ public class VehiculoCellFactory extends ListCell<Vehiculo> {
 
     // CONSTRUCTOR
 
+    /*
     public VehiculoCellFactory(){
         // preparar archivo .fxml
         loader = new FXMLLoader(
             App.class.getResource("vehiculos/gui/cell_vehiculo.fxml")
         );
+        
+        try {
+            // cargar archivo .fxml
+            root = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    */
+
+    public VehiculoCellFactory(ListaVehiculosMenuWare menuWare){
+        // preparar archivo .fxml
+        loader = new FXMLLoader(
+            App.class.getResource("vehiculos/gui/cell_vehiculo.fxml")
+        );
+
+        // asignar instancia controlador
+        loader.setControllerFactory(lambda -> {
+            return new VehiculoCellWare(menuWare);
+        });
         
         try {
             // cargar archivo .fxml
@@ -43,7 +66,13 @@ public class VehiculoCellFactory extends ListCell<Vehiculo> {
             setGraphic(null);
         } else {
             try {
-                // tomar atributos del vehiculo
+                // tomar el VehiculoCellWare de la celda actual...
+                VehiculoCellWare cellWare = loader.getController();
+
+                // ...y asignarle el vehiculo 'item'
+                cellWare.setVehiculo(item);
+
+                // tomar atributos del vehiculo 'item'
                 String matricula = item.getMatricula();
                 String marca = item.getModelo().getMarca().getNombre();
                 String modelo = item.getModelo().getNombre();
@@ -74,5 +103,4 @@ public class VehiculoCellFactory extends ListCell<Vehiculo> {
             }
         }
     }
-
 }

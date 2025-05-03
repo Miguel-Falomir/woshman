@@ -9,19 +9,19 @@ import com.utilities.DAO_Interface;
 public class DAO_Estado_Averia extends DAO implements DAO_Interface<Estado_Averia, Integer> {
 
     @Override
-    public void insert(Estado_Averia obj) {
+    public boolean insert(Estado_Averia obj) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'insert'");
     }
 
     @Override
-    public void update(Estado_Averia obj) {
+    public boolean update(Estado_Averia obj) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'update'");
     }
 
     @Override
-    public void delete(Estado_Averia obj) {
+    public boolean delete(Estado_Averia obj) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'delete'");
     }

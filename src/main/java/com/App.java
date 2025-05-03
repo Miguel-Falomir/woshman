@@ -23,7 +23,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 public class App extends Application {
     

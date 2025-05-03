@@ -87,26 +87,35 @@ public class NuevoUsuarioMiddleWare {
 
         // comprobar que la contrasenya coincide
         if (auxPassword.equals(auxConfirm)){
-            // insertar empleado nuevo
+            // generar empleado nuevo
             emp = new Empleado(
                 auxNombre,
                 auxApellidos,
                 auxUsername,
                 auxPassword
             );
-            dao.insert(emp);
 
-            // configurar alerta tipo CONFIRMATION
-            a.setAlertType(AlertType.INFORMATION);
-            a.setHeaderText("Bienvenid@ al equipo, " + auxUsername + ".");
-            a.setContentText("Por razones de seguridad, se le ha asignado el rol 'mecanico', el que menos permisos tiene.");
+            // (intentar) insertar empleado nuevo
+            // el metodo dao.insert(emp) devuelve false si emp.username o emp.password se repiten en BD
+            if (dao.insert(emp)){
+                // configurar alerta tipo CONFIRMATION
+                a.setAlertType(AlertType.INFORMATION);
+                a.setHeaderText("Bienvenid@ al equipo, " + auxUsername + ".");
+                a.setContentText("Por razones de seguridad, se le ha asignado el rol 'mecanico', el que menos permisos tiene.");
+    
+                // lanzar alerta
+                a.show();
+    
+                // navegar a menu principal con nuevo usuario
+                app.setUser(emp);
+                app.changeStage("menu", "main", "WOSHMAN", 720, 540, true, MainMiddleWare.class);
+            } else {
+                // configurar alerta tipo ERROR
+                a.setAlertType(AlertType.ERROR);
+                a.setHeaderText("Error base datos");
+                a.setContentText("No se puede agregar el nuevo usuario porque username y/o password se repiten en la base de datos.");
+            }
 
-            // lanzar alerta
-            a.show();
-
-            // navegar a menu principal con nuevo usuario
-            app.setUser(emp);
-            app.changeStage("menu", "main", "WOSHMAN", 720, 540, true, MainMiddleWare.class);
         } else {
             // configurar alerta tipo ERROR
             a.setAlertType(AlertType.ERROR);

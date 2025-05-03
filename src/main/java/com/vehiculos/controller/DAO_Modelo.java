@@ -28,19 +28,19 @@ public class DAO_Modelo extends DAO implements DAO_Interface<Modelo, Integer> {
     // METODOS CRUD
 
     @Override
-    public void insert(Modelo obj) {
+    public boolean insert(Modelo obj) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'insert'");
     }
 
     @Override
-    public void update(Modelo obj) {
+    public boolean update(Modelo obj) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'update'");
     }
 
     @Override
-    public void delete(Modelo obj) {
+    public boolean delete(Modelo obj) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'delete'");
     }

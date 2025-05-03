@@ -9,19 +9,19 @@ import com.utilities.DAO_Interface;
 public class DAO_Albaran extends DAO implements DAO_Interface<Albaran, Integer> {
 
     @Override
-    public void insert(Albaran obj) {
+    public boolean insert(Albaran obj) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'insert'");
     }
 
     @Override
-    public void update(Albaran obj) {
+    public boolean update(Albaran obj) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'update'");
     }
 
     @Override
-    public void delete(Albaran obj) {
+    public boolean delete(Albaran obj) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'delete'");
     }

@@ -9,19 +9,19 @@ import com.utilities.DAO_Interface;
 public class DAO_Proveedor extends DAO implements DAO_Interface<Proveedor, Integer> {
 
     @Override
-    public void insert(Proveedor obj) {
+    public boolean insert(Proveedor obj) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'insert'");
     }
 
     @Override
-    public void update(Proveedor obj) {
+    public boolean update(Proveedor obj) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'update'");
     }
 
     @Override
-    public void delete(Proveedor obj) {
+    public boolean delete(Proveedor obj) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'delete'");
     }

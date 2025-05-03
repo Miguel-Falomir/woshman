@@ -26,19 +26,19 @@ public class DAO_Marca extends DAO implements DAO_Interface<Marca, Integer> {
     // METODOS CRUD
 
     @Override
-    public void insert(Marca obj) {
+    public boolean insert(Marca obj) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'insert'");
     }
 
     @Override
-    public void update(Marca obj) {
+    public boolean update(Marca obj) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'update'");
     }
 
     @Override
-    public void delete(Marca obj) {
+    public boolean delete(Marca obj) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'delete'");
     }

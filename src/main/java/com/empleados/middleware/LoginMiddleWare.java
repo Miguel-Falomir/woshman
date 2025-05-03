@@ -87,7 +87,7 @@ public class LoginMiddleWare {
         }
     }
 
-    // METODOS
+    // METODO INICIAR SESION
 
     private void Func_User_Login(){
         // variables internas

@@ -4,11 +4,11 @@ import java.util.List;
 
 public interface DAO_Interface<T, K> {
 
-    void insert(T obj);
+    boolean insert(T obj);
 
-    void update(T obj);
+    boolean update(T obj);
 
-    void delete(T obj);
+    boolean delete(T obj);
 
     T search(K id);
 
