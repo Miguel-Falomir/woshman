@@ -63,7 +63,7 @@ public class Modelo {
 
     @Override
     public String toString() {
-        return "Modelo [id=" + id + ", nombre=" + nombre + ", marca=" + marca + ", categoria=" + categoria + "]";
+        return nombre;
     }
 
     @Override

@@ -84,13 +84,8 @@ public class ListaVehiculosMenuWare extends SubMenuWare {
 
     @FXML
     void OnAction_Buton_Agregar(ActionEvent event) {
-        mainController.openFormulary("vehiculos", "form_insertar_vehiculo", "INSERTAR VEHICULO", 480, 360, null);
+        Func_Insert_Vehiculo();
     }
-
-    //@FXML
-    //void OnAction_Buton_Buscar(ActionEvent event) {
-    //    System.out.println(Input_Matricula.getText());
-    //}
 
     @FXML
     void OnKeyTyped_Input_Matricula(KeyEvent event) {
@@ -194,9 +189,15 @@ public class ListaVehiculosMenuWare extends SubMenuWare {
         }
     }
 
+    // METODO INSERTAR VEHICULO
+
+    private void Func_Insert_Vehiculo(){
+        mainController.openFormulary("vehiculos", "form_editar_vehiculo", 480, 360, InsertarVehiculoFormWare.class, this, null);
+    }
+
     // METODO REINICIAR LISTA VEHICULOS
 
-    public void rebootObserVehiculos(){
+    public void Func_Reboot_ObserVehiculos(){
         // recopilar TODOS los vehiculos, modelos y marcas
         listaVehiculos = daoVehiculo.searchAll();
         listaModelos = daoModelo.searchAll();

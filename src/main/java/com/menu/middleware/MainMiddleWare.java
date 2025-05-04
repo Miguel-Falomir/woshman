@@ -6,11 +6,15 @@ import java.util.HashMap;
 import com.App;
 import com.empleados.middleware.LoginMiddleWare;
 import com.utilities.DAO;
+import com.utilities.FormWare;
 import com.utilities.SubMenuWare;
 import com.vehiculos.controller.DAO_Marca;
 import com.vehiculos.controller.DAO_Modelo;
 import com.vehiculos.controller.DAO_Vehiculo;
+import com.vehiculos.middleware.EditarVehiculoFormWare;
+import com.vehiculos.middleware.InsertarVehiculoFormWare;
 import com.vehiculos.middleware.ListaVehiculosMenuWare;
+import com.vehiculos.model.Vehiculo;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -184,7 +188,7 @@ public class MainMiddleWare {
 
     @FXML
     void OnAction_Mitem_Lista_Vehiculos(ActionEvent event) {
-        changeScene("vehiculos", "lista_vehiculos", "Lista Vehiculos", ListaVehiculosMenuWare.class);
+        changeSubMenu("vehiculos", "lista_vehiculos", "Lista Vehiculos", ListaVehiculosMenuWare.class);
     }
 
     @FXML
@@ -220,7 +224,7 @@ public class MainMiddleWare {
 
     // METODO CAMBIAR ESCENA
 
-    public void changeScene(String newModule, String newScene, String title, Class<?> menuWareClass){
+    public void changeSubMenu(String newModule, String newScene, String title, Class<? extends SubMenuWare> menuWareClass){
         // englobar todo el proceso en un try-catch
         // de esta forma, si surge un fallo al generar la nueva pantalla,
         // aborta tambien el proceso de limpiar la pantalla vieja
@@ -261,24 +265,42 @@ public class MainMiddleWare {
 
     // METODO ABRIR VENTANA FORMULARIO
 
-    public void openFormulary(String newModule, String newStage, String title, int width, int heigth, Class<?> midWareClass){
+    public void openFormulary(String newModule, String newStage, int width, int heigth, Class<? extends FormWare> formWareClass, SubMenuWare menuWare, Object obj){
         // preparar archivo .fxml
         FXMLLoader loader = new FXMLLoader(
             App.class.getResource(newModule + "/gui/" + newStage + ".fxml")
         );
 
         try {
+            // elegir controlador
+            if (menuWare instanceof ListaVehiculosMenuWare){ // submenu 'Lista Vehiculos'
+                ListaVehiculosMenuWare submenu = (ListaVehiculosMenuWare) menuWare;
+                if (formWareClass.equals(EditarVehiculoFormWare.class) && obj instanceof Vehiculo) { // formulario 'Actualizar Vehiculo'
+                    loader.setControllerFactory(lambda -> {
+                        Vehiculo vehiculo = (Vehiculo) obj;
+                        return new EditarVehiculoFormWare(vehiculo, submenu);
+                    });
+                } else if (formWareClass.equals(InsertarVehiculoFormWare.class)){ // formulario 'Insertar Vehiculo'
+                    loader.setControllerFactory(lambda -> {
+                        return new InsertarVehiculoFormWare(submenu);
+                    });
+                }
+            }
+
             // cargar escena y archivo .fxml
             Stage formulary = new Stage();
             Parent root = loader.load();
             Scene scene = new Scene(root);
 
-            // elegir controlador
-            
+            // inicializar elementos @FXML
+            if (formWareClass.equals(EditarVehiculoFormWare.class)){
+                EditarVehiculoFormWare formWare = (EditarVehiculoFormWare) loader.getController();
+                formWare.initialize();
+            }
 
             // definir dimensiones ventana
             formulary.setScene(scene);
-            formulary.setTitle(title);
+            formulary.setTitle("formulario");
             formulary.setWidth(width);
             formulary.setHeight(heigth);
             formulary.setResizable(false);

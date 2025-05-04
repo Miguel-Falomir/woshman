@@ -44,8 +44,11 @@ public class DAO_Vehiculo extends DAO implements DAO_Interface<Vehiculo, Integer
             // ejecutar consulta
             resultado = statement.executeQuery();
 
-            // asegurar que 'resultado' apunta a la primera fila
-            resultado.first();
+            // forzar que 'resultado' apunte a primera fila
+            if (!resultado.isBeforeFirst()){
+                resultado.beforeFirst();
+            }
+            resultado.next();
 
             // guardar resultado
             cantidadFilas = resultado.getInt(1);
@@ -57,12 +60,16 @@ public class DAO_Vehiculo extends DAO implements DAO_Interface<Vehiculo, Integer
             // ejecutar consulta
             resultado = statement.executeQuery();
 
-            // asegurar que 'resultado' apunta a la primera fila
-            resultado.first();
+            // forzar que 'resultado' apunte a primera fila
+            if (!resultado.isBeforeFirst()){
+                resultado.beforeFirst();
+            }
+            resultado.next();
 
-            // agregar vehiculo nuevo a BD
-            boolean matriculaUnica = (resultado.getInt(1) == 0);
-            if (matriculaUnica) {
+            // comprobar si matricula se repite
+            boolean matriculaUnique = (resultado.getInt(1) < 2);
+            if (matriculaUnique) {
+                // consulta 3: agregar vehiculo nuevo a BD
                 statement = connect.prepareStatement("INSERT INTO vehiculo(id_vehiculo, fk_modelo, matricula) VALUES(?, ?, ?);");
                 statement.setInt(1, cantidadFilas);
                 statement.setInt(2, obj.getModelo().getId());
@@ -111,12 +118,14 @@ public class DAO_Vehiculo extends DAO implements DAO_Interface<Vehiculo, Integer
             // ejecutar consulta
             resultado = statement.executeQuery();
 
-            // forzar que 'resultado' apunte a la primera fila
-            resultado.first();
+            // forzar que 'resultado' apunte a primera fila
+            if (!resultado.isBeforeFirst()){
+                resultado.beforeFirst();
+            }
+            resultado.next();
 
             // materializar 'resultado' en booleano
-            boolean matriculaUnique = (resultado.getInt(1) == 0);
-
+            boolean matriculaUnique = (resultado.getInt(1) < 2);
             if (matriculaUnique){
                 // consulta 2: actualizar vehiculo
                 statement = connect.prepareStatement("UPDATE vehiculo v SET v.fk_modelo = ?, v.matricula = ? WHERE v.id_vehiculo = ?;");
@@ -126,8 +135,10 @@ public class DAO_Vehiculo extends DAO implements DAO_Interface<Vehiculo, Integer
 
                 // ejecutar actualizacion
                 update = statement.executeUpdate();
-                System.out.println("INSERTAR VEHICULO: " + update);
+                System.out.println("ACTUALIZAR VEHICULO: " + update);
                 exito = true;
+            } else {
+                System.out.println("ERROR: MATRÍCULA REPETIDA");
             }
 
         // manejar excepciones
@@ -286,15 +297,18 @@ public class DAO_Vehiculo extends DAO implements DAO_Interface<Vehiculo, Integer
 
         // (intentar) ejecutar busqueda
         try {
-            // consulta 1: buscar todos los datos de vehiculo, modelo, categoria y marca mientras veh-id_vehiculo = id
+            // consulta 1: buscar todos los datos de vehiculo, modelo, categoria y marca mientras veh.id_vehiculo = id
             statement = connect.prepareStatement("SELECT veh.id_vehiculo, veh.matricula, mo.id_modelo, mo.nombre, cat.id_categoria, cat.nombre, cat.descripcion, ma.id_marca, ma.nombre FROM vehiculo veh JOIN modelo mo ON mo.id_modelo = veh.fk_modelo JOIN categoria cat ON mo.fk_categoria = cat.id_categoria JOIN marca ma ON ma.id_marca = mo.fk_marca WHERE veh.id_vehiculo = ?;");
             statement.setInt(1, id);
 
             // ejecutar consulta
             resultado = statement.executeQuery();
 
-            // asegurar que 'resultado' apunte a de la primera fila
-            resultado.first();
+            // forzar que 'resultado' apunte a primera fila
+            if (!resultado.isBeforeFirst()){
+                resultado.beforeFirst();
+            }
+            resultado.next();
 
             // agregar resultado a 'respuesta'
             Marca marca = new Marca(

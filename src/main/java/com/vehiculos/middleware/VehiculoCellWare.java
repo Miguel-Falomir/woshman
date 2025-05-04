@@ -1,7 +1,6 @@
 package com.vehiculos.middleware;
 
-import java.util.Optional;
-
+import com.utilities.CellWare;
 import com.vehiculos.controller.DAO_Vehiculo;
 import com.vehiculos.model.Vehiculo;
 
@@ -12,7 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Alert.AlertType;
 
-public class VehiculoCellWare {
+public class VehiculoCellWare extends CellWare {
 
     // OBJETOS PUNTERO (ESTOS NO PRETENDEN SER INSTANCIAS NUEVAS, SINO REFERENCIAS A OTROS OBJETOS YA EXISTENTES)
 
@@ -57,17 +56,17 @@ public class VehiculoCellWare {
 
     @FXML
     void OnAction_Buton_Borrar(ActionEvent event) {
-        Func_Borrar_Vehiculo();
+        Func_Delete_Vehiculo();
     }
 
     @FXML
     void OnAction_Buton_Editar(ActionEvent event) {
-        System.out.println("EDITAR");
+        Func_Update_Vehiculo();
     }
 
     // METODO BORRAR VEHICULO
 
-    private void Func_Borrar_Vehiculo(){
+    private void Func_Delete_Vehiculo(){
         // inicializar ventana alert
         Alert a = new Alert(AlertType.NONE);
 
@@ -87,6 +86,13 @@ public class VehiculoCellWare {
         a.showAndWait();
 
         // reiniciar la lista para que se muestre la ausencia del vehiculo eliminado
-        menuWare.rebootObserVehiculos();
+        menuWare.Func_Reboot_ObserVehiculos();
+    }
+
+    // METODO EDITAR VEHICULO
+
+    private void Func_Update_Vehiculo(){
+        // crear un formulario, pasandole vehiculo
+        this.menuWare.getMainController().openFormulary("vehiculos", "form_editar_vehiculo", 480, 360, EditarVehiculoFormWare.class, menuWare, vehiculo);
     }
 }

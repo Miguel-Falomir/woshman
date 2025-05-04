@@ -38,7 +38,7 @@ public class Marca {
 
     @Override
     public String toString() {
-        return "Marca [id=" + id + ", nombre=" + nombre + "]";
+        return nombre;
     }
 
     @Override

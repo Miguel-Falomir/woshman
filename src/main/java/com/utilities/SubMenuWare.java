@@ -20,7 +20,7 @@ public abstract class SubMenuWare {
         this.daoHashMap = daoHashMap;
     }
 
-    // METODO CAMBIAR CONTROLADOR PRINCIPAL
+    // GETTERS Y SETTERS
 
     public MainMiddleWare getMainController(){
         return mainController;
