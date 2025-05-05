@@ -24,7 +24,7 @@ public class InsertarVehiculoFormWare extends FormWare {
     
     // OBJETOS PUNTERO
 
-    ListaVehiculosMenuWare menuWare;
+    ListaVehiculosSubMenuWare menuWare;
     DAO_Vehiculo dao;
 
     // OBJETOS ALMACENAR DATOS INTERNOS
@@ -40,7 +40,7 @@ public class InsertarVehiculoFormWare extends FormWare {
 
     public InsertarVehiculoFormWare(){}
 
-    public InsertarVehiculoFormWare(ListaVehiculosMenuWare menuWare){
+    public InsertarVehiculoFormWare(ListaVehiculosSubMenuWare menuWare){
         this.vehiculo = new Vehiculo();
         this.menuWare = menuWare;
         this.dao = this.menuWare.getDaoVehiculo();

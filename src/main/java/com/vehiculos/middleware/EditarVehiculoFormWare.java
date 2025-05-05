@@ -25,7 +25,7 @@ public class EditarVehiculoFormWare extends FormWare {
     // OBJETOS PUNTERO
 
     Vehiculo vehiculo;
-    ListaVehiculosMenuWare menuWare;
+    ListaVehiculosSubMenuWare menuWare;
     DAO_Vehiculo dao;
 
     // OBJETOS ALMACENAR DATOS INTERNOS
@@ -40,7 +40,7 @@ public class EditarVehiculoFormWare extends FormWare {
 
     public EditarVehiculoFormWare(){}
 
-    public EditarVehiculoFormWare(Vehiculo vehiculo, ListaVehiculosMenuWare menuWare){
+    public EditarVehiculoFormWare(Vehiculo vehiculo, ListaVehiculosSubMenuWare menuWare){
         this.vehiculo = vehiculo;
         this.menuWare = menuWare;
         this.dao = this.menuWare.getDaoVehiculo();

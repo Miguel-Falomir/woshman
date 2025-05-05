@@ -3,7 +3,7 @@ package com.vehiculos.model;
 import java.io.IOException;
 
 import com.App;
-import com.vehiculos.middleware.ListaVehiculosMenuWare;
+import com.vehiculos.middleware.ListaVehiculosSubMenuWare;
 import com.vehiculos.middleware.VehiculoCellWare;
 
 import javafx.fxml.FXMLLoader;
@@ -37,7 +37,7 @@ public class VehiculoCellFactory extends ListCell<Vehiculo> {
     }
     */
 
-    public VehiculoCellFactory(ListaVehiculosMenuWare menuWare){
+    public VehiculoCellFactory(ListaVehiculosSubMenuWare menuWare){
         // preparar archivo .fxml
         loader = new FXMLLoader(
             App.class.getResource("vehiculos/gui/cell_vehiculo.fxml")

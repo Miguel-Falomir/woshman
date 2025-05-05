@@ -18,7 +18,7 @@ module com {
     opens com.empleados.controller to javafx.fxml;
     //menu
     opens com.menu.middleware to javafx.fxml;
-    ///opens com.menu.controller to javafx.fxml;
+    /* opens com.menu.controller to javafx.fxml; */
     //almacen
     opens com.almacen.middleware to javafx.fxml;
     opens com.vehiculos.middleware to javafx.fxml;
@@ -26,4 +26,5 @@ module com {
     // Exportar paquetes
     exports com;
     exports com.empleados.model;
+    exports com.utilities;
 }

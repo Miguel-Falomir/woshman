@@ -15,6 +15,7 @@ import com.empleados.model.Empleado;
 import com.empleados.model.Permiso;
 import com.menu.middleware.MainMiddleWare;
 import com.utilities.DB_Connector;
+import com.utilities.MiddleWare;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -62,7 +63,7 @@ public class App extends Application {
 
     // METODO CAMBIAR DE VENTANA
 
-    public void changeStage(String newModule, String newStage, String title, int width, int heigth, Boolean resize, Class<?> midWareClass){
+    public void changeStage(String newModule, String newStage, String title, int width, int heigth, Boolean resize, Class<? extends MiddleWare> midWareClass){
         // preparar archivo .fxml
         FXMLLoader loader = new FXMLLoader(
             App.class.getResource(newModule + "/gui/" + newStage + ".fxml")

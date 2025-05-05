@@ -7,13 +7,14 @@ import com.App;
 import com.empleados.middleware.LoginMiddleWare;
 import com.utilities.DAO;
 import com.utilities.FormWare;
+import com.utilities.MiddleWare;
 import com.utilities.SubMenuWare;
 import com.vehiculos.controller.DAO_Marca;
 import com.vehiculos.controller.DAO_Modelo;
 import com.vehiculos.controller.DAO_Vehiculo;
 import com.vehiculos.middleware.EditarVehiculoFormWare;
 import com.vehiculos.middleware.InsertarVehiculoFormWare;
-import com.vehiculos.middleware.ListaVehiculosMenuWare;
+import com.vehiculos.middleware.ListaVehiculosSubMenuWare;
 import com.vehiculos.model.Vehiculo;
 
 import javafx.event.ActionEvent;
@@ -26,7 +27,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
-public class MainMiddleWare {
+public class MainMiddleWare extends MiddleWare {
 
     // OBJETO APP
     // Entre otras cosas, contiene la conexion a BD
@@ -188,7 +189,7 @@ public class MainMiddleWare {
 
     @FXML
     void OnAction_Mitem_Lista_Vehiculos(ActionEvent event) {
-        changeSubMenu("vehiculos", "lista_vehiculos", "Lista Vehiculos", ListaVehiculosMenuWare.class);
+        changeSubMenu("vehiculos", "submenu_lista_vehiculos", "Lista Vehiculos", ListaVehiculosSubMenuWare.class);
     }
 
     @FXML
@@ -219,7 +220,7 @@ public class MainMiddleWare {
     @FXML
     void OnAction_Mitem_Salir(ActionEvent event){
         app.setUser(null);
-        app.changeStage("empleados", "login_form", "login", 400, 300, false, LoginMiddleWare.class);
+        app.changeStage("empleados", "form_login", "login", 400, 300, false, LoginMiddleWare.class);
     }
 
     // METODO CAMBIAR ESCENA
@@ -240,12 +241,12 @@ public class MainMiddleWare {
             // generar controlador correspondiente al submenu
             // asignando DAOs necesarios
             HashMap<String, DAO> daoHashMap = new HashMap<>();
-            if (menuWareClass.equals(ListaVehiculosMenuWare.class)){
+            if (menuWareClass.equals(ListaVehiculosSubMenuWare.class)){
                 loader.setControllerFactory(lambda -> {
                     daoHashMap.put("vehiculo", new DAO_Vehiculo(app.getConnection()));
                     daoHashMap.put("modelo", new DAO_Modelo(app.getConnection()));
                     daoHashMap.put("marca", new DAO_Marca(app.getConnection()));
-                    return new ListaVehiculosMenuWare(this, daoHashMap);
+                    return new ListaVehiculosSubMenuWare(this, daoHashMap);
                 });
             }
 
@@ -273,8 +274,8 @@ public class MainMiddleWare {
 
         try {
             // elegir controlador
-            if (menuWare instanceof ListaVehiculosMenuWare){ // submenu 'Lista Vehiculos'
-                ListaVehiculosMenuWare submenu = (ListaVehiculosMenuWare) menuWare;
+            if (menuWare instanceof ListaVehiculosSubMenuWare){ // submenu 'Lista Vehiculos'
+                ListaVehiculosSubMenuWare submenu = (ListaVehiculosSubMenuWare) menuWare;
                 if (formWareClass.equals(EditarVehiculoFormWare.class) && obj instanceof Vehiculo) { // formulario 'Actualizar Vehiculo'
                     loader.setControllerFactory(lambda -> {
                         Vehiculo vehiculo = (Vehiculo) obj;

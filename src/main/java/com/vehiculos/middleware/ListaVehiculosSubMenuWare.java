@@ -28,7 +28,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.KeyEvent;
 
-public class ListaVehiculosMenuWare extends SubMenuWare {
+public class ListaVehiculosSubMenuWare extends SubMenuWare {
 
     // OBJETOS ALMACENAR DATOS INTERNOS
 
@@ -46,9 +46,9 @@ public class ListaVehiculosMenuWare extends SubMenuWare {
 
     // CONSTRUCTOR
 
-    public ListaVehiculosMenuWare(){}
+    public ListaVehiculosSubMenuWare(){}
 
-    public ListaVehiculosMenuWare(MainMiddleWare mainController, HashMap<String, DAO> daoHashMap){
+    public ListaVehiculosSubMenuWare(MainMiddleWare mainController, HashMap<String, DAO> daoHashMap){
         this.mainController = mainController;
         this.daoHashMap = daoHashMap;
     }

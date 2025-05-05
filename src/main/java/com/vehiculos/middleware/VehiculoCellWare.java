@@ -17,13 +17,13 @@ public class VehiculoCellWare extends CellWare {
 
     DAO_Vehiculo dao;
     Vehiculo vehiculo;
-    ListaVehiculosMenuWare menuWare;
+    ListaVehiculosSubMenuWare menuWare;
 
     // CONSTRUCTORES
 
     public VehiculoCellWare(){}
 
-    public VehiculoCellWare(ListaVehiculosMenuWare menuWare){
+    public VehiculoCellWare(ListaVehiculosSubMenuWare menuWare){
         this.menuWare = menuWare;
         this.dao = this.menuWare.getDaoVehiculo();
     }

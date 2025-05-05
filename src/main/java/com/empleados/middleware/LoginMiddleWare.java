@@ -7,6 +7,7 @@ import com.App;
 import com.empleados.controller.DAO_Empleado;
 import com.empleados.model.Empleado;
 import com.menu.middleware.MainMiddleWare;
+import com.utilities.MiddleWare;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -17,7 +18,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
-public class LoginMiddleWare {
+public class LoginMiddleWare extends MiddleWare{
 
     // OBJETO APP
     // Entre otras cosas, contiene la conexion a BD
@@ -111,7 +112,7 @@ public class LoginMiddleWare {
             text = String.format("Contraseña correcta. Bienvenid@ de nuevo, %s", auxUser.getNombre() + " " + auxUser.getApellidos());
             System.out.println(text);
             app.setUser(auxUser);
-            app.changeStage("menu", "main", "WOSHMAN", 960, 540, true, MainMiddleWare.class);
+            app.changeStage("menu", "menu_principal", "WOSHMAN", 960, 540, true, MainMiddleWare.class);
         } else {
             a.setHeaderText("ACCESO DENEGADO");
             a.setContentText("Contraseña incorrecta. Repita la contraseña o cambie de usuario");

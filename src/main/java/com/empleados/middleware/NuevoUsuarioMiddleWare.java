@@ -4,6 +4,7 @@ import com.App;
 import com.empleados.controller.DAO_Empleado;
 import com.empleados.model.Empleado;
 import com.menu.middleware.MainMiddleWare;
+import com.utilities.MiddleWare;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,7 +14,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 
-public class NuevoUsuarioMiddleWare {
+public class NuevoUsuarioMiddleWare extends MiddleWare {
 
     // OBJETO APP
     // Entre otras cosas, contiene la conexion a BD
