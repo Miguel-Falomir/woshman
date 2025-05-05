@@ -74,14 +74,14 @@ public class LoginMiddleWare {
 
     @FXML
     void OnMouseClicked_Buton_Registrarse(MouseEvent event) {
-        app.changeStage("empleados", "nuevo_usuario_form", "REGISTRO", 480, 360, false, NuevoUsuarioMiddleWare.class);
+        app.changeStage("empleados", "form_nuevo_usuario", "REGISTRO", 480, 360, false, NuevoUsuarioMiddleWare.class);
     }
 
         @FXML
     void OnKeyPresed_Buton_Registrarse(KeyEvent event) {
         KeyCode ke = event.getCode();
         if (ke.equals(KeyCode.ENTER)) {
-            app.changeStage("empleados", "nuevo_usuario_form", "REGISTRO", 480, 360, false, NuevoUsuarioMiddleWare.class);
+            app.changeStage("empleados", "form_nuevo_usuario", "REGISTRO", 480, 360, false, NuevoUsuarioMiddleWare.class);
         } else {
             System.out.println("Este método detecta cualquier tecla, pero le he dicho que solo realize la acción si el usuario pulsa ENTER / INTRO");
         }

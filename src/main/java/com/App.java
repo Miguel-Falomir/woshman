@@ -187,7 +187,7 @@ public class App extends Application {
     public void start(Stage primaryStage) throws Exception {
         // declarar ventana login
         FXMLLoader loader = new FXMLLoader(
-            App.class.getResource("empleados/gui/login_form.fxml")
+            App.class.getResource("empleados/gui/form_login.fxml")
         );
 
         // declarar un constructor personalizado para crear el controlador del login.
