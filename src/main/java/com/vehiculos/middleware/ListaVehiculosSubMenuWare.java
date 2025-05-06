@@ -34,6 +34,8 @@ public class ListaVehiculosSubMenuWare extends SubMenuWare {
 
     private ObservableList<Vehiculo> obserVehiculos;
     private FilteredList<Vehiculo> filterVehiculos;
+    private Integer selectedMarcaID = null;
+    private Integer selectedModeloID = null;
     private List<Vehiculo> listaVehiculos;
     private List<Modelo> listaModelos;
     private List<Marca> listaMarcas;
@@ -89,7 +91,8 @@ public class ListaVehiculosSubMenuWare extends SubMenuWare {
 
     @FXML
     void OnKeyTyped_Input_Matricula(KeyEvent event) {
-        System.out.println("[ASMR teclado mecánico]: " + Input_Matricula.getText());
+        String regex = Input_Matricula.getText();
+        Func_Filter_Matricula(regex);
     }
 
     // INICIALIZAR
@@ -149,7 +152,7 @@ public class ListaVehiculosSubMenuWare extends SubMenuWare {
             Titem_Root.getChildren().add(Titem_Marca); // agregar marca a root
         }
         
-        // Asignar manejador de evento:
+        // Asignar manejadores de evento:
         // Al seleccionar Titem, se filtra la lista
         TreeV_Marca_Modelo.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
@@ -159,12 +162,16 @@ public class ListaVehiculosSubMenuWare extends SubMenuWare {
                 // comparar tipo
                 switch (tipo){
                     case MARCA: // filtrar marcas
-                        filterVehiculos.setPredicate(i -> i.getModelo().getMarca().getId() == id);
+                        selectedMarcaID = id;
+                        filterVehiculos.setPredicate(i -> i.getModelo().getMarca().getId() == selectedMarcaID);
                         break;
                     case MODELO: // filtrar modelos
-                        filterVehiculos.setPredicate(i -> i.getModelo().getId() == id);
+                        selectedModeloID = id;
+                        filterVehiculos.setPredicate(i -> i.getModelo().getId() == selectedModeloID);
                         break;
                     case null: // deshacer filtros
+                        selectedMarcaID = null;
+                        selectedModeloID = null;
                         if (!(App.checkPermiso(25) && App.checkPermiso(26) && App.checkPermiso(27))){
                             filterVehiculos.setPredicate(i -> i.getId() != 0);
                         } else {
@@ -175,6 +182,7 @@ public class ListaVehiculosSubMenuWare extends SubMenuWare {
                         break;
                 }
             }
+            
         });
         
         // asignar TreeItem al TreeView
@@ -186,6 +194,18 @@ public class ListaVehiculosSubMenuWare extends SubMenuWare {
             Buton_Agregar.setVisible(false);
             Buton_Agregar.setDisable(true);
             Buton_Agregar.setManaged(false);
+        }
+    }
+
+    // METODO APLICAR FILTRO TEXTO
+
+    private void Func_Filter_Matricula(String regex){
+        if (selectedModeloID !=  null) {
+            filterVehiculos.setPredicate(i -> i.getModelo().getId() == selectedModeloID && i.getMatricula().contains(regex));
+        } else if (selectedMarcaID != null) {
+            filterVehiculos.setPredicate(i -> i.getModelo().getMarca().getId() == selectedMarcaID && i.getMatricula().contains(regex));
+        } else {
+            filterVehiculos.setPredicate(i -> i.getMatricula().contains(regex));
         }
     }
 

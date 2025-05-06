@@ -17,7 +17,7 @@
       <!-- MENU MODULOS -->
       <MenuBar maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
         <menus>
-          <Menu mnemonicParsing="false" text="Facturación">
+          <Menu fx:id="Menu_Facturacion" mnemonicParsing="false" text="Facturación">
             <items>
               <MenuItem fx:id="Mitem_Lista_Averias" mnemonicParsing="false" onAction="#OnAction_Mitem_Lista_Averias" text="Lista Averias" disable="true" visible="false"/>
               <MenuItem fx:id="Mitem_Estado_Averia" mnemonicParsing="false" onAction="#OnAction_Mitem_Estado_Averia" text="Estado Averia" disable="true" visible="false"/>
@@ -28,7 +28,7 @@
               <MenuItem fx:id="Mitem_Lista_Clientes" mnemonicParsing="false" onAction="#OnAction_Mitem_Lista_Clientes" text="Lista Clientes" disable="true" visible="false"/>
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Almacen">
+          <Menu fx:id="Menu_Almacen" mnemonicParsing="false" text="Almacen">
             <items>
               <MenuItem fx:id="Mitem_Lista_Piezas" mnemonicParsing="false" onAction="#OnAction_Mitem_Lista_Piezas" text="Lista Piezas" disable="true" visible="false"/>
               <MenuItem fx:id="Mitem_Tipo_Pieza" mnemonicParsing="false" onAction="#OnAction_Mitem_Tipo_Pieza" text="Tipo Pieza" disable="true" visible="false"/>
@@ -37,7 +37,7 @@
               <MenuItem fx:id="Mitem_Lista_Albaranes" mnemonicParsing="false" onAction="#OnAction_Mitem_Lista_Albaranes" text="Lista Albaranes" disable="true" visible="false"/>
             </items>
             </Menu>
-            <Menu mnemonicParsing="false" text="Vehiculos">
+            <Menu fx:id="Menu_Vehiculos" mnemonicParsing="false" text="Vehiculos">
               <items>
                 <MenuItem fx:id="Mitem_Lista_Vehiculos" mnemonicParsing="false" onAction="#OnAction_Mitem_Lista_Vehiculos" text="Lista Vehiculos" disable="true" visible="false"/>
                 <MenuItem fx:id="Mitem_Lista_Modelos" mnemonicParsing="false" onAction="#OnAction_Mitem_Lista_Modelos" text="Lista Modelos" disable="true" visible="false"/>

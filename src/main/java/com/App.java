@@ -98,38 +98,56 @@ public class App extends Application {
             // para 'MainMiddleWare', activar botones modulos segun rol del usuario
             if (midWareClass.equals(MainMiddleWare.class)){
                 // variables internas
-                Integer rol = this.getUser().getId();
                 List<String> mitemsList = new ArrayList<String>();
                 MenuItem mitem = null;
 
                 // guardar nombres de elementos correspondientes al rol actual
+                boolean notFacturacion =  true;
+                boolean notAlmacen = true;
+                boolean notVehiculos = true;
+                boolean notEmpleados = true;
                 // Facturacion
-                if (checkPermiso(0)) {mitemsList.add("Mitem_Lista_Averias");}
-                if (checkPermiso(4)) {mitemsList.add("Mitem_Estado_Averia");}
-                if (checkPermiso(8)) {mitemsList.add("Mitem_Tipo_Averia");}
-                if (checkPermiso(12)) {mitemsList.add("Mitem_Lista_Ventas");}
-                if (checkPermiso(13)) {mitemsList.add("Mitem_Realizar_Venta");}
-                if (checkPermiso(16)) {mitemsList.add("Mitem_Lista_Facturas");}
-                if (checkPermiso(75)) {mitemsList.add("Mitem_Lista_Clientes");}
+                if (checkPermiso(0)) {mitemsList.add("Mitem_Lista_Averias"); notFacturacion = false;}
+                if (checkPermiso(4)) {mitemsList.add("Mitem_Estado_Averia"); notFacturacion = false;}
+                if (checkPermiso(8)) {mitemsList.add("Mitem_Tipo_Averia"); notFacturacion = false;}
+                if (checkPermiso(12)) {mitemsList.add("Mitem_Lista_Ventas"); notFacturacion = false;}
+                if (checkPermiso(13)) {mitemsList.add("Mitem_Realizar_Venta"); notFacturacion = false;}
+                if (checkPermiso(16)) {mitemsList.add("Mitem_Lista_Facturas"); notFacturacion = false;}
+                if (checkPermiso(75)) {mitemsList.add("Mitem_Lista_Clientes"); notFacturacion = false;}
                 // Almacen
-                if (checkPermiso(31)) {mitemsList.add("Mitem_Lista_Piezas");}
-                if (checkPermiso(36)) {mitemsList.add("Mitem_Tipo_Pieza");}
-                if (checkPermiso(40)) {mitemsList.add("Mitem_Lista_Proveedores");}
-                if (checkPermiso(22)) {mitemsList.add("Mitem_Lista_Encargos");}
-                if (checkPermiso(26)) {mitemsList.add("Mitem_Lista_Albaranes");}
+                if (checkPermiso(31)) {mitemsList.add("Mitem_Lista_Piezas"); notAlmacen = false;}
+                if (checkPermiso(36)) {mitemsList.add("Mitem_Tipo_Pieza"); notAlmacen = false;}
+                if (checkPermiso(40)) {mitemsList.add("Mitem_Lista_Proveedores"); notAlmacen = false;}
+                if (checkPermiso(22)) {mitemsList.add("Mitem_Lista_Encargos"); notAlmacen = false;}
+                if (checkPermiso(26)) {mitemsList.add("Mitem_Lista_Albaranes"); notAlmacen = false;}
                 // Vehiculos
-                if (checkPermiso(44)) {mitemsList.add("Mitem_Lista_Vehiculos");}
-                if (checkPermiso(48)) {mitemsList.add("Mitem_Lista_Modelos");}
-                if (checkPermiso(52)) {mitemsList.add("Mitem_Lista_Marcas");}
-                if (checkPermiso(56)) {mitemsList.add("Mitem_Lista_Categorias");}
+                if (checkPermiso(44)) {mitemsList.add("Mitem_Lista_Vehiculos"); notVehiculos = false;}
+                if (checkPermiso(48)) {mitemsList.add("Mitem_Lista_Modelos"); notVehiculos = false;}
+                if (checkPermiso(52)) {mitemsList.add("Mitem_Lista_Marcas"); notVehiculos = false;}
+                if (checkPermiso(56)) {mitemsList.add("Mitem_Lista_Categorias"); notVehiculos = false;}
                 // Empleados
-                if (checkPermiso(60)) {mitemsList.add("Mitem_Lista_Empleados");}
-                if (checkPermiso(66)) {mitemsList.add("Mitem_Lista_Roles");}
-                if (checkPermiso(71)) {mitemsList.add("Mitem_Lista_Permisos");}
+                if (checkPermiso(60)) {mitemsList.add("Mitem_Lista_Empleados"); notEmpleados = false;}
+                if (checkPermiso(66)) {mitemsList.add("Mitem_Lista_Roles"); notEmpleados = false;}
+                if (checkPermiso(71)) {mitemsList.add("Mitem_Lista_Permisos"); notEmpleados = false;}
 
                 // si no tiene acceso a ninguna funcionalidad, dehabilitar todo el modulo
+                // Facturacion
+                if (notFacturacion){
+                    Menu Facturacion = (Menu) loader.getNamespace().get("Menu_Facturacion");
+                    Facturacion.setDisable(true);
+                }
+                // Almacen
+                if (notAlmacen){
+                    Menu Almacen = (Menu) loader.getNamespace().get("Menu_Almacen");
+                    Almacen.setDisable(true);
+                }
+                // Vehiculos
+                if (notVehiculos){
+                    Menu Vehiculos = (Menu) loader.getNamespace().get("Menu_Vehiculos");
+                    Vehiculos.setDisable(true);
+                }
                 // Empleados
-                if (!checkPermiso(60) && !checkPermiso(66) && !checkPermiso(71)){
+                if (notEmpleados){
                     Menu Empleados = (Menu) loader.getNamespace().get("Menu_Empleados");
                     Empleados.setDisable(true);
                 }
