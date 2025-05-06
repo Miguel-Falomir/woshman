@@ -7,8 +7,6 @@ import java.util.List;
 
 import com.empleados.controller.DAO_Permiso;
 
-// import javax.xml.stream.events.Namespace;
-
 import com.empleados.middleware.LoginMiddleWare;
 import com.empleados.middleware.NuevoUsuarioMiddleWare;
 import com.empleados.model.Empleado;
@@ -64,6 +62,7 @@ public class App extends Application {
     // METODO CAMBIAR DE VENTANA
 
     public void changeStage(String newModule, String newStage, String title, int width, int heigth, Boolean resize, Class<? extends MiddleWare> midWareClass){
+        
         // preparar archivo .fxml
         FXMLLoader loader = new FXMLLoader(
             App.class.getResource(newModule + "/gui/" + newStage + ".fxml")
@@ -104,54 +103,37 @@ public class App extends Application {
                 MenuItem mitem = null;
 
                 // guardar nombres de elementos correspondientes al rol actual
-                switch (rol) {
-                    case 1: // mecanico
-                        mitemsList.add("Mitem_Lista_Averias");
-                        mitemsList.add("Mitem_Realizar_Venta");
-                        mitemsList.add("Mitem_Lista_Piezas");
-                        mitemsList.add("Mitem_Lista_Vehiculos");
-                        // como no tiene acceso a ninguna funcionalidad,
-                        // se le deshabilita todo el modulo "Empleados"
-                        Menu Empleados = (Menu) loader.getNamespace().get("Menu_Empleados");
-                        Empleados.setDisable(true);
-                        break;
-                    case 2: // encargado
-                        mitemsList.add("Mitem_Lista_Averias");
-                        mitemsList.add("Mitem_Lista_Ventas");
-                        mitemsList.add("Mitem_Lista_Facturas");
-                        mitemsList.add("Mitem_Lista_Clientes");
-                        mitemsList.add("Mitem_Realizar_Venta");
-                        mitemsList.add("Mitem_Lista_Piezas");
-                        mitemsList.add("Mitem_Lista_Proveedores");
-                        mitemsList.add("Mitem_Lista_Encargos");
-                        mitemsList.add("Mitem_Lista_Albaranes");
-                        mitemsList.add("Mitem_Lista_Vehiculos");
-                        mitemsList.add("Mitem_Lista_Modelos");
-                        mitemsList.add("Mitem_Lista_Marcas");
-                        mitemsList.add("Mitem_Lista_Empleados");
-                        break;
-                    default: // admimistrador
-                        mitemsList.add("Mitem_Lista_Averias");
-                        mitemsList.add("Mitem_Tipo_Averia");
-                        mitemsList.add("Mitem_Estado_Averia");
-                        mitemsList.add("Mitem_Lista_Ventas");
-                        mitemsList.add("Mitem_Lista_Facturas");
-                        mitemsList.add("Mitem_Realizar_Venta");
-                        mitemsList.add("Mitem_Lista_Clientes");
-                        mitemsList.add("Mitem_Lista_Piezas");
-                        mitemsList.add("Mitem_Tipo_Pieza");
-                        mitemsList.add("Mitem_Lista_Proveedores");
-                        mitemsList.add("Mitem_Lista_Encargos");
-                        mitemsList.add("Mitem_Lista_Albaranes");
-                        mitemsList.add("Mitem_Lista_Vehiculos");
-                        mitemsList.add("Mitem_Lista_Modelos");
-                        mitemsList.add("Mitem_Lista_Marcas");
-                        mitemsList.add("Mitem_Lista_Categorias");
-                        mitemsList.add("Mitem_Lista_Empleados");
-                        mitemsList.add("Mitem_Lista_Roles");
-                        mitemsList.add("Mitem_Lista_Permisos");
-                        break;
+                // Facturacion
+                if (checkPermiso(0)) {mitemsList.add("Mitem_Lista_Averias");}
+                if (checkPermiso(4)) {mitemsList.add("Mitem_Estado_Averia");}
+                if (checkPermiso(8)) {mitemsList.add("Mitem_Tipo_Averia");}
+                if (checkPermiso(12)) {mitemsList.add("Mitem_Lista_Ventas");}
+                if (checkPermiso(13)) {mitemsList.add("Mitem_Realizar_Venta");}
+                if (checkPermiso(16)) {mitemsList.add("Mitem_Lista_Facturas");}
+                if (checkPermiso(75)) {mitemsList.add("Mitem_Lista_Clientes");}
+                // Almacen
+                if (checkPermiso(31)) {mitemsList.add("Mitem_Lista_Piezas");}
+                if (checkPermiso(36)) {mitemsList.add("Mitem_Tipo_Pieza");}
+                if (checkPermiso(40)) {mitemsList.add("Mitem_Lista_Proveedores");}
+                if (checkPermiso(22)) {mitemsList.add("Mitem_Lista_Encargos");}
+                if (checkPermiso(26)) {mitemsList.add("Mitem_Lista_Albaranes");}
+                // Vehiculos
+                if (checkPermiso(44)) {mitemsList.add("Mitem_Lista_Vehiculos");}
+                if (checkPermiso(48)) {mitemsList.add("Mitem_Lista_Modelos");}
+                if (checkPermiso(52)) {mitemsList.add("Mitem_Lista_Marcas");}
+                if (checkPermiso(56)) {mitemsList.add("Mitem_Lista_Categorias");}
+                // Empleados
+                if (checkPermiso(60)) {mitemsList.add("Mitem_Lista_Empleados");}
+                if (checkPermiso(66)) {mitemsList.add("Mitem_Lista_Roles");}
+                if (checkPermiso(71)) {mitemsList.add("Mitem_Lista_Permisos");}
+
+                // si no tiene acceso a ninguna funcionalidad, dehabilitar todo el modulo
+                // Empleados
+                if (!checkPermiso(60) && !checkPermiso(66) && !checkPermiso(71)){
+                    Menu Empleados = (Menu) loader.getNamespace().get("Menu_Empleados");
+                    Empleados.setDisable(true);
                 }
+
 
                 // activar elementos guardados
                 for (String itemName : mitemsList) {

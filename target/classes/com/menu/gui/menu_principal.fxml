@@ -20,8 +20,8 @@
           <Menu mnemonicParsing="false" text="Facturación">
             <items>
               <MenuItem fx:id="Mitem_Lista_Averias" mnemonicParsing="false" onAction="#OnAction_Mitem_Lista_Averias" text="Lista Averias" disable="true" visible="false"/>
-              <MenuItem fx:id="Mitem_Tipo_Averia" mnemonicParsing="false" onAction="#OnAction_Mitem_Tipo_Averia" text="Tipo Averia" disable="true" visible="false"/>
               <MenuItem fx:id="Mitem_Estado_Averia" mnemonicParsing="false" onAction="#OnAction_Mitem_Estado_Averia" text="Estado Averia" disable="true" visible="false"/>
+              <MenuItem fx:id="Mitem_Tipo_Averia" mnemonicParsing="false" onAction="#OnAction_Mitem_Tipo_Averia" text="Tipo Averia" disable="true" visible="false"/>
               <MenuItem fx:id="Mitem_Lista_Ventas" mnemonicParsing="false" onAction="#OnAction_Mitem_Lista_Ventas" text="Lista Ventas" disable="true" visible="false"/>
               <MenuItem fx:id="Mitem_Realizar_Venta" mnemonicParsing="false" onAction="#OnAction_Mitem_Realizar_Venta" text="Realizar Venta" disable="true" visible="false"/>
               <MenuItem fx:id="Mitem_Lista_Facturas" mnemonicParsing="false" onAction="#OnAction_Mitem_Lista_Facturas" text="Lista Facturas" disable="true" visible="false"/>

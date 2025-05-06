@@ -25,6 +25,7 @@ module com {
 
     // Exportar paquetes
     exports com;
+    exports com.menu.middleware;
     exports com.empleados.model;
     exports com.utilities;
 }
