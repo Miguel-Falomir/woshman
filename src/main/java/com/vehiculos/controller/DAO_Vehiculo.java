@@ -66,8 +66,8 @@ public class DAO_Vehiculo extends DAO implements DAO_Interface<Vehiculo, Integer
             }
             resultado.next();
 
-            // comprobar si matricula se repite
-            boolean matriculaUnique = (resultado.getInt(1) < 2);
+            // comprobar que matricula no se repita
+            boolean matriculaUnique = (resultado.getInt(1) == 0);
             if (matriculaUnique) {
                 // consulta 3: agregar vehiculo nuevo a BD
                 statement = connect.prepareStatement("INSERT INTO vehiculo(id_vehiculo, fk_modelo, matricula) VALUES(?, ?, ?);");
@@ -112,8 +112,9 @@ public class DAO_Vehiculo extends DAO implements DAO_Interface<Vehiculo, Integer
         // (intentar) ejecutar actualizacion
         try {
             // consulta 1: comprobar que la nueva matricula no se repite
-            statement = connect.prepareStatement("SELECT count(*) FROM vehiculo v WHERE v.matricula = ?;");
+            statement = connect.prepareStatement("SELECT count(*) FROM vehiculo v WHERE v.matricula = ? AND v.id_vehiculo <> ?;");
             statement.setString(1, obj.getMatricula());
+            statement.setInt(2, obj.getId());
 
             // ejecutar consulta
             resultado = statement.executeQuery();
@@ -125,7 +126,7 @@ public class DAO_Vehiculo extends DAO implements DAO_Interface<Vehiculo, Integer
             resultado.next();
 
             // materializar 'resultado' en booleano
-            boolean matriculaUnique = (resultado.getInt(1) < 2);
+            boolean matriculaUnique = (resultado.getInt(1) == 0);
             if (matriculaUnique){
                 // consulta 2: actualizar vehiculo
                 statement = connect.prepareStatement("UPDATE vehiculo v SET v.fk_modelo = ?, v.matricula = ? WHERE v.id_vehiculo = ?;");
@@ -233,61 +234,6 @@ public class DAO_Vehiculo extends DAO implements DAO_Interface<Vehiculo, Integer
         return exito;
     }
 
-    public boolean deleteCascade(Vehiculo obj){
-        // variables internas
-        PreparedStatement statement = null;
-        /* ResultSet resultado = null; */
-        int update;
-        boolean exito = false;
-
-        // (intentar) ejecutar eliminacion
-        try {
-            // consulta 1: borrar las averias 
-            statement = connect.prepareStatement("DELETE FROM averia a WHERE a.fk_vehiculo = ?;");
-            statement.setInt(1, obj.getId());
-
-            // ejecutar actualizacion
-            update = statement.executeUpdate();
-            System.out.println("ELIMINAR AVERIAS: " + update);
-
-            // consulta 2: borrar vehiculo
-            statement = connect.prepareStatement("DELETE FROM vehiculo WHERE id = ?;");
-            statement.setInt(1, obj.getId());
-
-            // ejecutar eliminacion
-            update = statement.executeUpdate();
-            System.out.println("ELIMINAR VEHICULO: " + update);
-
-            // consulta 3: actualizar manualmente los IDs de los vehiculos posteriores
-            statement = connect.prepareStatement("UPDATE vehiculo SET id_vehiculo = id_vehiculo - 1 WHERE id_vehiculo > ?;");
-            statement.setInt(1, obj.getId());
-
-            // ejecutar actualizacion
-            update = statement.executeUpdate();
-            System.out.println("REORGANIZAR IDs MANUALMENTE: " + update);
-            exito = true;
-
-        // manejar excepciones
-        } catch (SQLException e){
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        
-        // pase lo que pase, cerrar 'statement'
-        } finally {
-            if (statement != null){
-                try {
-                    statement.close();
-                } catch (SQLException e){
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        // devolver 'exito', para indicar si se ha completado la actualizacion
-        return exito;
-    }
-
     @Override
     public Vehiculo search(Integer id) {
         // variables internas
@@ -297,7 +243,7 @@ public class DAO_Vehiculo extends DAO implements DAO_Interface<Vehiculo, Integer
 
         // (intentar) ejecutar busqueda
         try {
-            // consulta 1: buscar todos los datos de vehiculo, modelo, categoria y marca mientras veh.id_vehiculo = id
+            // consulta 1: buscar todos los datos de vehiculo, modelo, categoria y marca relativos a vehiculo veh.id_vehiculo = id
             statement = connect.prepareStatement("SELECT veh.id_vehiculo, veh.matricula, mo.id_modelo, mo.nombre, cat.id_categoria, cat.nombre, cat.descripcion, ma.id_marca, ma.nombre FROM vehiculo veh JOIN modelo mo ON mo.id_modelo = veh.fk_modelo JOIN categoria cat ON mo.fk_categoria = cat.id_categoria JOIN marca ma ON ma.id_marca = mo.fk_marca WHERE veh.id_vehiculo = ?;");
             statement.setInt(1, id);
 
@@ -310,7 +256,7 @@ public class DAO_Vehiculo extends DAO implements DAO_Interface<Vehiculo, Integer
             }
             resultado.next();
 
-            // agregar resultado a 'respuesta'
+            // guardar resultado en objeto 'respuesta'
             Marca marca = new Marca(
                 resultado.getInt(8),
                 resultado.getString(9)
