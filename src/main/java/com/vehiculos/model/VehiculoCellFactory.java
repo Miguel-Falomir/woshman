@@ -21,22 +21,6 @@ public class VehiculoCellFactory extends ListCell<Vehiculo> {
 
     // CONSTRUCTOR
 
-    /*
-    public VehiculoCellFactory(){
-        // preparar archivo .fxml
-        loader = new FXMLLoader(
-            App.class.getResource("vehiculos/gui/cell_vehiculo.fxml")
-        );
-        
-        try {
-            // cargar archivo .fxml
-            root = loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    */
-
     public VehiculoCellFactory(ListaVehiculosSubMenuWare menuWare){
         // preparar archivo .fxml
         loader = new FXMLLoader(

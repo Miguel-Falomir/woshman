@@ -64,7 +64,7 @@ public class NuevoUsuarioMiddleWare extends MiddleWare {
 
     @FXML
     void OnAction_Buton_Empleado_Cancelar(ActionEvent event) {
-        app.changeStage("login", "login_form", "Login", 400, 300, false, LoginMiddleWare.class);
+        app.changeStage("empleados", "form_login", "Login", 400, 300, false, LoginMiddleWare.class);
     }
 
     @FXML

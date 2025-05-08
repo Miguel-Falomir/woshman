@@ -21,6 +21,12 @@ module com {
     /* opens com.menu.controller to javafx.fxml; */
     //almacen
     opens com.almacen.middleware to javafx.fxml;
+    // empleados
+    
+    // facturacion
+    opens com.facturacion.middleware to javafx.fxml;
+    opens com.facturacion.model to javafx.base;
+    // vehiculos
     opens com.vehiculos.middleware to javafx.fxml;
 
     // Exportar paquetes

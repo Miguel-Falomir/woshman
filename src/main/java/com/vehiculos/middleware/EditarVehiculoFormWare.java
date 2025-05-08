@@ -44,7 +44,7 @@ public class EditarVehiculoFormWare extends FormWare {
         this.vehiculo = vehiculo;
         this.menuWare = menuWare;
         this.dao = this.menuWare.getDaoVehiculo();
-        this.listaMarcas = this.menuWare.daoMarca.searchAll();
+        this.listaMarcas = this.menuWare.daoMarca.searchAllAlphabetically();
         this.listaModelos = this.menuWare.daoModelo.searchAll();
     }
 

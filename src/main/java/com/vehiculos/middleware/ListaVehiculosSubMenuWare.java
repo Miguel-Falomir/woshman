@@ -34,8 +34,6 @@ public class ListaVehiculosSubMenuWare extends SubMenuWare {
 
     private ObservableList<Vehiculo> obserVehiculos;
     private FilteredList<Vehiculo> filterVehiculos;
-    private Integer selectedMarcaID = null;
-    private Integer selectedModeloID = null;
     private List<Vehiculo> listaVehiculos;
     private List<Modelo> listaModelos;
     private List<Marca> listaMarcas;
@@ -70,9 +68,6 @@ public class ListaVehiculosSubMenuWare extends SubMenuWare {
     @FXML
     private Button Buton_Agregar;
 
-    //@FXML
-    //private Button Buton_Buscar;
-
     @FXML
     private ListView<Vehiculo> ListV_Vehiculos;
 
@@ -91,8 +86,7 @@ public class ListaVehiculosSubMenuWare extends SubMenuWare {
 
     @FXML
     void OnKeyTyped_Input_Matricula(KeyEvent event) {
-        String regex = Input_Matricula.getText();
-        Func_Filter_Matricula(regex);
+        Func_Calculate_Predicate();
     }
 
     // INICIALIZAR
@@ -114,7 +108,8 @@ public class ListaVehiculosSubMenuWare extends SubMenuWare {
         // 25 (Insertar Vehiculos)
         // 26 (Modificar Vehiculos)
         // 27 (Eliminar Vehiculos)
-        if (!(App.checkPermiso(25) && App.checkPermiso(26) && App.checkPermiso(27))){
+        boolean prohibited = !(App.checkPermiso(25) && App.checkPermiso(26) && App.checkPermiso(27));
+        if (prohibited){
             listaMarcas.removeIf(marca -> marca.getId() == 0); // sugerencia de chatGPT
             listaModelos.removeIf(modelo -> modelo.getId() == 0);
             listaVehiculos.removeIf(vehiculo -> vehiculo.getId() == 0);
@@ -156,31 +151,7 @@ public class ListaVehiculosSubMenuWare extends SubMenuWare {
         // Al seleccionar Titem, se filtra la lista
         TreeV_Marca_Modelo.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
-                // recopilar datos Titem
-                Titem.Tipo tipo = newSelection.getValue().getTipo();
-                Integer id = newSelection.getValue().getId();
-                // comparar tipo
-                switch (tipo){
-                    case MARCA: // filtrar marcas
-                        selectedMarcaID = id;
-                        filterVehiculos.setPredicate(i -> i.getModelo().getMarca().getId() == selectedMarcaID);
-                        break;
-                    case MODELO: // filtrar modelos
-                        selectedModeloID = id;
-                        filterVehiculos.setPredicate(i -> i.getModelo().getId() == selectedModeloID);
-                        break;
-                    case null: // deshacer filtros
-                        selectedMarcaID = null;
-                        selectedModeloID = null;
-                        if (!(App.checkPermiso(25) && App.checkPermiso(26) && App.checkPermiso(27))){
-                            filterVehiculos.setPredicate(i -> i.getId() != 0);
-                        } else {
-                            filterVehiculos.setPredicate(null);
-                        }
-                        break;
-                    default: // esto no hace nada, pero switch-case SIEMPRE necesita un default
-                        break;
-                }
+                Func_Calculate_Predicate();
             }
             
         });
@@ -197,22 +168,36 @@ public class ListaVehiculosSubMenuWare extends SubMenuWare {
         }
     }
 
-    // METODO APLICAR FILTRO TEXTO
+    // METODO CALCULAR PREDICADO
 
-    private void Func_Filter_Matricula(String regex){
-        if (selectedModeloID !=  null) {
-            filterVehiculos.setPredicate(i -> i.getModelo().getId() == selectedModeloID && i.getMatricula().contains(regex));
-        } else if (selectedMarcaID != null) {
-            filterVehiculos.setPredicate(i -> i.getModelo().getMarca().getId() == selectedMarcaID && i.getMatricula().contains(regex));
-        } else {
-            filterVehiculos.setPredicate(i -> i.getMatricula().contains(regex));
+    private void Func_Calculate_Predicate(){
+        // recopilar TODOS los valores de entrada
+        Titem titem = TreeV_Marca_Modelo.getSelectionModel().getSelectedItem().getValue();
+        String regex = Input_Matricula.getText();
+        Titem.Tipo tipo = titem.getTipo();
+        Integer id = titem.getId();
+
+        // aplicar predicado
+        switch (tipo){
+            case MARCA:
+                filterVehiculos.setPredicate(i -> i.getModelo().getMarca().getId() == id && i.getMatricula().contains(regex));
+                break;
+            case MODELO:
+                filterVehiculos.setPredicate(i -> i.getModelo().getId() == id && i.getMatricula().contains(regex));
+                break;
+            case null:
+                filterVehiculos.setPredicate(i -> i.getMatricula().contains(regex));
+                break;
+            default:
+                System.out.println("No especificó ");
+                break;
         }
     }
 
     // METODO INSERTAR VEHICULO
 
     private void Func_Insert_Vehiculo(){
-        mainController.openFormulary("vehiculos", "form_editar_vehiculo", 480, 360, InsertarVehiculoFormWare.class, this, null);
+        mainController.openFormulary("vehiculos", "form_insertar_vehiculo", 480, 360, InsertarVehiculoFormWare.class, this, null);
     }
 
     // METODO REINICIAR LISTA VEHICULOS
@@ -227,23 +212,16 @@ public class ListaVehiculosSubMenuWare extends SubMenuWare {
         // 25 (Insertar Vehiculos)
         // 26 (Modificar Vehiculos)
         // 27 (Eliminar Vehiculos)
-        if (!(App.checkPermiso(25) && App.checkPermiso(26) && App.checkPermiso(27))){
+        boolean prohibited = !(App.checkPermiso(25) && App.checkPermiso(26) && App.checkPermiso(27));
+        if (prohibited){
             listaMarcas.removeIf(marca -> marca.getId() == 0); // sugerencia de chatGPT
             listaModelos.removeIf(modelo -> modelo.getId() == 0);
             listaVehiculos.removeIf(vehiculo -> vehiculo.getId() == 0);
         }
 
-        // inicializar listas observables
-        obserVehiculos = FXCollections.observableArrayList(listaVehiculos);
-        filterVehiculos = new FilteredList<>(obserVehiculos);
-
-        // asignar lista observable a ListView interfaz
-        ListV_Vehiculos.setItems(filterVehiculos);
-
-        // definir formato de las celdas de ListView
-        ListV_Vehiculos.setCellFactory(lambda -> {
-            return new VehiculoCellFactory(this);
-        });
+        // actualizar listas observables
+        obserVehiculos.clear();
+        obserVehiculos.setAll(listaVehiculos);
 
         // refrescar ListView
         ListV_Vehiculos.refresh();

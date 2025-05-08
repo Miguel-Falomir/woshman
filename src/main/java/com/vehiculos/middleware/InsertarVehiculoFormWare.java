@@ -83,17 +83,20 @@ public class InsertarVehiculoFormWare extends FormWare {
         filterModelos.setPredicate(i -> i.getId() == -1);
 
         // asignar manejadores de eventos a elementos UI
+        // al elegir marca, se filtran los modelos de 'Combo_Modelo'
         Combo_Marca.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null){
                 int id = newSelection.getId();
                 filterModelos.setPredicate(i -> i.getMarca().getId() == id);
             }
         });
+        // al elegir modelo, este se asigna a 'vehiculo.modelo'
         Combo_Modelo.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null){
                 vehiculo.setModelo(newSelection);
             }
         });
+        // al escribir texto en campo 'Input_Matricula', el contenido se asigna a 'vehiculo.matricula'
         Input_Matricula.textProperty().addListener((observable, oldValue, newValue) -> {
             vehiculo.setMatricula(newValue);
         });
@@ -111,26 +114,29 @@ public class InsertarVehiculoFormWare extends FormWare {
         Func_Insert_Vehiculo();
     }
 
-    // METODOS
+    // METODO CERRAR FORMULARIO
 
     private void Func_Close(){
         Stage thisStage = (Stage) Buton_Cancelar.getScene().getWindow();
         thisStage.close();
     }
 
+    // METODO INSERTAR VEHICULO
+
     private void Func_Insert_Vehiculo(){
         // inicializar ventana alert
         Alert a = new Alert(AlertType.NONE);
+        String matricula = vehiculo.getMatricula();
 
         // (intentar) ejecutar actualizacion
         if(dao.insert(vehiculo)){
             a.setAlertType(AlertType.INFORMATION);
             a.setHeaderText("OPERACIÓN COMPLETADA");
-            a.setContentText("El vehiculo " + vehiculo.getMatricula() + " ha sido actualizado.");
+            a.setContentText("El vehículo " + matricula + " se ha guardado en la base de datos.");
         } else {
             a.setAlertType(AlertType.ERROR);
             a.setHeaderText("ERROR SQL");
-            a.setContentText("Ya existe un vehiculo com matrícula " + vehiculo.getMatricula() + ". recuerde que las matrículas no pueden repetirse.");
+            a.setContentText("Datos duplicados en vehículo " + matricula + ". recuerde que las matrículas no pueden repetirse.");
         }
 
         // pase lo que pase, mostrarlo mediante la alert
@@ -141,6 +147,6 @@ public class InsertarVehiculoFormWare extends FormWare {
         menuWare.Func_Reboot_ObserVehiculos();
 
         // cerrar ventana
-        Func_Close();
+        if (a.getAlertType().equals(AlertType.INFORMATION)){Func_Close();}
     }
 }

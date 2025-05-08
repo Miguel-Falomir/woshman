@@ -10,10 +10,6 @@ import java.util.List;
 import com.facturacion.model.Cliente;
 import com.utilities.DAO;
 import com.utilities.DAO_Interface;
-import com.vehiculos.model.Categoria;
-import com.vehiculos.model.Marca;
-import com.vehiculos.model.Modelo;
-import com.vehiculos.model.Vehiculo;
 
 public class DAO_Cliente extends DAO implements DAO_Interface<Cliente, Integer> {
 
@@ -54,8 +50,8 @@ public class DAO_Cliente extends DAO implements DAO_Interface<Cliente, Integer> 
             // guardar resultado
             cantidadFilas = resultado.getInt(1);
 
-            // consulta 2: buscar todos los clientes con c.dni == obj.dni
-            statement = connect.prepareStatement("SELECT count(*) FROM cliente c WHERE c.dni = ?;");
+            // consulta 2: buscar todos los clientes con cli.dni == obj.dni
+            statement = connect.prepareStatement("SELECT count(*) FROM cliente cli WHERE cli.dni = ?;");
             statement.setString(1, obj.getDni());
 
             // ejecutar consulta
@@ -70,8 +66,8 @@ public class DAO_Cliente extends DAO implements DAO_Interface<Cliente, Integer> 
             // guardar resultado
             boolean dniUnique = (resultado.getInt(1) == 0);
             
-            // consulta 3: buscar todos los clientes con c.email == obj.email
-            statement = connect.prepareStatement("SELECT count(*) FROM cliente c WHERE c.email = ?;");
+            // consulta 3: buscar todos los clientes con cli.email == obj.email
+            statement = connect.prepareStatement("SELECT count(*) FROM cliente cli WHERE cli.email = ?;");
             statement.setString(1, obj.getEmail());
 
             // ejecutar consulta
@@ -130,8 +126,8 @@ public class DAO_Cliente extends DAO implements DAO_Interface<Cliente, Integer> 
 
         // (intentar) ejecutar actualizacion
         try {
-            // consulta 1: buscar todos los clientes con c.dni == obj.dni
-            statement = connect.prepareStatement("SELECT count(*) FROM cliente c WHERE c.dni = ? AND c.id_cliente <> ?;");
+            // consulta 1: buscar todos los clientes con cli.dni == obj.dni
+            statement = connect.prepareStatement("SELECT count(*) FROM cliente cli WHERE cli.dni = ? AND cli.id_cliente <> ?;");
             statement.setString(1, obj.getDni());
             statement.setInt(2, obj.getId());
 
@@ -147,8 +143,8 @@ public class DAO_Cliente extends DAO implements DAO_Interface<Cliente, Integer> 
             // guardar resultado
             boolean dniUnique = (resultado.getInt(1) == 0);
             
-            // consulta 2: buscar todos los clientes con c.email == obj.email
-            statement = connect.prepareStatement("SELECT count(*) FROM cliente c WHERE c.email = ? AND c.id_cliente <> ?;");
+            // consulta 2: buscar todos los clientes con cli.email == obj.email
+            statement = connect.prepareStatement("SELECT count(*) FROM cliente cli WHERE cli.email = ? AND cli.id_cliente <> ?;");
             statement.setString(1, obj.getEmail());
             statement.setInt(2, obj.getId());
 
@@ -167,7 +163,7 @@ public class DAO_Cliente extends DAO implements DAO_Interface<Cliente, Integer> 
             // comprobar que tanto dni como email no se repitan
             if(dniUnique && emailUnique){
                 // consulta 4: agregar cliente nuevo a BD
-                statement = connect.prepareStatement("UPDATE cliente c SET c.dni = ?, c.nombre = ?, c.apellidos = ?, c.email = ?, c.direccion = ? WHERE c.di_cliente = ?;");
+                statement = connect.prepareStatement("UPDATE cliente cli SET cli.dni = ?, cli.nombre = ?, cli.apellidos = ?, cli.email = ?, cli.direccion = ? WHERE cli.di_cliente = ?;");
                 statement.setString(1, obj.getDni());
                 statement.setString(2, obj.getNombre());
                 statement.setString(3, obj.getApellidos());
@@ -290,8 +286,8 @@ public class DAO_Cliente extends DAO implements DAO_Interface<Cliente, Integer> 
 
         // (intentar) ejecutar busqueda
         try {
-            // consulta 1: buscar todos los datos del cliente c.id_cliente = id
-            statement = connect.prepareStatement("SELECT c.id_cliente, c.dni, c.nombre, c.apellidos, c.email, direccion FROM cliente c WHERE c.id_cliente = ?;");
+            // consulta 1: buscar todos los datos del cliente cli.id_cliente = id
+            statement = connect.prepareStatement("SELECT cli.id_cliente, cli.dni, cli.nombre, cli.apellidos, cli.email, direccion FROM cliente cli WHERE cli.id_cliente = ?;");
             statement.setInt(1, id);
 
             // ejecutar consulta
@@ -344,7 +340,60 @@ public class DAO_Cliente extends DAO implements DAO_Interface<Cliente, Integer> 
         // (intentar) ejecutar busqueda
         try {
             // consulta 1: buscar todos los clientes
-            statement = connect.prepareStatement("SELECT c.id_cliente, c.dni, c.nombre, c.apellidos, c.email, direccion FROM cliente c;");
+            statement = connect.prepareStatement("SELECT cli.id_cliente, cli.dni, cli.nombre, cli.apellidos, cli.email, direccion FROM cliente cli;");
+
+            // ejecutar consulta
+            resultado = statement.executeQuery();
+
+            // asegurar que 'resultado' apunte antes de la primera fila
+            if (!resultado.isBeforeFirst()){
+                resultado.beforeFirst();
+            }
+
+            // agregar todos los resultados a lista 'respuesta'
+            while (resultado.next()){
+                Cliente cliente = new Cliente(
+                    resultado.getInt(1),
+                    resultado.getString(2),
+                    resultado.getString(3),
+                    resultado.getString(4),
+                    resultado.getString(5),
+                    resultado.getString(6)
+                );
+                respuesta.add(cliente);
+            }
+
+        // manejar excepciones
+        } catch (SQLException e){
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        
+        // pase lo que pase, cerrar 'statement'
+        } finally {
+            if (statement != null){
+                try {
+                    statement.close();
+                } catch (SQLException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+        
+        // devolver respuesta
+        return respuesta;
+    }
+
+    public List<Cliente> searchAllAlphabetically() {
+        // variables internas
+        PreparedStatement statement = null;
+        ResultSet resultado = null;
+        List<Cliente> respuesta = new ArrayList<Cliente>();
+
+        // (intentar) ejecutar busqueda
+        try {
+            // consulta 1: buscar todos los clientes
+            statement = connect.prepareStatement("SELECT cli.id_cliente, cli.dni, cli.nombre, cli.apellidos, cli.email, direccion FROM cliente cli ORDER BY cli.nombre ASC;");
 
             // ejecutar consulta
             resultado = statement.executeQuery();

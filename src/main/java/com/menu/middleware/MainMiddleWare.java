@@ -5,6 +5,10 @@ import java.util.HashMap;
 
 import com.App;
 import com.empleados.middleware.LoginMiddleWare;
+import com.facturacion.controller.DAO_Cliente;
+import com.facturacion.middleware.InsertarClienteFormWare;
+import com.facturacion.middleware.ListaClientesSubMenuWare;
+import com.facturacion.model.Cliente;
 import com.utilities.DAO;
 import com.utilities.FormWare;
 import com.utilities.MiddleWare;
@@ -139,7 +143,7 @@ public class MainMiddleWare extends MiddleWare {
 
     @FXML
     void OnAction_Mitem_Lista_Clientes(ActionEvent event) {
-
+        changeSubMenu("facturacion", "submenu_lista_clientes", "Lista Clientes", ListaClientesSubMenuWare.class);
     }
 
     @FXML
@@ -223,7 +227,7 @@ public class MainMiddleWare extends MiddleWare {
         app.changeStage("empleados", "form_login", "login", 400, 300, false, LoginMiddleWare.class);
     }
 
-    // METODO CAMBIAR ESCENA
+    // METODO CAMBIAR SUB MENU
 
     public void changeSubMenu(String newModule, String newScene, String title, Class<? extends SubMenuWare> menuWareClass){
         // englobar todo el proceso en un try-catch
@@ -241,12 +245,17 @@ public class MainMiddleWare extends MiddleWare {
             // generar controlador correspondiente al submenu
             // asignando DAOs necesarios
             HashMap<String, DAO> daoHashMap = new HashMap<>();
-            if (menuWareClass.equals(ListaVehiculosSubMenuWare.class)){
+            if (menuWareClass.equals(ListaVehiculosSubMenuWare.class)){ // submenu 'Lista Vehiculos'
                 loader.setControllerFactory(lambda -> {
                     daoHashMap.put("vehiculo", new DAO_Vehiculo(app.getConnection()));
                     daoHashMap.put("modelo", new DAO_Modelo(app.getConnection()));
                     daoHashMap.put("marca", new DAO_Marca(app.getConnection()));
                     return new ListaVehiculosSubMenuWare(this, daoHashMap);
+                });
+            } else if (menuWareClass.equals(ListaClientesSubMenuWare.class)){ // submenu 'Lista Clientes'
+                loader.setControllerFactory(lambda -> {
+                    daoHashMap.put("cliente", new DAO_Cliente(app.getConnection()));
+                    return new ListaClientesSubMenuWare(this, daoHashMap);
                 });
             }
 
@@ -284,6 +293,16 @@ public class MainMiddleWare extends MiddleWare {
                 } else if (formWareClass.equals(InsertarVehiculoFormWare.class)){ // formulario 'Insertar Vehiculo'
                     loader.setControllerFactory(lambda -> {
                         return new InsertarVehiculoFormWare(submenu);
+                    });
+                }
+            } else if (menuWare instanceof ListaClientesSubMenuWare) { // submenu 'Lista Clientes'
+                ListaClientesSubMenuWare submenu = (ListaClientesSubMenuWare) menuWare;
+                if (/*formWareClass.equals(EditarClienteFormWare.class) && obj instanceof Cliente*/false){ // formulario 'Actualizar Cliente'
+                    Cliente cliente = (Cliente) obj;
+                    //return new EditarClienteFormWare(cliente, submenu);
+                } else if (formWareClass.equals(InsertarClienteFormWare.class)) { // formulario 'Insertar Cliente'
+                    loader.setControllerFactory(lambda -> {
+                        return new InsertarClienteFormWare(submenu);
                     });
                 }
             }
