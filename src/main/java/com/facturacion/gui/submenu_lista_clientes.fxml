@@ -68,7 +68,7 @@
             <VBox HBox.hgrow="ALWAYS">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Debido a limitaciones técnicas, no se han podido implementar botones de &quot;Editar&quot; y &quot;Borrar&quot; en cada fila." />
-                  <Text layoutX="10.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Para editar o borrar un cliente, seleccionar fila del cliente y pulsar boton de la accion." />
+                  <Text layoutX="10.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Para editar o borrar un cliente, selecciona la fila del cliente y pulsa el botón de la acción." />
                </children>
             </VBox>
             <Button fx:id="Buton_Editar" mnemonicParsing="false" onAction="#OnAction_Buton_Editar" text="Editar">

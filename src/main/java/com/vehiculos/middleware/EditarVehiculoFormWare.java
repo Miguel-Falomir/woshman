@@ -142,11 +142,12 @@ public class EditarVehiculoFormWare extends FormWare {
         // .showAndWait() bloquea las siguientes instrucciones hasta cerrar la alert
         alert.showAndWait();
 
-        // reiniciar la lista para que se muestre la ausencia del vehiculo eliminado
-        menuWare.Func_Reboot_ObserVehiculos();
-
-        // cerrar ventana
-        Func_Close();
+        // si se ha completado la operacion, reiniciar lista y cerrar ventana
+        boolean succeed = (alert.getAlertType().equals(AlertType.INFORMATION));
+        if (succeed) {
+            menuWare.Func_Reboot_ObserVehiculos();
+            Func_Close();
+        }
     }
 
 }

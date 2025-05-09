@@ -124,7 +124,7 @@ public class InsertarClienteFormWare extends FormWare {
         // .showAndWait() bloquea las siguientes instrucciones hasta cerrar la alert
         alert.showAndWait();
 
-        // si se ha completado la oprecion, reiniciar lista y cerrar ventana
+        // si se ha completado la operacion, reiniciar lista y cerrar ventana
         boolean succeed = (alert.getAlertType().equals(AlertType.INFORMATION));
         if (succeed) {
             menuWare.Func_Reboot_ObserClientes();
