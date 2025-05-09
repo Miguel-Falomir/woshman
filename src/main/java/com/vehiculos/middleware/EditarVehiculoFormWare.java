@@ -125,22 +125,22 @@ public class EditarVehiculoFormWare extends FormWare {
 
     private void Func_Update_Vehiculo(){
         // inicializar ventana alert
-        Alert a = new Alert(AlertType.NONE);
+        Alert alert = new Alert(AlertType.NONE);
 
         // (intentar) ejecutar actualizacion
         if(dao.update(vehiculo)){
-            a.setAlertType(AlertType.INFORMATION);
-            a.setHeaderText("OPERACIÓN COMPLETADA");
-            a.setContentText("El vehiculo " + vehiculo.getMatricula() + " ha sido actualizado.");
+            alert.setAlertType(AlertType.INFORMATION);
+            alert.setHeaderText("OPERACIÓN COMPLETADA");
+            alert.setContentText("El vehiculo " + vehiculo.getMatricula() + " ha sido actualizado.");
         } else {
-            a.setAlertType(AlertType.ERROR);
-            a.setHeaderText("ERROR SQL");
-            a.setContentText("Ya existe un vehiculo com matrícula " + vehiculo.getMatricula() + ". recuerde que las matrículas no pueden repetirse.");
+            alert.setAlertType(AlertType.ERROR);
+            alert.setHeaderText("ERROR SQL");
+            alert.setContentText("Ya existe un vehiculo com matrícula " + vehiculo.getMatricula() + ". recuerde que las matrículas no pueden repetirse.");
         }
 
         // pase lo que pase, mostrarlo mediante la alert
         // .showAndWait() bloquea las siguientes instrucciones hasta cerrar la alert
-        a.showAndWait();
+        alert.showAndWait();
 
         // reiniciar la lista para que se muestre la ausencia del vehiculo eliminado
         menuWare.Func_Reboot_ObserVehiculos();

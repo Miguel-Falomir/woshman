@@ -5,11 +5,14 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.facturacion.middleware.ListaClientesSubMenuWare">
   <columnConstraints>
@@ -18,6 +21,7 @@
   <rowConstraints>
     <RowConstraints minHeight="10.0" vgrow="NEVER" />
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
       <HBox prefWidth="200.0" GridPane.vgrow="NEVER">
@@ -40,21 +44,53 @@
             </Button>
          </children>
          <GridPane.margin>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            <Insets left="20.0" right="20.0" top="20.0" />
          </GridPane.margin>
       </HBox>
-      <TableView fx:id="TablV_Clientes" prefHeight="200.0" prefWidth="200.0" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+         <children>
+            <TableView fx:id="TablV_Clientes" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <columns>
+                  <TableColumn fx:id="TVcol_DNI" text="DNI" />
+                  <TableColumn fx:id="TVcol_Nombre" text="Nombre" />
+                  <TableColumn fx:id="TVcol_Apellidos" text="Apellidos" />
+                  <TableColumn fx:id="TVcol_Email" text="Email" />
+                  <TableColumn fx:id="TVcol_Direccion" text="Dirección" />
+               </columns>
+            </TableView>
+         </children>
+         <GridPane.margin>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </GridPane.margin>
+      </AnchorPane>
+      <HBox alignment="CENTER_LEFT" layoutX="30.0" layoutY="30.0" prefWidth="200.0" GridPane.rowIndex="2">
+         <children>
+            <VBox HBox.hgrow="ALWAYS">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Debido a limitaciones técnicas, no se han podido implementar botones de &quot;Editar&quot; y &quot;Borrar&quot; en cada fila." />
+                  <Text layoutX="10.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Para editar o borrar un cliente, seleccionar fila del cliente y pulsar boton de la accion." />
+               </children>
+            </VBox>
+            <Button fx:id="Buton_Editar" mnemonicParsing="false" onAction="#OnAction_Buton_Editar" text="Editar">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="Buton_Borrar" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#OnAction_Buton_Borrar" text="Borrar">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="20.0" />
+               </HBox.margin>
+            </Button>
+         </children>
          <GridPane.margin>
             <Insets bottom="20.0" left="20.0" right="20.0" />
          </GridPane.margin>
-         <columns>
-            <TableColumn fx:id="Col_DNI" text="DNI" />
-            <TableColumn fx:id="Col_Nombre" text="Nombre" />
-            <TableColumn fx:id="Col_Apellidos" text="Apellidos" />
-            <TableColumn fx:id="Col_Email" text="Email" />
-            <TableColumn fx:id="Col_Direccion" text="Dirección" />
-            <TableColumn />
-         </columns>
-      </TableView>
+      </HBox>
    </children>
 </GridPane>

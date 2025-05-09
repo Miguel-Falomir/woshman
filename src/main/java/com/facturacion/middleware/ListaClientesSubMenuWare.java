@@ -1,6 +1,5 @@
 package com.facturacion.middleware;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -10,25 +9,22 @@ import com.facturacion.model.Cliente;
 import com.menu.middleware.MainMiddleWare;
 import com.utilities.DAO;
 import com.utilities.SubMenuWare;
-import com.vehiculos.middleware.InsertarVehiculoFormWare;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
 
 public class ListaClientesSubMenuWare extends SubMenuWare {
 
@@ -41,6 +37,7 @@ public class ListaClientesSubMenuWare extends SubMenuWare {
     // DAOs
 
     DAO_Cliente daoCliente;
+    Cliente cliente;
 
     // CONSTRUCTORES
 
@@ -70,13 +67,44 @@ public class ListaClientesSubMenuWare extends SubMenuWare {
     Button Buton_Agregar;
 
     @FXML
+    Button Buton_Editar;
+
+    @FXML
+    Button Buton_Borrar;
+
+    @FXML
     TableView<Cliente> TablV_Clientes;
+
+    @FXML
+    TableColumn<Cliente, String> TVcol_DNI;
+
+    @FXML
+    TableColumn<Cliente, String> TVcol_Nombre;
+
+    @FXML
+    TableColumn<Cliente, String> TVcol_Apellidos;
+
+    @FXML
+    TableColumn<Cliente, String> TVcol_Email;
+
+    @FXML
+    TableColumn<Cliente, String> TVcol_Direccion;
 
     // EVENTOS
 
     @FXML
     void OnAction_Buton_Agregar(ActionEvent event){
         Func_Insert_Cliente();
+    }
+
+    @FXML
+    void OnAction_Buton_Editar(ActionEvent event){
+        Func_Update_Cliente();
+    }
+
+    @FXML
+    void OnAction_Buton_Borrar(ActionEvent event){
+        Func_Delete_Cliente();
     }
 
     @FXML
@@ -87,7 +115,10 @@ public class ListaClientesSubMenuWare extends SubMenuWare {
     // INICIALIZAR
 
     public void initialize(){
-        // inicializar DAOs
+        // booleano permisos
+        boolean prohibited;
+
+        // inicializar DAOs y 'Cliente'
         daoCliente = (DAO_Cliente) daoHashMap.get("cliente");
 
         // recopilar todos los clientes
@@ -97,153 +128,19 @@ public class ListaClientesSubMenuWare extends SubMenuWare {
         // 76 (Insertar Clientes)
         // 77 (Actualizar Datos Cliente)
         // 78 (Eliminar Clientes)
-        boolean prohibited = !(App.checkPermiso(76) && App.checkPermiso(77) && App.checkPermiso(78));
+        prohibited = !(App.checkPermiso(76) && App.checkPermiso(77) && App.checkPermiso(78));
         if (prohibited) {
             listaClientes.removeIf(i -> i.getId() == 0);
         }
 
-        // inicializar TableView
-        TablV_Clientes.getColumns().clear(); // limpiar tabla
-        TablV_Clientes.setEditable(true);
-        List<TableColumn<Cliente, String>> listaColumnas = new ArrayList<TableColumn<Cliente, String>>();
-        String[] atributos = {"dni", "nombre", "apellidos", "email", "direccion"};
-        for (String str : atributos) { // generar columnas
-            TableColumn<Cliente, String> taco = new TableColumn<Cliente, String>(str);
-            taco.setCellValueFactory(new PropertyValueFactory<Cliente, String>(str));
-            taco.setCellFactory(TextFieldTableCell.forTableColumn());
-            switch (str) {
-                case "dni":
-                    taco.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Cliente,String>>() {
-                        @Override
-                        public void handle(CellEditEvent<Cliente, String> event) {
-                            // recopilar variables
-                            Cliente cliente = event.getRowValue();
-                            String oldValue = event.getOldValue();
-                            String newValue = event.getNewValue();
-                            // actualizar fila de la tabla
-                            cliente.setDni(newValue);
-                            // alerta de confirmacion
-                            Alert a = new Alert(AlertType.CONFIRMATION);
-                            a.setHeaderText("¿Desea guardar cambios?");
-                            a.setContentText("Al aceptar, todos los cambios se guardarán el la base de datos de forma automática.");
-                            a.showAndWait();
-                            // si btn = OK, actualizar cliente
-                            ButtonType btn = a.getResult();
-                            if (btn.equals(ButtonType.OK)){
-                               daoCliente.update(cliente);
-                            } else {
-                                cliente.setDni(oldValue);
-                            }
-                        }
-                    });
-                    break;
-                case "nombre":
-                    taco.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Cliente,String>>() {
-                        @Override
-                        public void handle(CellEditEvent<Cliente, String> event) {
-                            // recopilar variables
-                            Cliente cliente = event.getRowValue();
-                            String oldValue = event.getOldValue();
-                            String newValue = event.getNewValue();
-                            // actualizar fila de la tabla
-                            cliente.setNombre(newValue);
-                            // alerta de confirmacion
-                            Alert a = new Alert(AlertType.CONFIRMATION);
-                            a.setHeaderText("¿Desea guardar cambios?");
-                            a.setContentText("Al aceptar, todos los cambios se guardarán el la base de datos de forma automática.");
-                            a.showAndWait();
-                            // si btn = OK, actualizar cliente
-                            ButtonType btn = a.getResult();
-                            if (btn.equals(ButtonType.OK)){
-                               daoCliente.update(cliente);
-                            } else {
-                                cliente.setNombre(oldValue);
-                            }
-                        }
-                    });
-                    break;
-                case "apellidos":
-                    taco.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Cliente,String>>() {
-                        @Override
-                        public void handle(CellEditEvent<Cliente, String> event) {
-                            // recopilar variables
-                            Cliente cliente = event.getRowValue();
-                            String oldValue = event.getOldValue();
-                            String newValue = event.getNewValue();
-                            // actualizar fila de la tabla
-                            cliente.setApellidos(newValue);
-                            // alerta de confirmacion
-                            Alert a = new Alert(AlertType.CONFIRMATION);
-                            a.setHeaderText("¿Desea guardar cambios?");
-                            a.setContentText("Al aceptar, todos los cambios se guardarán el la base de datos de forma automática.");
-                            a.showAndWait();
-                            // si btn = OK, actualizar cliente
-                            ButtonType btn = a.getResult();
-                            if (btn.equals(ButtonType.OK)){
-                               daoCliente.update(cliente);
-                            } else {
-                                cliente.setApellidos(oldValue);
-                            }
-                        }
-                    });
-                    break;
-                case "email":
-                    taco.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Cliente,String>>() {
-                        @Override
-                        public void handle(CellEditEvent<Cliente, String> event) {
-                            // recopilar variables
-                            Cliente cliente = event.getRowValue();
-                            String oldValue = event.getOldValue();
-                            String newValue = event.getNewValue();
-                            // actualizar fila de la tabla
-                            cliente.setEmail(newValue);
-                            // alerta de confirmacion
-                            Alert a = new Alert(AlertType.CONFIRMATION);
-                            a.setHeaderText("¿Desea guardar cambios?");
-                            a.setContentText("Al aceptar, todos los cambios se guardarán el la base de datos de forma automática.");
-                            a.showAndWait();
-                            // si btn = OK, actualizar cliente
-                            ButtonType btn = a.getResult();
-                            if (btn.equals(ButtonType.OK)){
-                               daoCliente.update(cliente);
-                            } else {
-                                cliente.setEmail(oldValue);
-                            }
-                        }
-                    });
-                    break;
-                case "direccion":
-                    taco.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Cliente,String>>() {
-                        @Override
-                        public void handle(CellEditEvent<Cliente, String> event) {
-                            // recopilar variables
-                            Cliente cliente = event.getRowValue();
-                            String oldValue = event.getOldValue();
-                            String newValue = event.getNewValue();
-                            // actualizar fila de la tabla
-                            cliente.setDireccion(newValue);
-                            // alerta de confirmacion
-                            Alert a = new Alert(AlertType.CONFIRMATION);
-                            a.setHeaderText("¿Desea guardar cambios?");
-                            a.setContentText("Al aceptar, todos los cambios se guardarán el la base de datos de forma automática.");
-                            a.showAndWait();
-                            // si btn = OK, actualizar cliente
-                            ButtonType btn = a.getResult();
-                            if (btn.equals(ButtonType.OK)){
-                               daoCliente.update(cliente);
-                            } else {
-                                cliente.setDireccion(oldValue);
-                            }
-                        }
-                    });
-                    break;
-                default:
-                    break;
-            }
-            listaColumnas.add(taco);
-        }
-        TablV_Clientes.getColumns().setAll(listaColumnas); // asignar columnas a tabla
-        TablV_Clientes.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS); // ajustar columnas al ancho de la pantalla
+        // inicializar TableColumns y TableView
+        TVcol_DNI.setCellValueFactory(new PropertyValueFactory<Cliente, String>("dni"));
+        TVcol_Nombre.setCellValueFactory(new PropertyValueFactory<Cliente, String>("nombre"));
+        TVcol_Apellidos.setCellValueFactory(new PropertyValueFactory<Cliente, String>("apellidos"));
+        TVcol_Email.setCellValueFactory(new PropertyValueFactory<Cliente, String>("email"));
+        TVcol_Direccion.setCellValueFactory(new PropertyValueFactory<Cliente, String>("direccion"));
+        TablV_Clientes.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_NEXT_COLUMN);
+        TablV_Clientes.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
         // inicializar listas observables, y rellenar filas tabla con 'filterClientes'
         obserClientes = FXCollections.observableArrayList(listaClientes);
@@ -251,10 +148,38 @@ public class ListaClientesSubMenuWare extends SubMenuWare {
         TablV_Clientes.setItems(filterClientes);
 
         // deshabilitar 'Buton_Agregar' si no se tiene permiso 76 (Insertar Clientes)
-        if (!App.checkPermiso(76)){
+        prohibited = (!App.checkPermiso(76));
+        if (prohibited){
             Buton_Agregar.setVisible(false);
             Buton_Agregar.setDisable(true);
             Buton_Agregar.setManaged(false);
+        }
+
+        // deshabilitar 'Buton_Editar' si no se tiene permiso 77 (Actualizar datos Cliente)
+        prohibited = !(App.checkPermiso(77));
+        if (prohibited){
+            Buton_Editar.setVisible(false);
+            Buton_Editar.setDisable(true);
+            Buton_Editar.setManaged(false);
+        }
+
+        // deshabilitar 'Buton_Borrar' si no se tiene permiso 78 (Eliminar cliente)
+        prohibited = !(App.checkPermiso(78));
+        if (prohibited) {
+            Buton_Borrar.setVisible(false);
+            Buton_Borrar.setDisable(true);
+            Buton_Borrar.setManaged(false);
+        }
+
+        // deshabilitar HBox inferior si no se tienen permisos:
+        // 77 (Actualizar datos Cliente)
+        // 78 (Eliminar cliente)
+        prohibited = (!App.checkPermiso(77) && !App.checkPermiso(78));
+        if (prohibited) {
+            HBox hbox = (HBox) Buton_Borrar.getParent();
+            hbox.setVisible(false);
+            hbox.setDisable(true);
+            hbox.setManaged(false);
         }
     }
     
@@ -272,6 +197,65 @@ public class ListaClientesSubMenuWare extends SubMenuWare {
 
     private void Func_Insert_Cliente(){
         mainController.openFormulary("facturacion", "form_insertar_cliente", 480, 360, InsertarClienteFormWare.class, this, null);
+    }
+
+    // METODO EDITAR CLIENTE
+
+    private void Func_Update_Cliente(){
+        // inicializar ventana alert
+        Alert alert = new Alert(AlertType.WARNING);
+
+        // (intentar) ejecutar actualizacion
+        boolean selected = !(TablV_Clientes.getSelectionModel().isEmpty());
+        if (selected) {
+            cliente = TablV_Clientes.getSelectionModel().getSelectedItem();
+            mainController.openFormulary("facturacion", "form_editar_cliente", 480, 360, EditarClienteFormWare.class, this, cliente);
+        } else {
+            alert.setHeaderText("ELIGE UN CLIENTE");
+            alert.showAndWait();
+        }
+
+        // si se ha completado la operacion, reiniciar listas observables
+        boolean succeed = (alert.getAlertType().equals(AlertType.INFORMATION));
+        if (succeed) {
+            Func_Reboot_ObserClientes();
+            TablV_Clientes.getSelectionModel().clearSelection();
+        }
+    }
+
+    // METODO BORRAR CLIENTE
+
+    private void Func_Delete_Cliente(){
+        // inicializar ventana alert
+        Alert alert = new Alert(AlertType.WARNING);
+
+        // (intentar) ejecutar borrado
+        boolean selected = !(TablV_Clientes.getSelectionModel().isEmpty());
+        if (selected) {
+            cliente = TablV_Clientes.getSelectionModel().getSelectedItem();
+            String nombre = cliente.getNombre() + " " + cliente.getApellidos();
+            if (daoCliente.delete(cliente)){
+                alert.setAlertType(AlertType.INFORMATION);
+                alert.setHeaderText("OPERACIÓN COMPLETADA");
+                alert.setContentText("El cliente " + nombre + " ha sido eliminado de la base de datos.");
+            } else {
+                alert.setAlertType(AlertType.ERROR);
+                alert.setHeaderText("ERROR SQL");
+                alert.setContentText("No se puede eliminar cliente " + nombre + " porque tiene asignadas 1 o más ventas/averías");
+            }
+        } else {
+            alert.setHeaderText("ELIGE UN CLIENTE");
+        }
+
+        // mostrar alert
+        alert.showAndWait();
+
+        // si se ha completado la operacion, reiniciar listas observables
+        boolean succeed = (alert.getAlertType().equals(AlertType.INFORMATION));
+        if (succeed) {
+            Func_Reboot_ObserClientes();
+            TablV_Clientes.getSelectionModel().clearSelection();
+        }
     }
 
     // METODO REINICIAR LISTA CLIENTES

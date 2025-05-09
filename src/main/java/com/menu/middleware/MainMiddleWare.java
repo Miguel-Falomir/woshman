@@ -6,6 +6,7 @@ import java.util.HashMap;
 import com.App;
 import com.empleados.middleware.LoginMiddleWare;
 import com.facturacion.controller.DAO_Cliente;
+import com.facturacion.middleware.EditarClienteFormWare;
 import com.facturacion.middleware.InsertarClienteFormWare;
 import com.facturacion.middleware.ListaClientesSubMenuWare;
 import com.facturacion.model.Cliente;
@@ -40,12 +41,22 @@ public class MainMiddleWare extends MiddleWare {
 
     // OBJETOS ALMACENAR DATOS ENTRADA
 
-    SubMenuWare subMenuWare;
+    SubMenuWare menuWare;
 
     // CONSTRUCTOR
 
     public MainMiddleWare(App app) {
         this.app = app;
+    }
+
+    // GETTERS Y SETTERS
+
+    public SubMenuWare getMenuWare(){
+        return this.menuWare;
+    }
+
+    public void setMenuWare(SubMenuWare menuWare){
+        this.menuWare = menuWare;
     }
 
     // ELEMENTOS UI
@@ -263,7 +274,7 @@ public class MainMiddleWare extends MiddleWare {
             Parent root = loader.load();
 
             // obtener SubMenuWare del archivo .fxml
-            subMenuWare = loader.getController();
+            menuWare = loader.getController();
 
             // agregar archivo al panel central
             Central_Box.getChildren().add(root);
@@ -297,9 +308,11 @@ public class MainMiddleWare extends MiddleWare {
                 }
             } else if (menuWare instanceof ListaClientesSubMenuWare) { // submenu 'Lista Clientes'
                 ListaClientesSubMenuWare submenu = (ListaClientesSubMenuWare) menuWare;
-                if (/*formWareClass.equals(EditarClienteFormWare.class) && obj instanceof Cliente*/false){ // formulario 'Actualizar Cliente'
-                    Cliente cliente = (Cliente) obj;
-                    //return new EditarClienteFormWare(cliente, submenu);
+                if (formWareClass.equals(EditarClienteFormWare.class) && obj instanceof Cliente){ // formulario 'Actualizar Cliente'
+                    loader.setControllerFactory(lambda -> {
+                        Cliente cliente = (Cliente) obj;
+                        return new EditarClienteFormWare(cliente, submenu);
+                    });    
                 } else if (formWareClass.equals(InsertarClienteFormWare.class)) { // formulario 'Insertar Cliente'
                     loader.setControllerFactory(lambda -> {
                         return new InsertarClienteFormWare(submenu);

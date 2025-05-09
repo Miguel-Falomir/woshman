@@ -93,7 +93,7 @@ public class LoginMiddleWare extends MiddleWare{
     private void Func_User_Login(){
         // variables internas
         String text = "";
-        Alert a = new Alert(AlertType.ERROR);
+        Alert alert = new Alert(AlertType.ERROR);
 
         // recopilar datos de los inputs
         auxUsername = Input_Username.getText();
@@ -105,18 +105,18 @@ public class LoginMiddleWare extends MiddleWare{
         // mostrar si 'auxUsername' y 'auxPassword' coinciden
         if(auxUser == null){
             text = String.format("Usuario %s no existe o no se encuentra", auxUsername.isBlank()? "[empty]" : auxUsername);
-            a.setHeaderText("ACCESO DENEGADO");
-            a.setContentText(text);
-            a.show();
+            alert.setHeaderText("ACCESO DENEGADO");
+            alert.setContentText(text);
+            alert.show();
         } else if (auxUser.getPassword().equals(auxPassword)){
             text = String.format("Contraseña correcta. Bienvenid@ de nuevo, %s", auxUser.getNombre() + " " + auxUser.getApellidos());
             System.out.println(text);
             app.setUser(auxUser);
             app.changeStage("menu", "menu_principal", "WOSHMAN", 960, 540, true, MainMiddleWare.class);
         } else {
-            a.setHeaderText("ACCESO DENEGADO");
-            a.setContentText("Contraseña incorrecta. Repita la contraseña o cambie de usuario");
-            a.show();
+            alert.setHeaderText("ACCESO DENEGADO");
+            alert.setContentText("Contraseña incorrecta. Repita la contraseña o cambie de usuario");
+            alert.show();
         }
     }
 

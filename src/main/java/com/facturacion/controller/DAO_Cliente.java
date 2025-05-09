@@ -163,12 +163,13 @@ public class DAO_Cliente extends DAO implements DAO_Interface<Cliente, Integer> 
             // comprobar que tanto dni como email no se repitan
             if(dniUnique && emailUnique){
                 // consulta 4: agregar cliente nuevo a BD
-                statement = connect.prepareStatement("UPDATE cliente cli SET cli.dni = ?, cli.nombre = ?, cli.apellidos = ?, cli.email = ?, cli.direccion = ? WHERE cli.di_cliente = ?;");
+                statement = connect.prepareStatement("UPDATE cliente cli SET cli.dni = ?, cli.nombre = ?, cli.apellidos = ?, cli.email = ?, cli.direccion = ? WHERE cli.id_cliente = ?;");
                 statement.setString(1, obj.getDni());
                 statement.setString(2, obj.getNombre());
                 statement.setString(3, obj.getApellidos());
                 statement.setString(4, obj.getEmail());
                 statement.setString(5, obj.getDireccion());
+                statement.setInt(6, obj.getId());
                 System.out.println("ACTUALIZAR CLIENTE: " + statement.executeUpdate());
                 exito = true;
             }

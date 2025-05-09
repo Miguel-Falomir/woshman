@@ -125,28 +125,28 @@ public class InsertarVehiculoFormWare extends FormWare {
 
     private void Func_Insert_Vehiculo(){
         // inicializar ventana alert
-        Alert a = new Alert(AlertType.NONE);
+        Alert alert = new Alert(AlertType.NONE);
         String matricula = vehiculo.getMatricula();
 
         // (intentar) ejecutar actualizacion
         if(dao.insert(vehiculo)){
-            a.setAlertType(AlertType.INFORMATION);
-            a.setHeaderText("OPERACIÓN COMPLETADA");
-            a.setContentText("El vehículo " + matricula + " se ha guardado en la base de datos.");
+            alert.setAlertType(AlertType.INFORMATION);
+            alert.setHeaderText("OPERACIÓN COMPLETADA");
+            alert.setContentText("El vehículo " + matricula + " se ha guardado en la base de datos.");
         } else {
-            a.setAlertType(AlertType.ERROR);
-            a.setHeaderText("ERROR SQL");
-            a.setContentText("Datos duplicados en vehículo " + matricula + ". recuerde que las matrículas no pueden repetirse.");
+            alert.setAlertType(AlertType.ERROR);
+            alert.setHeaderText("ERROR SQL");
+            alert.setContentText("Datos duplicados en vehículo " + matricula + ". recuerde que las matrículas no pueden repetirse.");
         }
 
         // pase lo que pase, mostrarlo mediante la alert
         // .showAndWait() bloquea las siguientes instrucciones hasta cerrar la alert
-        a.showAndWait();
+        alert.showAndWait();
 
         // reiniciar la lista para que se muestre la ausencia del vehiculo eliminado
         menuWare.Func_Reboot_ObserVehiculos();
 
         // cerrar ventana
-        if (a.getAlertType().equals(AlertType.INFORMATION)){Func_Close();}
+        if (alert.getAlertType().equals(AlertType.INFORMATION)){Func_Close();}
     }
 }

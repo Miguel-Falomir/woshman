@@ -68,22 +68,21 @@ public class VehiculoCellWare extends CellWare {
 
     private void Func_Delete_Vehiculo(){
         // inicializar ventana alert
-        Alert a = new Alert(AlertType.NONE);
+        Alert alert = new Alert(AlertType.ERROR);
 
         // (intentar) ejecutar eliminacion
         if(dao.delete(vehiculo)){
-            a.setAlertType(AlertType.INFORMATION);
-            a.setHeaderText("OPERACIÓN COMPLETADA");
-            a.setContentText("El vehiculo " + vehiculo.getMatricula() + " ha sido eliminado de la base de datos.");
+            alert.setAlertType(AlertType.INFORMATION);
+            alert.setHeaderText("OPERACIÓN COMPLETADA");
+            alert.setContentText("El vehiculo " + vehiculo.getMatricula() + " ha sido eliminado de la base de datos.");
         } else {
-            a.setAlertType(AlertType.ERROR);
-            a.setHeaderText("ERROR SQL");
-            a.setContentText("No se puede borrar " + vehiculo.getMatricula() + " porque tiene asignadas 1 o más averías");
+            alert.setHeaderText("ERROR SQL");
+            alert.setContentText("No se puede eliminar " + vehiculo.getMatricula() + " porque tiene asignadas 1 o más averías");
         }
 
         // pase lo que pase, mostrarlo mediante la alert
         // .showAndWait() bloquea las siguientes instrucciones hasta cerrar la alert
-        a.showAndWait();
+        alert.showAndWait();
 
         // reiniciar la lista para que se muestre la ausencia del vehiculo eliminado
         menuWare.Func_Reboot_ObserVehiculos();

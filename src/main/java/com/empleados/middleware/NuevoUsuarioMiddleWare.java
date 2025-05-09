@@ -77,7 +77,7 @@ public class NuevoUsuarioMiddleWare extends MiddleWare {
     private void Func_User_Insert(){
         // variables internas
         Empleado emp = null;
-        Alert a = new Alert(AlertType.ERROR);
+        Alert alert = new Alert(AlertType.ERROR);
 
         // recopilar datos de los inputs
         auxNombre = Input_Nombre.getText();
@@ -100,31 +100,31 @@ public class NuevoUsuarioMiddleWare extends MiddleWare {
             // el metodo dao.insert(emp) devuelve false si emp.username o emp.password se repiten en BD
             if (dao.insert(emp)){
                 // configurar alerta tipo CONFIRMATION
-                a.setAlertType(AlertType.INFORMATION);
-                a.setHeaderText("Bienvenid@ al equipo, " + auxUsername + ".");
-                a.setContentText("Por razones de seguridad, se le ha asignado el rol 'mecanico', el que menos permisos tiene.");
+                alert.setAlertType(AlertType.INFORMATION);
+                alert.setHeaderText("Bienvenid@ al equipo, " + auxUsername + ".");
+                alert.setContentText("Por razones de seguridad, se le ha asignado el rol 'mecanico', el que menos permisos tiene.");
     
                 // lanzar alerta
-                a.show();
+                alert.show();
     
                 // navegar a menu principal con nuevo usuario
                 app.setUser(emp);
                 app.changeStage("menu", "main", "WOSHMAN", 720, 540, true, MainMiddleWare.class);
             } else {
                 // configurar alerta tipo ERROR
-                a.setAlertType(AlertType.ERROR);
-                a.setHeaderText("Error base datos");
-                a.setContentText("No se puede agregar el nuevo usuario porque username y/o password se repiten en la base de datos.");
+                alert.setAlertType(AlertType.ERROR);
+                alert.setHeaderText("Error base datos");
+                alert.setContentText("No se puede agregar el nuevo usuario porque username y/o password se repiten en la base de datos.");
             }
 
         } else {
             // configurar alerta tipo ERROR
-            a.setAlertType(AlertType.ERROR);
-            a.setHeaderText("Error contraseña");
-            a.setContentText("Ambos campos deben ser identicos para poder validar la contraseña.");
+            alert.setAlertType(AlertType.ERROR);
+            alert.setHeaderText("Error contraseña");
+            alert.setContentText("Ambos campos deben ser identicos para poder validar la contraseña.");
 
             // lanzar alerta
-            a.show();
+            alert.show();
         }
     }
 

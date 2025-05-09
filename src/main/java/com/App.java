@@ -152,7 +152,6 @@ public class App extends Application {
                     Empleados.setDisable(true);
                 }
 
-
                 // activar elementos guardados
                 for (String itemName : mitemsList) {
                     mitem = (MenuItem) loader.getNamespace().get(itemName);

@@ -12,7 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class InsertarClienteFormWare extends FormWare {
+public class EditarClienteFormWare extends FormWare {
 
     // OBJETOS PUNTERO
 
@@ -25,10 +25,10 @@ public class InsertarClienteFormWare extends FormWare {
 
     // CONSTRUCTORES
 
-    public InsertarClienteFormWare(){}
+    public EditarClienteFormWare(){}
 
-    public InsertarClienteFormWare(ListaClientesSubMenuWare menuWare){
-        this.cliente = new Cliente();
+    public EditarClienteFormWare(Cliente cliente, ListaClientesSubMenuWare menuWare){
+        this.cliente = cliente;
         this.menuWare = menuWare;
         this.dao = this.menuWare.getDaoCliente();
     }
@@ -60,7 +60,7 @@ public class InsertarClienteFormWare extends FormWare {
 
     @FXML
     void OnAction_Buton_Aceptar(ActionEvent event) {
-        Func_Insert_Cliente();
+        Func_Update_Cliente();
     }
 
     @FXML
@@ -71,6 +71,13 @@ public class InsertarClienteFormWare extends FormWare {
     // METODO INICIALIZAR
 
     public void initialize(){
+        // rellenar campos de entrada con atributos cliente
+        Input_Nombre.setText(cliente.getNombre());
+        Input_Apellidos.setText(cliente.getApellidos());
+        Input_DNI.setText(cliente.getDni());
+        Input_Email.setText(cliente.getEmail());
+        Input_Direccion.setText(cliente.getDireccion());
+
         // asignar manejadores de eventos a elementos UI
         // al escribir en 'Input_Nombre', contenido se asigna a 'cliente.nombre'
         Input_Nombre.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -92,7 +99,6 @@ public class InsertarClienteFormWare extends FormWare {
         Input_Direccion.textProperty().addListener((observable, oldValue, newValue) -> {
             cliente.setDireccion(newValue);
         });
-
     }
 
     // METODO CERRAR FORMULARIO
@@ -102,15 +108,15 @@ public class InsertarClienteFormWare extends FormWare {
         thisStage.close();
     }
 
-    // METODO INSERTAR CLIENTE
+    // METODO ACTUALIZAR CLIENTE
 
-    private void Func_Insert_Cliente(){
+    private void Func_Update_Cliente(){
         // inicializar ventana alert
         Alert alert = new Alert(AlertType.NONE);
         String nombre = cliente.getNombre() + " " + cliente.getApellidos();
 
         // (intentar) ejecutar actualizacion
-        if(dao.insert(cliente)){
+        if(dao.update(cliente)){
             alert.setAlertType(AlertType.INFORMATION);
             alert.setHeaderText("OPERACIÓN COMPLETADA");
             alert.setContentText("El cliente " + nombre + " se ha guardado en la base de datos.");
@@ -130,6 +136,7 @@ public class InsertarClienteFormWare extends FormWare {
             menuWare.Func_Reboot_ObserClientes();
             Func_Close();
         }
+
     }
 
 }
