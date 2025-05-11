@@ -116,7 +116,8 @@ public class EditarClienteFormWare extends FormWare {
         String nombre = cliente.getNombre() + " " + cliente.getApellidos();
 
         // (intentar) ejecutar actualizacion
-        if(dao.update(cliente)){
+        boolean completed = dao.update(cliente);
+        if(completed){
             alert.setAlertType(AlertType.INFORMATION);
             alert.setHeaderText("OPERACIÓN COMPLETADA");
             alert.setContentText("El cliente " + nombre + " se ha guardado en la base de datos.");
@@ -131,8 +132,8 @@ public class EditarClienteFormWare extends FormWare {
         alert.showAndWait();
 
         // si se ha completado la operacion, reiniciar lista y cerrar ventana
-        boolean succeed = (alert.getAlertType().equals(AlertType.INFORMATION));
-        if (succeed) {
+        boolean success = (alert.getAlertType().equals(AlertType.INFORMATION));
+        if (success) {
             menuWare.Func_Reboot_ObserClientes();
             Func_Close();
         }

@@ -128,7 +128,8 @@ public class EditarVehiculoFormWare extends FormWare {
         Alert alert = new Alert(AlertType.NONE);
 
         // (intentar) ejecutar actualizacion
-        if(dao.update(vehiculo)){
+        boolean completed = dao.update(vehiculo);
+        if(completed){
             alert.setAlertType(AlertType.INFORMATION);
             alert.setHeaderText("OPERACIÓN COMPLETADA");
             alert.setContentText("El vehiculo " + vehiculo.getMatricula() + " ha sido actualizado.");
@@ -143,8 +144,8 @@ public class EditarVehiculoFormWare extends FormWare {
         alert.showAndWait();
 
         // si se ha completado la operacion, reiniciar lista y cerrar ventana
-        boolean succeed = (alert.getAlertType().equals(AlertType.INFORMATION));
-        if (succeed) {
+        boolean success = (alert.getAlertType().equals(AlertType.INFORMATION));
+        if (success) {
             menuWare.Func_Reboot_ObserVehiculos();
             Func_Close();
         }

@@ -129,7 +129,8 @@ public class InsertarVehiculoFormWare extends FormWare {
         String matricula = vehiculo.getMatricula();
 
         // (intentar) ejecutar actualizacion
-        if(dao.insert(vehiculo)){
+        boolean completed = dao.insert(vehiculo);
+        if(completed){
             alert.setAlertType(AlertType.INFORMATION);
             alert.setHeaderText("OPERACIÓN COMPLETADA");
             alert.setContentText("El vehículo " + matricula + " se ha guardado en la base de datos.");
@@ -144,8 +145,8 @@ public class InsertarVehiculoFormWare extends FormWare {
         alert.showAndWait();
 
         // si se ha completado la operacion, reiniciar lista y cerrar ventana
-        boolean succeed = (alert.getAlertType().equals(AlertType.INFORMATION));
-        if (succeed) {
+        boolean success = (alert.getAlertType().equals(AlertType.INFORMATION));
+        if (success) {
             menuWare.Func_Reboot_ObserVehiculos();
             Func_Close();
         }

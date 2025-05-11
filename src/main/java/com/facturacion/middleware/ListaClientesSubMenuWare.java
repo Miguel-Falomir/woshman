@@ -33,11 +33,11 @@ public class ListaClientesSubMenuWare extends SubMenuWare {
     private ObservableList<Cliente> obserClientes;
     private FilteredList<Cliente> filterClientes;
     private List<Cliente> listaClientes;
+    private Cliente cliente;
 
     // DAOs
 
     DAO_Cliente daoCliente;
-    Cliente cliente;
 
     // CONSTRUCTORES
 
@@ -134,11 +134,21 @@ public class ListaClientesSubMenuWare extends SubMenuWare {
         }
 
         // inicializar TableColumns y TableView
-        TVcol_DNI.setCellValueFactory(new PropertyValueFactory<Cliente, String>("dni"));
-        TVcol_Nombre.setCellValueFactory(new PropertyValueFactory<Cliente, String>("nombre"));
-        TVcol_Apellidos.setCellValueFactory(new PropertyValueFactory<Cliente, String>("apellidos"));
-        TVcol_Email.setCellValueFactory(new PropertyValueFactory<Cliente, String>("email"));
-        TVcol_Direccion.setCellValueFactory(new PropertyValueFactory<Cliente, String>("direccion"));
+        TVcol_DNI.setCellValueFactory(
+            new PropertyValueFactory<Cliente, String>("dni")
+        );
+        TVcol_Nombre.setCellValueFactory(
+            new PropertyValueFactory<Cliente, String>("nombre")
+        );
+        TVcol_Apellidos.setCellValueFactory(
+            new PropertyValueFactory<Cliente, String>("apellidos")
+        );
+        TVcol_Email.setCellValueFactory(
+            new PropertyValueFactory<Cliente, String>("email")
+        );
+        TVcol_Direccion.setCellValueFactory(
+            new PropertyValueFactory<Cliente, String>("direccion")
+        );
         TablV_Clientes.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_NEXT_COLUMN);
         TablV_Clientes.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
@@ -216,8 +226,8 @@ public class ListaClientesSubMenuWare extends SubMenuWare {
         }
 
         // si se ha completado la operacion, reiniciar listas observables
-        boolean succeed = (alert.getAlertType().equals(AlertType.INFORMATION));
-        if (succeed) {
+        boolean success = (alert.getAlertType().equals(AlertType.INFORMATION));
+        if (success) {
             Func_Reboot_ObserClientes();
             TablV_Clientes.getSelectionModel().clearSelection();
         }
@@ -234,7 +244,8 @@ public class ListaClientesSubMenuWare extends SubMenuWare {
         if (selected) {
             cliente = TablV_Clientes.getSelectionModel().getSelectedItem();
             String nombre = cliente.getNombre() + " " + cliente.getApellidos();
-            if (daoCliente.delete(cliente)){
+            boolean completed = daoCliente.delete(cliente);
+            if (completed){
                 alert.setAlertType(AlertType.INFORMATION);
                 alert.setHeaderText("OPERACIÓN COMPLETADA");
                 alert.setContentText("El cliente " + nombre + " ha sido eliminado de la base de datos.");
@@ -251,8 +262,8 @@ public class ListaClientesSubMenuWare extends SubMenuWare {
         alert.showAndWait();
 
         // si se ha completado la operacion, reiniciar listas observables
-        boolean succeed = (alert.getAlertType().equals(AlertType.INFORMATION));
-        if (succeed) {
+        boolean success = (alert.getAlertType().equals(AlertType.INFORMATION));
+        if (success) {
             Func_Reboot_ObserClientes();
             TablV_Clientes.getSelectionModel().clearSelection();
         }
@@ -268,7 +279,7 @@ public class ListaClientesSubMenuWare extends SubMenuWare {
         // 76 (Insertar Clientes)
         // 77 (Actualizar Datos Cliente)
         // 78 (Eliminar Clientes)
-        boolean prohibited = !(App.checkPermiso(76) && App.checkPermiso(77) && App.checkPermiso(78));
+        boolean prohibited = (!App.checkPermiso(76) && !App.checkPermiso(77) && !App.checkPermiso(78));
         if (prohibited) {
             listaClientes.removeIf(i -> i.getId() == 0);
         }

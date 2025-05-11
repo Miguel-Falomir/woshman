@@ -21,6 +21,7 @@ module com {
     /* opens com.menu.controller to javafx.fxml; */
     //almacen
     opens com.almacen.middleware to javafx.fxml;
+    opens com.almacen.model to javafx.base;
     // empleados
     
     // facturacion

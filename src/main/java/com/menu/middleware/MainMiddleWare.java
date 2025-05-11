@@ -1,9 +1,14 @@
 package com.menu.middleware;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.util.HashMap;
 
 import com.App;
+import com.almacen.controller.DAO_Pieza;
+import com.almacen.controller.DAO_Proveedor;
+import com.almacen.controller.DAO_Tipo_Pieza;
+import com.almacen.middleware.ListaPiezasSubMenuWare;
 import com.empleados.middleware.LoginMiddleWare;
 import com.facturacion.controller.DAO_Cliente;
 import com.facturacion.middleware.EditarClienteFormWare;
@@ -189,7 +194,7 @@ public class MainMiddleWare extends MiddleWare {
 
     @FXML
     void OnAction_Mitem_Lista_Piezas(ActionEvent event) {
-        //app.changeScene(Central_Box, "almacen", "grid_1", "prueba");
+        changeSubMenu("almacen", "submenu_lista_piezas", "Lista Piezas", ListaPiezasSubMenuWare.class);
     }
 
     @FXML
@@ -255,18 +260,26 @@ public class MainMiddleWare extends MiddleWare {
 
             // generar controlador correspondiente al submenu
             // asignando DAOs necesarios
+            Connection conn = app.getConnection();
             HashMap<String, DAO> daoHashMap = new HashMap<>();
             if (menuWareClass.equals(ListaVehiculosSubMenuWare.class)){ // submenu 'Lista Vehiculos'
                 loader.setControllerFactory(lambda -> {
-                    daoHashMap.put("vehiculo", new DAO_Vehiculo(app.getConnection()));
-                    daoHashMap.put("modelo", new DAO_Modelo(app.getConnection()));
-                    daoHashMap.put("marca", new DAO_Marca(app.getConnection()));
+                    daoHashMap.put("vehiculo", new DAO_Vehiculo(conn));
+                    daoHashMap.put("modelo", new DAO_Modelo(conn));
+                    daoHashMap.put("marca", new DAO_Marca(conn));
                     return new ListaVehiculosSubMenuWare(this, daoHashMap);
                 });
             } else if (menuWareClass.equals(ListaClientesSubMenuWare.class)){ // submenu 'Lista Clientes'
                 loader.setControllerFactory(lambda -> {
-                    daoHashMap.put("cliente", new DAO_Cliente(app.getConnection()));
+                    daoHashMap.put("cliente", new DAO_Cliente(conn));
                     return new ListaClientesSubMenuWare(this, daoHashMap);
+                });
+            } else if (menuWareClass.equals(ListaPiezasSubMenuWare.class)){ // submenu 'Lista Piezas'
+                loader.setControllerFactory(lambda -> {
+                    daoHashMap.put("pieza", new DAO_Pieza(conn));
+                    daoHashMap.put("tipo", new DAO_Tipo_Pieza());
+                    daoHashMap.put("proveedor", new DAO_Proveedor());
+                    return new ListaPiezasSubMenuWare(this, daoHashMap);
                 });
             }
 

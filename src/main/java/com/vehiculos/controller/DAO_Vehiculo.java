@@ -33,27 +33,12 @@ public class DAO_Vehiculo extends DAO implements DAO_Interface<Vehiculo, Integer
         // variables internas
         PreparedStatement statement = null;
         ResultSet resultado = null;
-        int cantidadFilas;
-        boolean exito = false;
+        int insert;
+        boolean success = false;
 
         // (intentar) ejecutar insercion
         try {
-            // consulta 1: contar cantidad filas
-            statement = connect.prepareStatement("SELECT count(*) FROM vehiculo;");
-
-            // ejecutar consulta
-            resultado = statement.executeQuery();
-
-            // forzar que 'resultado' apunte a primera fila
-            if (!resultado.isBeforeFirst()){
-                resultado.beforeFirst();
-            }
-            resultado.next();
-
-            // guardar resultado
-            cantidadFilas = resultado.getInt(1);
-
-            // consulta 2: buscar todos los vehiculos con v.matricula == obj.matricula
+            // consulta 1: buscar todos los vehiculos con v.matricula == obj.matricula
             statement = connect.prepareStatement("SELECT count(*) FROM vehiculo v WHERE v.matricula = ?;");
             statement.setString(1, obj.getMatricula());
 
@@ -69,13 +54,32 @@ public class DAO_Vehiculo extends DAO implements DAO_Interface<Vehiculo, Integer
             // comprobar que matricula no se repita
             boolean matriculaUnique = (resultado.getInt(1) == 0);
             if (matriculaUnique) {
+                // consulta 2: contar cantidad filas
+                statement = connect.prepareStatement("SELECT count(*) FROM vehiculo;");
+
+                // ejecutar consulta
+                resultado = statement.executeQuery();
+
+                // forzar que 'resultado' apunte a primera fila
+                if (!resultado.isBeforeFirst()){
+                    resultado.beforeFirst();
+                }
+                resultado.next();
+
+                // guardar resultado
+                int cantidadFilas = resultado.getInt(1);
+
                 // consulta 3: agregar vehiculo nuevo a BD
                 statement = connect.prepareStatement("INSERT INTO vehiculo(id_vehiculo, fk_modelo, matricula) VALUES(?, ?, ?);");
                 statement.setInt(1, cantidadFilas);
                 statement.setInt(2, obj.getModelo().getId());
                 statement.setString(3, obj.getMatricula());
-                System.out.println("INSERTAR NUEVO VEHICULO: " + statement.executeUpdate());
-                exito = true;
+
+                // ejecutar insercion
+                insert = statement.executeUpdate();
+                System.out.println("INSERTAR NUEVO VEHICULO: " + insert);
+                success = true;
+
             } else {
                 System.out.println("ERROR: MATRÍCULA REPETIDA");
             }
@@ -97,8 +101,8 @@ public class DAO_Vehiculo extends DAO implements DAO_Interface<Vehiculo, Integer
             }
         }
 
-        // devolver 'exito', para indicar si se ha completado la insercion
-        return exito;
+        // devolver 'success', para indicar si se ha completado la insercion
+        return success;
     }
 
     @Override
@@ -107,7 +111,7 @@ public class DAO_Vehiculo extends DAO implements DAO_Interface<Vehiculo, Integer
         PreparedStatement statement = null;
         ResultSet resultado = null;
         int update;
-        boolean exito = false;
+        boolean success = false;
 
         // (intentar) ejecutar actualizacion
         try {
@@ -137,7 +141,8 @@ public class DAO_Vehiculo extends DAO implements DAO_Interface<Vehiculo, Integer
                 // ejecutar actualizacion
                 update = statement.executeUpdate();
                 System.out.println("ACTUALIZAR VEHICULO: " + update);
-                exito = true;
+                success = true;
+                
             } else {
                 System.out.println("ERROR: MATRÍCULA REPETIDA");
             }
@@ -159,8 +164,8 @@ public class DAO_Vehiculo extends DAO implements DAO_Interface<Vehiculo, Integer
             }
         }
 
-        // devolver 'exito', para indicar si se ha completado la actualizacion
-        return exito;
+        // devolver 'success', para indicar si se ha completado la actualizacion
+        return success;
     }
 
     @Override
@@ -169,7 +174,7 @@ public class DAO_Vehiculo extends DAO implements DAO_Interface<Vehiculo, Integer
         PreparedStatement statement = null;
         ResultSet resultado = null;
         int update;
-        boolean exito = false;
+        boolean success = false;
 
         // (intentar) ejecutar eliminacion
         try {
@@ -190,7 +195,6 @@ public class DAO_Vehiculo extends DAO implements DAO_Interface<Vehiculo, Integer
 
             // materializar 'resultado' en booleano
             boolean zeroAverias = (resultado.getInt(1) == 0);
-
             if (zeroAverias) {
                 // consulta 2: borrar vehiculo
                 statement = connect.prepareStatement("DELETE FROM vehiculo WHERE id_vehiculo = ?;");
@@ -210,7 +214,9 @@ public class DAO_Vehiculo extends DAO implements DAO_Interface<Vehiculo, Integer
                 // de nuevo, kashate boludo
                 update = statement.executeUpdate();
                 System.out.println("REORGANIZAR IDs MANUALMENTE: " + update);
-                exito = true;
+                success = true;
+            } else {
+                System.out.println("ERROR, EL VEHÍCULO TIENE ASIGNADAS 1 O MÁS AVERÍAS.");
             }
 
         // manejar excepciones
@@ -230,8 +236,8 @@ public class DAO_Vehiculo extends DAO implements DAO_Interface<Vehiculo, Integer
             }
         }
 
-        // devolver 'exito', para indicar si se ha completado la actualizacion
-        return exito;
+        // devolver 'success', para indicar si se ha completado el borrado
+        return success;
     }
 
     @Override
