@@ -6,14 +6,16 @@ public class Tipo_Pieza {
 
     Integer id;
     String nombre;
+    String descripcion;
 
     // CONSTRUCTORES
 
     public Tipo_Pieza(){}
 
-    public Tipo_Pieza(Integer id, String nombre){
+    public Tipo_Pieza(Integer id, String nombre, String descripcion){
         this.id = id;
         this.nombre = nombre;
+        this.descripcion = descripcion;
     }
 
     // GETTERS Y SETTERS
@@ -34,11 +36,19 @@ public class Tipo_Pieza {
         this.nombre = nombre;
     }
 
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
     // TOSTRING, HASHCODE Y EQUALS
 
     @Override
     public String toString() {
-        return "Tipo_Pieza [id=" + id + ", nombre=" + nombre + "]";
+        return "Tipo_Pieza [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + "]";
     }
 
     @Override
@@ -47,6 +57,7 @@ public class Tipo_Pieza {
         int result = 1;
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
+        result = prime * result + ((descripcion == null) ? 0 : descripcion.hashCode());
         return result;
     }
 
@@ -69,9 +80,12 @@ public class Tipo_Pieza {
                 return false;
         } else if (!nombre.equals(other.nombre))
             return false;
+        if (descripcion == null) {
+            if (other.descripcion != null)
+                return false;
+        } else if (!descripcion.equals(other.descripcion))
+            return false;
         return true;
     }
-
-    
     
 }

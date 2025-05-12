@@ -32,6 +32,7 @@ public class DAO_Pieza extends DAO implements DAO_Interface<Pieza, Integer> {
         // variables internas
         PreparedStatement statement = null;
         ResultSet resultado = null;
+        int insert;
         boolean success = false;
 
         // (intentar) ejecutar insercion
@@ -76,7 +77,10 @@ public class DAO_Pieza extends DAO implements DAO_Interface<Pieza, Integer> {
                 statement.setString(5, obj.getDescripcion());
                 statement.setFloat(6, obj.getPrecio());
                 statement.setInt(7, obj.getCantidad());
-                System.out.println("INSERTAR NUEVA PIEZA: " + statement.executeUpdate());
+
+                // ejecutar consulta
+                insert = statement.executeUpdate();
+                System.out.println("INSERTAR NUEVA PIEZA: " + insert);
                 success = true;
 
             } else {
@@ -131,7 +135,7 @@ public class DAO_Pieza extends DAO implements DAO_Interface<Pieza, Integer> {
             // materializar 'resultado' en booleano
             boolean nombreUnique = (resultado.getInt(1) == 0);
             if (nombreUnique) {
-                // consulta 2: actualizar pieza fk_tipo_pieza, fk_proveedor, nombre, descripcion, precio, cantidad
+                // consulta 2: actualizar pieza
                 statement = connect.prepareStatement("UPDATE pieza pi set pi.fk_tipo_pieza = ?, pi.fk_proveedor = ?, pi.nombre = ?, pi.descripcion = ?, pi.precio = ?, pi.cantidad = ? WHERE pi.id_vehiculo = ?;");
                 statement.setInt(1, obj.getTipo().getId());
                 statement.setInt(2, obj.getProveedor().getId());
@@ -195,7 +199,6 @@ public class DAO_Pieza extends DAO implements DAO_Interface<Pieza, Integer> {
             resultado.next();
 
             // materializar 'resultado' en booleano
-            System.out.println(resultado.getInt(1));
             boolean zeroAverias = (resultado.getInt(1) == 0);
             if (zeroAverias) {
                 // consulta 2: borrar pieza
