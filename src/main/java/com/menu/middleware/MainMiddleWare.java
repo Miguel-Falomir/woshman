@@ -277,8 +277,8 @@ public class MainMiddleWare extends MiddleWare {
             } else if (menuWareClass.equals(ListaPiezasSubMenuWare.class)){ // submenu 'Lista Piezas'
                 loader.setControllerFactory(lambda -> {
                     daoHashMap.put("pieza", new DAO_Pieza(conn));
-                    daoHashMap.put("tipo", new DAO_Tipo_Pieza());
-                    daoHashMap.put("proveedor", new DAO_Proveedor());
+                    daoHashMap.put("tipo", new DAO_Tipo_Pieza(conn));
+                    daoHashMap.put("proveedor", new DAO_Proveedor(conn));
                     return new ListaPiezasSubMenuWare(this, daoHashMap);
                 });
             }

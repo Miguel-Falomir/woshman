@@ -252,7 +252,7 @@ public class DAO_Pieza extends DAO implements DAO_Interface<Pieza, Integer> {
         // (intentar) ejecutar busqueda
         try{
             // consulta 1: buscar pieza pi.id_pieza = id, tambien su tipo y proveedor
-            statement = connect.prepareStatement("SELECT pi.id_pieza, pi.nombre, pi.descripcion, pi.precio, pi.cantidad, pr.id_proveedor, pr.cif, pr.nombre, pr.email, pr.direccion, tp.id_tipo_pieza, tp.nombre FROM pieza pi JOIN tipo_pieza tp ON pi.fk_tipo_pieza = tp.id_tipo_pieza JOIN proveedor pr ON pi.fk_proveedor = pr.id_proveedor WHERE pi.id_pieza = ?;");
+            statement = connect.prepareStatement("SELECT pi.id_pieza, pi.nombre, pi.descripcion, pi.precio, pi.cantidad, pr.id_proveedor, pr.cif, pr.nombre, pr.email, pr.direccion, tp.id_tipo_pieza, tp.nombre, tp.descripcion FROM pieza pi JOIN tipo_pieza tp ON pi.fk_tipo_pieza = tp.id_tipo_pieza JOIN proveedor pr ON pi.fk_proveedor = pr.id_proveedor WHERE pi.id_pieza = ?;");
             statement.setInt(1, id);
 
             // ejecutar consulta
@@ -267,7 +267,8 @@ public class DAO_Pieza extends DAO implements DAO_Interface<Pieza, Integer> {
             // guardar resultado en objeto 'respuesta'
             Tipo_Pieza tipo = new Tipo_Pieza(
                 resultado.getInt(11),
-                resultado.getString(12)
+                resultado.getString(12),
+                resultado.getString(13)
             );
             Proveedor proveedor = new Proveedor(
                 resultado.getInt(6),
@@ -317,7 +318,7 @@ public class DAO_Pieza extends DAO implements DAO_Interface<Pieza, Integer> {
         // (intentar) ejecutar busqueda
         try{
             // consulta 1: buscar todas las piezas, tambien el tipo y proveedor de cada una
-            statement = connect.prepareStatement("SELECT pi.id_pieza, pi.nombre, pi.descripcion, pi.precio, pi.cantidad, pr.id_proveedor, pr.cif, pr.nombre, pr.email, pr.direccion, tp.id_tipo_pieza, tp.nombre FROM pieza pi JOIN tipo_pieza tp ON pi.fk_tipo_pieza = tp.id_tipo_pieza JOIN proveedor pr ON pi.fk_proveedor = pr.id_proveedor;");
+            statement = connect.prepareStatement("SELECT pi.id_pieza, pi.nombre, pi.descripcion, pi.precio, pi.cantidad, pr.id_proveedor, pr.cif, pr.nombre, pr.email, pr.direccion, tp.id_tipo_pieza, tp.nombre, tp.descripcion FROM pieza pi JOIN tipo_pieza tp ON pi.fk_tipo_pieza = tp.id_tipo_pieza JOIN proveedor pr ON pi.fk_proveedor = pr.id_proveedor;");
             
             // ejecutar consulta
             resultado = statement.executeQuery();
@@ -331,7 +332,8 @@ public class DAO_Pieza extends DAO implements DAO_Interface<Pieza, Integer> {
             while (resultado.next()) {
                 Tipo_Pieza tipo = new Tipo_Pieza(
                     resultado.getInt(11),
-                    resultado.getString(12)
+                    resultado.getString(12),
+                    resultado.getString(13)
                 );
                 Proveedor proveedor = new Proveedor(
                     resultado.getInt(6),

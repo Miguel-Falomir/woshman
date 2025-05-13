@@ -89,7 +89,7 @@
                   <TableColumn fx:id="TVcol_Descripcion" prefWidth="75.0" text="Descripcion" />
               </columns>
                <VBox.margin>
-                  <Insets bottom="20.0" />
+                  <Insets />
                </VBox.margin>
             </TableView>
             <HBox alignment="CENTER_LEFT" prefWidth="200.0">
@@ -119,6 +119,9 @@
                      </font>
                   </Button>
                </children>
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
             </HBox>
          </children>
          <GridPane.margin>
