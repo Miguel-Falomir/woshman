@@ -44,8 +44,8 @@ public class InsertarVehiculoFormWare extends FormWare {
         this.vehiculo = new Vehiculo();
         this.menuWare = menuWare;
         this.dao = this.menuWare.getDaoVehiculo();
-        this.listaMarcas = this.menuWare.daoMarca.searchAll();
-        this.listaModelos = this.menuWare.daoModelo.searchAll();
+        this.listaMarcas = this.menuWare.getDaoMarca().searchAll();
+        this.listaModelos = this.menuWare.getDaoModelo().searchAll();
     }
 
     // ELEMENTOS UI

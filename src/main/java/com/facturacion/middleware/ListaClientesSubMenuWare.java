@@ -37,7 +37,7 @@ public class ListaClientesSubMenuWare extends SubMenuWare {
 
     // DAOs
 
-    DAO_Cliente daoCliente;
+    private DAO_Cliente daoCliente;
 
     // CONSTRUCTORES
 

@@ -12,6 +12,11 @@ public class Tipo_Pieza {
 
     public Tipo_Pieza(){}
 
+    public Tipo_Pieza(Integer id, String nombre){
+        this.id = id;
+        this.nombre = nombre;
+    }
+
     public Tipo_Pieza(Integer id, String nombre, String descripcion){
         this.id = id;
         this.nombre = nombre;
@@ -48,7 +53,7 @@ public class Tipo_Pieza {
 
     @Override
     public String toString() {
-        return "Tipo_Pieza [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + "]";
+        return nombre;
     }
 
     @Override

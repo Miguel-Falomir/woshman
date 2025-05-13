@@ -14,6 +14,11 @@ public class Proveedor {
 
     public Proveedor(){}
 
+    public Proveedor(Integer id, String nombre){
+        this.id = id;
+        this.nombre = nombre;
+    }
+
     public Proveedor(Integer id, String cif, String nombre, String email, String direccion){
         this.id = id;
         this.cif = cif;
@@ -68,8 +73,7 @@ public class Proveedor {
 
     @Override
     public String toString() {
-        return "Proveedor [id=" + id + ", cif=" + cif + ", nombre=" + nombre + ", email=" + email + ", direccion="
-                + direccion + "]";
+        return nombre;
     }
 
     @Override

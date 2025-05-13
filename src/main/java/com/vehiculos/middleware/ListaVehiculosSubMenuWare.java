@@ -40,9 +40,9 @@ public class ListaVehiculosSubMenuWare extends SubMenuWare {
 
     // DAOs
 
-    DAO_Vehiculo daoVehiculo;
-    DAO_Modelo daoModelo;
-    DAO_Marca daoMarca;
+    private DAO_Vehiculo daoVehiculo;
+    private DAO_Modelo daoModelo;
+    private DAO_Marca daoMarca;
 
     // CONSTRUCTOR
 
@@ -61,6 +61,22 @@ public class ListaVehiculosSubMenuWare extends SubMenuWare {
 
     public void setDaoVehiculo(DAO_Vehiculo daoVehiculo){
         this.daoVehiculo = daoVehiculo;
+    }
+
+    public DAO_Modelo getDaoModelo() {
+        return daoModelo;
+    }
+
+    public void setDaoModelo(DAO_Modelo daoModelo) {
+        this.daoModelo = daoModelo;
+    }
+
+    public DAO_Marca getDaoMarca() {
+        return daoMarca;
+    }
+
+    public void setDaoMarca(DAO_Marca daoMarca) {
+        this.daoMarca = daoMarca;
     }
 
     // ELEMENTOS UI

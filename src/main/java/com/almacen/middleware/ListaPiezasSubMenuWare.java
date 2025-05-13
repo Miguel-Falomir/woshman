@@ -23,6 +23,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
@@ -40,16 +41,18 @@ public class ListaPiezasSubMenuWare extends SubMenuWare {
 
     private ObservableList<Pieza> obserPiezas;
     private FilteredList<Pieza> filterPiezas;
-    private List<Pieza> listaPiezas;
-    private List<Tipo_Pieza> listaTipos;
-    private List<Proveedor> listaProveedores;
+    private ObservableList<Tipo_Pieza> obserTipos;
+    private ObservableList<Proveedor> obserProveedores;
+    private List<Pieza> listPiezas;
+    private List<Tipo_Pieza> listTipos;
+    private List<Proveedor> listProveedores;
     private Pieza pieza;
 
     // DAOs
 
-    DAO_Pieza daoPieza;
-    DAO_Tipo_Pieza daoTipo;
-    DAO_Proveedor daoProveedor;
+    private DAO_Pieza daoPieza;
+    private DAO_Tipo_Pieza daoTipo;
+    private DAO_Proveedor daoProveedor;
 
     // CONSTRUCTORES
 
@@ -58,6 +61,32 @@ public class ListaPiezasSubMenuWare extends SubMenuWare {
     public ListaPiezasSubMenuWare(MainMiddleWare mainController, HashMap<String, DAO> daoHashMap){
         this.mainController = mainController;
         this.daoHashMap = daoHashMap;
+    }
+
+    // GETTERS Y SETTERS
+
+    public DAO_Pieza getDaoPieza() {
+        return daoPieza;
+    }
+
+    public void setDaoPieza(DAO_Pieza daoPieza) {
+        this.daoPieza = daoPieza;
+    }
+
+    public DAO_Tipo_Pieza getDaoTipo() {
+        return daoTipo;
+    }
+
+    public void setDaoTipo(DAO_Tipo_Pieza daoTipo) {
+        this.daoTipo = daoTipo;
+    }
+
+    public DAO_Proveedor getDaoProveedor() {
+        return daoProveedor;
+    }
+
+    public void setDaoProveedor(DAO_Proveedor daoProveedor) {
+        this.daoProveedor = daoProveedor;
     }
 
     // ELEMENTOS UI
@@ -79,6 +108,12 @@ public class ListaPiezasSubMenuWare extends SubMenuWare {
 
     @FXML
     private Slider Slide_Cantidad;
+
+    @FXML
+    private ComboBox<Tipo_Pieza> Combo_Tipos;
+
+    @FXML
+    private ComboBox<Proveedor> Combo_Proveedores;
 
     @FXML
     private TableView<Pieza> TablV_Piezas;
@@ -132,9 +167,9 @@ public class ListaPiezasSubMenuWare extends SubMenuWare {
         daoProveedor = (DAO_Proveedor) daoHashMap.get("proveedor");
 
         // recopilar Piezas, Tipos y Proveedores
-        listaPiezas = daoPieza.searchAll();
-        //listaTipos = daoTipo.searchAll();
-        //listaProveedores = daoProveedor.searchAll();
+        listPiezas = daoPieza.searchAll();
+        listTipos = daoTipo.searchAll();
+        listProveedores = daoProveedor.searchAll();
 
         // forzar que 'undefined' no sea visible si no se tienen permisos:
         // 32 (Insertar Pieza)
@@ -143,7 +178,7 @@ public class ListaPiezasSubMenuWare extends SubMenuWare {
         // 35 (Eliminar Pieza)
         boolean prohibited = (!App.checkPermiso(32) && !App.checkPermiso(33) && !App.checkPermiso(34) && !App.checkPermiso(35));
         if (prohibited) {
-            listaPiezas.removeIf(pieza -> pieza.getId() == 0);
+            listPiezas.removeIf(pieza -> pieza.getId() == 0);
             //listaTipos.removeIf(tipo -> tipo.getId() == 0);
             //listaProveedores.removeIf(prov -> prov.getId() == 0);
         }
@@ -170,19 +205,41 @@ public class ListaPiezasSubMenuWare extends SubMenuWare {
         TablV_Piezas.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_NEXT_COLUMN);
         TablV_Piezas.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
-        // inicializar listas observables
-        obserPiezas = FXCollections.observableArrayList(listaPiezas);
+        // asignar lista piezas a 'TablV_Piezas'
+        obserPiezas = FXCollections.observableArrayList(listPiezas);
         filterPiezas = new FilteredList<>(obserPiezas);
         TablV_Piezas.setItems(filterPiezas);
 
+        // asignar lista tipos a 'Combo_Tipos'
+        obserTipos = FXCollections.observableArrayList(listTipos);
+        Tipo_Pieza clearTipoSelection = new Tipo_Pieza(-1, "Elegir Tipo Pieza");
+        obserTipos.addFirst(clearTipoSelection);
+        Combo_Tipos.setItems(obserTipos);
+        Combo_Tipos.getSelectionModel().select(clearTipoSelection);
+
+        // asignar lista proveedores a 'Combo_Proveedores'
+        obserProveedores = FXCollections.observableArrayList(listProveedores);
+        Proveedor clearProvSelection = new Proveedor(-1, "Elegir Proveedor");
+        obserProveedores.addFirst(clearProvSelection);
+        Combo_Proveedores.setItems(obserProveedores);
+        Combo_Proveedores.getSelectionModel().select(clearProvSelection);
+
         // agregar manejadores de eventos
-        // al deslizar 'Slide_Cantidad', 'Label_Cantidad' cambia de valor
+        // al deslizar 'Slide_Cantidad', cambiar valor 'Label_Cantidad' y filtrar piezas
         Slide_Cantidad.valueProperty().addListener( new ChangeListener<Number>() {
             @Override
             public void changed(javafx.beans.value.ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 Label_Cantidad.textProperty().setValue( String.valueOf( newValue.intValue()));
                 Func_Calculate_Predicate();
             };
+        });
+        // al elegir tipo pieza en 'Combo_Tipos', filtrar piezas
+        Combo_Tipos.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            Func_Calculate_Predicate();
+        });
+        // al elegir proveedor en 'Combo_Proveedores', filtrar piezas
+        Combo_Proveedores.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            Func_Calculate_Predicate();
         });
 
         // deshabilitar 'Buton_Agregar' si no se tiene permiso 32 (Insertar Pieza)
@@ -226,10 +283,24 @@ public class ListaPiezasSubMenuWare extends SubMenuWare {
     private void Func_Calculate_Predicate(){
         // recopilar valores
         String regex = Input_Nombre.getText();
+        int tipoID = Combo_Tipos.getSelectionModel().getSelectedItem().getId();
+        int provID = Combo_Proveedores.getSelectionModel().getSelectedItem().getId();
         int cantidad = (int) Math.floor( Slide_Cantidad.getValue());
 
         // aplicar predicado
-        filterPiezas.setPredicate(i -> i.getNombre().contains(regex) && i.getCantidad() >= cantidad);
+        boolean selectTipo = (tipoID > -1);
+        boolean selectProv = (provID > -1);
+        boolean selectBoth = selectTipo && selectProv;
+        boolean selectNone = !(selectTipo) && !(selectProv);
+        if (selectNone) {
+            filterPiezas.setPredicate(i -> i.getNombre().contains(regex) && i.getCantidad() >= cantidad);
+        } else if (selectBoth) {
+            filterPiezas.setPredicate(i -> i.getNombre().contains(regex) && i.getCantidad() >= cantidad && i.getTipo().getId() == tipoID && i.getProveedor().getId() == provID);
+        } else if (selectTipo) {
+            filterPiezas.setPredicate(i -> i.getNombre().contains(regex) && i.getCantidad() >= cantidad && i.getTipo().getId() == tipoID);
+        } else if (selectProv) {
+            filterPiezas.setPredicate(i -> i.getNombre().contains(regex) && i.getCantidad() >= cantidad && i.getProveedor().getId() == provID);
+        }
     }
 
     // METODO INSERTAR PIEZA
@@ -302,7 +373,7 @@ public class ListaPiezasSubMenuWare extends SubMenuWare {
 
     public void Func_Reboot_ObserPiezas(){
         // recopilar todas las piezas
-        listaPiezas = daoPieza.searchAll();
+        listPiezas = daoPieza.searchAll();
 
         // forzar que 'undefined' no sea visible si no se tienen permisos:
         // 32 (Insertar Pieza)
@@ -311,14 +382,14 @@ public class ListaPiezasSubMenuWare extends SubMenuWare {
         // 35 (Eliminar Pieza)
         boolean prohibited = (!App.checkPermiso(32) && !App.checkPermiso(33) && !App.checkPermiso(34) && !App.checkPermiso(35));
         if (prohibited) {
-            listaPiezas.removeIf(pieza -> pieza.getId() == 0);
+            listPiezas.removeIf(pieza -> pieza.getId() == 0);
             //listaTipos.removeIf(tipo -> tipo.getId() == 0);
             //listaProveedores.removeIf(prov -> prov.getId() == 0);
         }
 
         // actualizar listas observables
         obserPiezas.clear();
-        obserPiezas.setAll(listaPiezas);
+        obserPiezas.setAll(listPiezas);
 
         // refrescar TableView
         TablV_Piezas.refresh();
