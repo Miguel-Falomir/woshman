@@ -8,7 +8,10 @@ import com.App;
 import com.almacen.controller.DAO_Pieza;
 import com.almacen.controller.DAO_Proveedor;
 import com.almacen.controller.DAO_Tipo_Pieza;
+import com.almacen.middleware.EditarPiezaFormWare;
+import com.almacen.middleware.InsertarPiezaFormWare;
 import com.almacen.middleware.ListaPiezasSubMenuWare;
+import com.almacen.model.Pieza;
 import com.empleados.middleware.LoginMiddleWare;
 import com.facturacion.controller.DAO_Cliente;
 import com.facturacion.middleware.EditarClienteFormWare;
@@ -299,7 +302,7 @@ public class MainMiddleWare extends MiddleWare {
 
     // METODO ABRIR VENTANA FORMULARIO
 
-    public void openFormulary(String newModule, String newStage, int width, int heigth, Class<? extends FormWare> formWareClass, SubMenuWare menuWare, Object obj){
+    public void openFormulary(String newModule, String newStage, String title, int width, int heigth, Class<? extends FormWare> formWareClass, SubMenuWare menuWare, Object obj){
         // preparar archivo .fxml
         FXMLLoader loader = new FXMLLoader(
             App.class.getResource(newModule + "/gui/" + newStage + ".fxml")
@@ -331,6 +334,18 @@ public class MainMiddleWare extends MiddleWare {
                         return new InsertarClienteFormWare(submenu);
                     });
                 }
+            } else if (menuWare instanceof ListaPiezasSubMenuWare) { // submenu 'Lista Piezas'
+                ListaPiezasSubMenuWare submenu = (ListaPiezasSubMenuWare) menuWare;
+                if (formWareClass.equals(EditarPiezaFormWare.class) && obj instanceof Pieza){ // formulario 'Editar Pieza'
+                    loader.setControllerFactory(lambda -> {
+                        Pieza pieza = (Pieza) obj;
+                        return new EditarPiezaFormWare(pieza, submenu);
+                    });
+                } else if (formWareClass.equals(InsertarPiezaFormWare.class)){ // formulario 'Insertar Pieza'
+                    loader.setControllerFactory(lambda -> {
+                        return new InsertarPiezaFormWare(submenu);
+                    });
+                }
             }
 
             // cargar escena y archivo .fxml
@@ -346,7 +361,7 @@ public class MainMiddleWare extends MiddleWare {
 
             // definir dimensiones ventana
             formulary.setScene(scene);
-            formulary.setTitle("formulario");
+            formulary.setTitle(title);
             formulary.setWidth(width);
             formulary.setHeight(heigth);
             formulary.setResizable(false);

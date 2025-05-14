@@ -213,7 +213,7 @@ public class ListaVehiculosSubMenuWare extends SubMenuWare {
     // METODO INSERTAR VEHICULO
 
     private void Func_Insert_Vehiculo(){
-        mainController.openFormulary("vehiculos", "form_insertar_vehiculo", 480, 360, InsertarVehiculoFormWare.class, this, null);
+        mainController.openFormulary("vehiculos", "form_insertar_vehiculo", "insertar vehiculo", 480, 360, InsertarVehiculoFormWare.class, this, null);
     }
 
     // METODO REINICIAR LISTA VEHICULOS

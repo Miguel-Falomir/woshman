@@ -54,7 +54,7 @@ public class DAO_Pieza extends DAO implements DAO_Interface<Pieza, Integer> {
             boolean nombreUnique = (resultado.getInt(1) == 0);
             if (nombreUnique) {
                 // consulta 2: contar cantidad filas
-                statement = connect.prepareStatement("SELECT count(*) FROM categoria;");
+                statement = connect.prepareStatement("SELECT count(*) FROM pieza;");
 
                 // ejecutar consulta
                 resultado = statement.executeQuery();
@@ -136,7 +136,7 @@ public class DAO_Pieza extends DAO implements DAO_Interface<Pieza, Integer> {
             boolean nombreUnique = (resultado.getInt(1) == 0);
             if (nombreUnique) {
                 // consulta 2: actualizar pieza
-                statement = connect.prepareStatement("UPDATE pieza pi set pi.fk_tipo_pieza = ?, pi.fk_proveedor = ?, pi.nombre = ?, pi.descripcion = ?, pi.precio = ?, pi.cantidad = ? WHERE pi.id_vehiculo = ?;");
+                statement = connect.prepareStatement("UPDATE pieza pi set pi.fk_tipo_pieza = ?, pi.fk_proveedor = ?, pi.nombre = ?, pi.descripcion = ?, pi.precio = ?, pi.cantidad = ? WHERE pi.id_pieza = ?;");
                 statement.setInt(1, obj.getTipo().getId());
                 statement.setInt(2, obj.getProveedor().getId());
                 statement.setString(3, obj.getNombre());

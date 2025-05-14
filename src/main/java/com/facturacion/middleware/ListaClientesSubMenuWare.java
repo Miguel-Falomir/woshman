@@ -206,7 +206,7 @@ public class ListaClientesSubMenuWare extends SubMenuWare {
     // METODO INSERTAR CLIENTE
 
     private void Func_Insert_Cliente(){
-        mainController.openFormulary("facturacion", "form_insertar_cliente", 480, 360, InsertarClienteFormWare.class, this, null);
+        mainController.openFormulary("facturacion", "form_insertar_cliente", "insertar cliente", 480, 360, InsertarClienteFormWare.class, this, null);
     }
 
     // METODO EDITAR CLIENTE
@@ -219,7 +219,7 @@ public class ListaClientesSubMenuWare extends SubMenuWare {
         boolean selected = !(TablV_Clientes.getSelectionModel().isEmpty());
         if (selected) {
             cliente = TablV_Clientes.getSelectionModel().getSelectedItem();
-            mainController.openFormulary("facturacion", "form_editar_cliente", 480, 360, EditarClienteFormWare.class, this, cliente);
+            mainController.openFormulary("facturacion", "form_editar_cliente", "editar cliente", 480, 360, EditarClienteFormWare.class, this, cliente);
         } else {
             alert.setHeaderText("ELIGE UN CLIENTE");
             alert.showAndWait();

@@ -109,7 +109,7 @@ public class InsertarClienteFormWare extends FormWare {
         Alert alert = new Alert(AlertType.NONE);
         String nombre = cliente.getNombre() + " " + cliente.getApellidos();
 
-        // (intentar) ejecutar actualizacion
+        // (intentar) ejecutar insercion
         boolean completed = dao.insert(cliente);
         if(completed){
             alert.setAlertType(AlertType.INFORMATION);

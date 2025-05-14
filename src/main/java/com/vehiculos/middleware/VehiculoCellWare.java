@@ -92,6 +92,6 @@ public class VehiculoCellWare extends CellWare {
 
     private void Func_Update_Vehiculo(){
         // crear un formulario, pasandole vehiculo
-        this.menuWare.getMainController().openFormulary("vehiculos", "form_editar_vehiculo", 480, 360, EditarVehiculoFormWare.class, menuWare, vehiculo);
+        this.menuWare.getMainController().openFormulary("vehiculos", "form_editar_vehiculo", "editar vehiculo", 480, 360, EditarVehiculoFormWare.class, menuWare, vehiculo);
     }
 }

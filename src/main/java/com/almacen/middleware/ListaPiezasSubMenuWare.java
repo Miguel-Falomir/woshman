@@ -306,7 +306,7 @@ public class ListaPiezasSubMenuWare extends SubMenuWare {
     // METODO INSERTAR PIEZA
 
     private void Func_Insert_Pieza(){
-        //mainController.openFormulary("almacen", "form_insertar_pieza", 480, 360, InsertarPiezaFormWare.class, this, null);
+        mainController.openFormulary("almacen", "form_insertar_pieza", "insertar pieza", 480, 360, InsertarPiezaFormWare.class, this, null);
     }
 
     // METODO EDITAR PIEZA
@@ -319,9 +319,9 @@ public class ListaPiezasSubMenuWare extends SubMenuWare {
         boolean selected =!(TablV_Piezas.getSelectionModel().isEmpty());
         if (selected) {
             pieza = TablV_Piezas.getSelectionModel().getSelectedItem();
-            //mainController.openFormulary("almacen", "form_insertar_pieza", 480, 360, EditarPiezaFormWare.class, this, pieza);
+            mainController.openFormulary("almacen", "form_insertar_pieza", "editar pieza", 480, 360, EditarPiezaFormWare.class, this, pieza);
         } else {
-            alert.setHeaderText("ELIGE UN CLIENTE");
+            alert.setHeaderText("ELIGE UNA PIEZA");
             alert.showAndWait();
         }
 
@@ -348,7 +348,7 @@ public class ListaPiezasSubMenuWare extends SubMenuWare {
             if (completed){
                 alert.setAlertType(AlertType.INFORMATION);
                 alert.setHeaderText("OPERACIÓN COMPLETADA");
-                alert.setContentText("La pieza " + nombre + " ha sido eliminado de la base de datos.");
+                alert.setContentText("La pieza " + nombre + " ha sido eliminada de la base de datos.");
             } else {
                 alert.setAlertType(AlertType.ERROR);
                 alert.setHeaderText("ERROR SQL");
