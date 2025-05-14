@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
@@ -8,20 +7,17 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="360.0" prefWidth="480.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.empleados.middleware.NuevoUsuarioMiddleWare">
    <children>
-      <GridPane alignment="CENTER" hgap="20.0" layoutX="245.0" layoutY="200.0" vgap="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <GridPane alignment="CENTER" hgap="20.0" layoutX="245.0" layoutY="200.0" vgap="20.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0" >
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
@@ -29,25 +25,17 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="NUEVO EMPLEADO" textAlignment="CENTER" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM">
-               <font>
-                  <Font size="24.0" />
-               </font>
-            </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nombre completo" GridPane.rowIndex="1" />
-            <TextField fx:id="Input_Nombre" promptText="Nombre" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField fx:id="Input_Apellidos" promptText="Apellidos" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-            <Text layoutX="10.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nombre usuario" GridPane.rowIndex="2" />
-            <TextField fx:id="Input_Username" promptText="ABC1234" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" />
-            <Text layoutX="10.0" layoutY="215.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Contraseña" GridPane.rowIndex="3" />
-            <PasswordField fx:id="Input_Password_Insertar" promptText="Contraseña nueva" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3" />
-            <PasswordField fx:id="Input_Password_Confirmar" promptText="Confirmar contraseña" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4" />
-            <Button fx:id="Buton_Empleado_Registrar" mnemonicParsing="false" onAction="#OnAction_Buton_Empleado_Registrar" text="Registrar" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="5" GridPane.valignment="TOP" />
-            <Button fx:id="Buton_Empleado_Cancelar" layoutX="394.0" layoutY="300.0" mnemonicParsing="false" onAction="#OnAction_Buton_Empleado_Cancelar" text="Cancelar" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="5" GridPane.valignment="TOP" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nombre completo" />
+            <TextField fx:id="Input_Nombre" promptText="Nombre" GridPane.columnIndex="1" />
+            <TextField fx:id="Input_Apellidos" promptText="Apellidos" GridPane.columnIndex="2" />
+            <Text layoutX="10.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nombre usuario" GridPane.rowIndex="1" />
+            <TextField fx:id="Input_Username" promptText="ABC1234" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+            <Text layoutX="10.0" layoutY="215.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Contraseña" GridPane.rowIndex="2" />
+            <PasswordField fx:id="Input_Password_Insertar" promptText="Contraseña nueva" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+            <PasswordField fx:id="Input_Password_Confirmar" promptText="Confirmar contraseña" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+            <Button fx:id="Buton_Empleado_Registrar" mnemonicParsing="false" onAction="#OnAction_Buton_Empleado_Registrar" text="Registrar" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.valignment="TOP" />
+            <Button fx:id="Buton_Empleado_Cancelar" layoutX="394.0" layoutY="300.0" mnemonicParsing="false" onAction="#OnAction_Buton_Empleado_Cancelar" text="Cancelar" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="4" GridPane.valignment="TOP" />
          </children>
       </GridPane>
    </children>
-   <padding>
-      <Insets left="20.0" right="20.0" />
-   </padding>
 </AnchorPane>
