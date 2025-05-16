@@ -23,6 +23,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Slider;
@@ -337,36 +338,52 @@ public class ListaPiezasSubMenuWare extends SubMenuWare {
 
     private void Func_Delete_Pieza(){
         // inicializar ventana alert
-        Alert alert = new Alert(AlertType.WARNING);
+        Alert alert = new Alert(AlertType.NONE);
 
-        // (intentar) ejecutar borrado
+        // comprobar seleccion
         boolean selected = !(TablV_Piezas.getSelectionModel().isEmpty());
         if (selected) {
+            // tomar valores
             pieza = TablV_Piezas.getSelectionModel().getSelectedItem();
             String nombre = pieza.getNombre();
-            boolean completed = daoPieza.delete(pieza);
-            if (completed){
-                alert.setAlertType(AlertType.INFORMATION);
-                alert.setHeaderText("OPERACIÓN COMPLETADA");
-                alert.setContentText("La pieza " + nombre + " ha sido eliminada de la base de datos.");
+            // pregunta de seguridad
+            alert.setAlertType(AlertType.CONFIRMATION);
+            alert.setHeaderText("¿ESTÁ SEGURO?");
+            alert.setContentText("Esta acción borrará la pieza '" + nombre + "'");
+            alert.showAndWait();
+            boolean confirm = alert.getResult().equals(ButtonType.OK);
+            if (confirm) {
+                // (intentar) ejecutar borrado
+                boolean completed = daoPieza.delete(pieza);
+                if (completed){
+                    alert.setAlertType(AlertType.INFORMATION);
+                    alert.setHeaderText("OPERACIÓN COMPLETADA");
+                    alert.setContentText("La pieza " + nombre + " ha sido eliminada de la base de datos.");
+                } else {
+                    alert.setAlertType(AlertType.ERROR);
+                    alert.setHeaderText("ERROR SQL");
+                    alert.setContentText("No se puede eliminar pieza " + nombre + " porque tiene asignadas 1 o más ventas/averías");
+                }
+                // reiniciar lista piezas
+                Func_Reboot_ObserPiezas();
             } else {
-                alert.setAlertType(AlertType.ERROR);
-                alert.setHeaderText("ERROR SQL");
-                alert.setContentText("No se puede eliminar pieza " + nombre + " porque tiene asignadas 1 o más ventas/averías");
+                // mostrar mensaje cancelacion
+                alert.setAlertType(AlertType.WARNING);
+                alert.setHeaderText("OPERACIÓN CANCELADA");
+                alert.setContentText("");
             }
         } else {
+            // mostrar advertencia pieza no elegida
+            alert.setAlertType(AlertType.WARNING);
             alert.setHeaderText("ELIGE UNA PIEZA");
+            alert.setContentText("");
         }
 
         // mostrar alert
         alert.showAndWait();
 
-        // si se ha completado la operacion, reiniciar listas observables
-        boolean success = (alert.getAlertType().equals(AlertType.INFORMATION));
-        if (success) {
-            Func_Reboot_ObserPiezas();
-            TablV_Piezas.getSelectionModel().clearSelection();
-        }
+        // limpiar seleccion
+        TablV_Piezas.getSelectionModel().clearSelection();
     }
 
     // METODO REINICIAR LISTA PIEZAS

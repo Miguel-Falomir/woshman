@@ -17,6 +17,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -237,36 +238,52 @@ public class ListaClientesSubMenuWare extends SubMenuWare {
 
     private void Func_Delete_Cliente(){
         // inicializar ventana alert
-        Alert alert = new Alert(AlertType.WARNING);
+        Alert alert = new Alert(AlertType.NONE);
 
-        // (intentar) ejecutar borrado
+        // comprobar seleccion
         boolean selected = !(TablV_Clientes.getSelectionModel().isEmpty());
         if (selected) {
+            // tomar valores
             cliente = TablV_Clientes.getSelectionModel().getSelectedItem();
             String nombre = cliente.getNombre() + " " + cliente.getApellidos();
-            boolean completed = daoCliente.delete(cliente);
-            if (completed){
-                alert.setAlertType(AlertType.INFORMATION);
-                alert.setHeaderText("OPERACIÓN COMPLETADA");
-                alert.setContentText("El cliente " + nombre + " ha sido eliminado de la base de datos.");
+            // pregunta de seguridad
+            alert.setAlertType(AlertType.CONFIRMATION);
+            alert.setHeaderText("¿ESTÁ SEGURO?");
+            alert.setContentText("Esta acción borrará al cliente '" + nombre + "'");
+            alert.showAndWait();
+            boolean confirm = alert.getResult().equals(ButtonType.OK);
+            if (confirm) {
+                boolean completed = daoCliente.delete(cliente);
+                if (completed){
+                    // (intentar) ejecutar borrado
+                    alert.setAlertType(AlertType.INFORMATION);
+                    alert.setHeaderText("OPERACIÓN COMPLETADA");
+                    alert.setContentText("El cliente " + nombre + " ha sido eliminado de la base de datos.");
+                } else {
+                    alert.setAlertType(AlertType.ERROR);
+                    alert.setHeaderText("ERROR SQL");
+                    alert.setContentText("No se puede eliminar cliente " + nombre + " porque tiene asignadas 1 o más ventas/averías");
+                }
+                // reiniciar lista clientes
+                Func_Reboot_ObserClientes();
             } else {
-                alert.setAlertType(AlertType.ERROR);
-                alert.setHeaderText("ERROR SQL");
-                alert.setContentText("No se puede eliminar cliente " + nombre + " porque tiene asignadas 1 o más ventas/averías");
+                // mostrar mensaje cancelacion
+                alert.setAlertType(AlertType.WARNING);
+                alert.setHeaderText("OPERACIÓN CANCELADA");
+                alert.setContentText("");
             }
         } else {
+            // mostrar advertencia cliente no elegido
+            alert.setAlertType(AlertType.WARNING);
             alert.setHeaderText("ELIGE UN CLIENTE");
+            alert.setContentText("");
         }
 
         // mostrar alert
         alert.showAndWait();
 
-        // si se ha completado la operacion, reiniciar listas observables
-        boolean success = (alert.getAlertType().equals(AlertType.INFORMATION));
-        if (success) {
-            Func_Reboot_ObserClientes();
-            TablV_Clientes.getSelectionModel().clearSelection();
-        }
+        // limpiar seleccion
+        TablV_Clientes.getSelectionModel().clearSelection();
     }
 
     // METODO REINICIAR LISTA CLIENTES

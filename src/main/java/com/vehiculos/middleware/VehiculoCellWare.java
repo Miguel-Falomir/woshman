@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Alert.AlertType;
 
@@ -67,25 +68,42 @@ public class VehiculoCellWare extends CellWare {
     // METODO BORRAR VEHICULO
 
     private void Func_Delete_Vehiculo(){
+        // guardar matricula vehiculo
+        String matricula = vehiculo.getMatricula();
+
         // inicializar ventana alert
-        Alert alert = new Alert(AlertType.ERROR);
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setHeaderText("¿ESTÁ SEGURO?");
+        alert.setContentText("Esta acción borrará el vehículo " + matricula);
+
+        // pregunta de seguridad
+        alert.showAndWait();
+        boolean confirm = alert.getResult().equals(ButtonType.OK);
 
         // (intentar) ejecutar eliminacion
-        if(dao.delete(vehiculo)){
-            alert.setAlertType(AlertType.INFORMATION);
-            alert.setHeaderText("OPERACIÓN COMPLETADA");
-            alert.setContentText("El vehiculo " + vehiculo.getMatricula() + " ha sido eliminado de la base de datos.");
+        if (confirm) {
+            // comprobar operacion
+            boolean completed = dao.delete(vehiculo);
+            if(completed){
+                alert.setAlertType(AlertType.INFORMATION);
+                alert.setHeaderText("OPERACIÓN COMPLETADA");
+                alert.setContentText("El vehiculo " + matricula + " ha sido eliminado de la base de datos.");
+            } else {
+                alert.setAlertType(AlertType.ERROR);
+                alert.setHeaderText("ERROR SQL");
+                alert.setContentText("No se puede eliminar " + matricula + " porque tiene asignadas 1 o más averías");
+            }
+            // reiniciar lista vehiculos
+            menuWare.Func_Reboot_ObserVehiculos();
         } else {
-            alert.setHeaderText("ERROR SQL");
-            alert.setContentText("No se puede eliminar " + vehiculo.getMatricula() + " porque tiene asignadas 1 o más averías");
+            // mostrar mensaje cancelacion
+            alert.setAlertType(AlertType.WARNING);
+            alert.setHeaderText("OPERACIÓN CANCELADA");
+            alert.setContentText("");
         }
-
         // pase lo que pase, mostrarlo mediante la alert
         // .showAndWait() bloquea las siguientes instrucciones hasta cerrar la alert
         alert.showAndWait();
-
-        // reiniciar la lista para que se muestre la ausencia del vehiculo eliminado
-        menuWare.Func_Reboot_ObserVehiculos();
     }
 
     // METODO EDITAR VEHICULO
