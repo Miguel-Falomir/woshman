@@ -116,11 +116,16 @@ public class EditarClienteFormWare extends FormWare {
         String nombre = cliente.getNombre() + " " + cliente.getApellidos();
 
         // (intentar) ejecutar actualizacion
+        boolean notFulfilled = cliente.getId() == null || cliente.getNombre() == null || cliente.getApellidos() == null || cliente.getDni() == null || cliente.getEmail() == null || cliente.getDireccion() == null;
         boolean completed = dao.update(cliente);
         if(completed){
             alert.setAlertType(AlertType.INFORMATION);
             alert.setHeaderText("OPERACIÓN COMPLETADA");
             alert.setContentText("El cliente " + nombre + " se ha guardado en la base de datos.");
+        } else if (notFulfilled) {
+            alert.setAlertType(AlertType.ERROR);
+            alert.setHeaderText("ERROR FORMULARIO");
+            alert.setContentText("Deben rellenarse TODOS los datos del formulario");
         } else {
             alert.setAlertType(AlertType.ERROR);
             alert.setHeaderText("ERROR SQL");

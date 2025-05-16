@@ -87,6 +87,8 @@ public class EditarVehiculoFormWare extends FormWare {
             if (newSelection != null){
                 int id = newSelection.getId();
                 filterModelos.setPredicate(i -> i.getMarca().getId() == id);
+                Combo_Modelo.getSelectionModel().clearSelection();
+                Combo_Modelo.valueProperty().set(null);
             }
         });
         Combo_Modelo.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
@@ -126,13 +128,18 @@ public class EditarVehiculoFormWare extends FormWare {
     private void Func_Update_Vehiculo(){
         // inicializar ventana alert
         Alert alert = new Alert(AlertType.NONE);
-
+        
         // (intentar) ejecutar actualizacion
+        boolean notFulfilled = vehiculo.getId() == null || vehiculo.getMatricula() == null || vehiculo.getModelo() != null;
         boolean completed = dao.update(vehiculo);
         if(completed){
             alert.setAlertType(AlertType.INFORMATION);
             alert.setHeaderText("OPERACIÓN COMPLETADA");
             alert.setContentText("El vehiculo " + vehiculo.getMatricula() + " ha sido actualizado.");
+        } else if (notFulfilled) {
+            alert.setAlertType(AlertType.ERROR);
+            alert.setHeaderText("ERROR FORMULARIO");
+            alert.setContentText("Deben rellenarse TODOS los datos del formulario");
         } else {
             alert.setAlertType(AlertType.ERROR);
             alert.setHeaderText("ERROR SQL");

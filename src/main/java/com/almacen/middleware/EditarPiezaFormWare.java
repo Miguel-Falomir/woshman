@@ -194,11 +194,16 @@ public class EditarPiezaFormWare extends FormWare {
         String nombre = pieza.getNombre();
 
         // (intentar) ejecutar insercion
+        boolean notFulfilled = pieza.getId() == null || pieza.getNombre() == null || pieza.getDescripcion() == null || pieza.getTipo() == null || pieza.getProveedor() == null || pieza.getCantidad() == null || pieza.getPrecio() == null;
         boolean completed = daoPieza.update(pieza);
         if (completed) {
             alert.setAlertType(AlertType.INFORMATION);
             alert.setHeaderText("OPERACIÓN COMPLETADA");
             alert.setContentText("La pieza '" + nombre + "' ha sido actualizada");
+        } else if (notFulfilled) {
+            alert.setAlertType(AlertType.ERROR);
+            alert.setHeaderText("ERROR FORMULARIO");
+            alert.setContentText("Deben rellenarse TODOS los datos del formulario");
         } else {
             alert.setAlertType(AlertType.ERROR);
             alert.setHeaderText("ERROR SQL");

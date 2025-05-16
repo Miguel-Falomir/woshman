@@ -88,6 +88,8 @@ public class InsertarVehiculoFormWare extends FormWare {
             if (newSelection != null){
                 int id = newSelection.getId();
                 filterModelos.setPredicate(i -> i.getMarca().getId() == id);
+                Combo_Modelo.getSelectionModel().clearSelection();
+                Combo_Modelo.valueProperty().set(null);
             }
         });
         // al elegir modelo, este se asigna a 'vehiculo.modelo'
@@ -126,18 +128,22 @@ public class InsertarVehiculoFormWare extends FormWare {
     private void Func_Insert_Vehiculo(){
         // inicializar ventana alert
         Alert alert = new Alert(AlertType.NONE);
-        String matricula = vehiculo.getMatricula();
 
         // (intentar) ejecutar actualizacion
+        boolean notFulfilled = vehiculo.getId() == null || vehiculo.getMatricula() == null || vehiculo.getModelo() != null;
         boolean completed = dao.insert(vehiculo);
         if(completed){
             alert.setAlertType(AlertType.INFORMATION);
             alert.setHeaderText("OPERACIÓN COMPLETADA");
-            alert.setContentText("El vehículo " + matricula + " se ha guardado en la base de datos.");
+            alert.setContentText("El vehiculo " + vehiculo.getMatricula() + " se ha guardado en la base de datos.");
+        } else if (notFulfilled) {
+            alert.setAlertType(AlertType.ERROR);
+            alert.setHeaderText("ERROR FORMULARIO");
+            alert.setContentText("Deben rellenarse TODOS los datos del formulario");
         } else {
             alert.setAlertType(AlertType.ERROR);
             alert.setHeaderText("ERROR SQL");
-            alert.setContentText("Datos duplicados en vehículo " + matricula + ". recuerde que las matrículas no pueden repetirse.");
+            alert.setContentText("Ya existe un vehiculo com matrícula " + vehiculo.getMatricula() + ". recuerde que las matrículas no pueden repetirse.");
         }
 
         // pase lo que pase, mostrarlo mediante la alert

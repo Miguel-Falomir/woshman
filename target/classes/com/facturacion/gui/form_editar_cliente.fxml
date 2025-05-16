@@ -10,29 +10,31 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="360.0" prefWidth="480.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.facturacion.middleware.EditarClienteFormWare">
    <children>
-      <GridPane hgap="20.0" layoutX="133.0" layoutY="116.0" vgap="20.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+      <GridPane hgap="20.0" layoutX="133.0" layoutY="116.0" vgap="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
           <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
         </rowConstraints>
          <children>
-            <TextField fx:id="Input_Nombre" promptText="Nombre" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
-            <TextField fx:id="Input_Apellidos" promptText="Apellidos" GridPane.columnIndex="2" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="datos cliente" />
-            <TextField fx:id="Input_DNI" promptText="DNI" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
-            <Text layoutX="10.0" layoutY="145.0" strokeType="OUTSIDE" strokeWidth="0.0" text="contactos" GridPane.rowIndex="2" />
-            <TextField fx:id="Input_Email" promptText="Email" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" />
-            <TextField fx:id="Input_Direccion" promptText="Dirección" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3" />
-            <Button fx:id="Buton_Aceptar" mnemonicParsing="false" onAction="#OnAction_Buton_Aceptar" text="Aceptar" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.valignment="TOP" />
-            <Button fx:id="Buton_Cancelar" layoutX="390.0" layoutY="300.0" mnemonicParsing="false" onAction="#OnAction_Buton_Cancelar" text="Cancelar" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="4" GridPane.valignment="TOP" />
+            <TextField fx:id="Input_Nombre" promptText="Nombre" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
+            <TextField fx:id="Input_Apellidos" promptText="Apellidos" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="datos cliente" GridPane.rowIndex="1" />
+            <TextField fx:id="Input_DNI" promptText="DNI" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
+            <Text layoutX="10.0" layoutY="145.0" strokeType="OUTSIDE" strokeWidth="0.0" text="contactos" GridPane.rowIndex="3" />
+            <TextField fx:id="Input_Email" promptText="Email" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+            <TextField fx:id="Input_Direccion" promptText="Dirección" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4" />
+            <Button fx:id="Buton_Aceptar" mnemonicParsing="false" onAction="#OnAction_Buton_Aceptar" text="Aceptar" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="5" GridPane.valignment="TOP" />
+            <Button fx:id="Buton_Cancelar" layoutX="390.0" layoutY="300.0" mnemonicParsing="false" onAction="#OnAction_Buton_Cancelar" text="Cancelar" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="5" GridPane.valignment="TOP" />
          </children>
       </GridPane>
    </children>
