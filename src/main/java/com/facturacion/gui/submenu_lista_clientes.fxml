@@ -31,12 +31,12 @@
                   <Insets />
                </HBox.margin>
                <font>
-                  <Font size="18.0" />
+                  <Font size="13.0" />
                </font>
             </TextField>
             <Button fx:id="Buton_Agregar" mnemonicParsing="false" onAction="#OnAction_Buton_Agregar" text="Agregar">
                <font>
-                  <Font size="18.0" />
+                  <Font size="13.0" />
                </font>
                <HBox.margin>
                   <Insets left="20.0" />
@@ -73,7 +73,7 @@
             </VBox>
             <Button fx:id="Buton_Editar" mnemonicParsing="false" onAction="#OnAction_Buton_Editar" text="Editar">
                <font>
-                  <Font size="18.0" />
+                  <Font size="13.0" />
                </font>
                <HBox.margin>
                   <Insets />
@@ -81,7 +81,7 @@
             </Button>
             <Button fx:id="Buton_Borrar" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#OnAction_Buton_Borrar" text="Borrar">
                <font>
-                  <Font size="18.0" />
+                  <Font size="13.0" />
                </font>
                <HBox.margin>
                   <Insets left="20.0" />

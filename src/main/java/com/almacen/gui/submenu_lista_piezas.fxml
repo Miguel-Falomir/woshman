@@ -71,7 +71,7 @@
                <children>
                   <Button fx:id="Buton_Agregar" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#OnAction_Buton_Agregar" text="Agregar" HBox.hgrow="NEVER">
                      <font>
-                        <Font size="18.0" />
+                        <Font size="13.0" />
                      </font></Button>
                </children>
             </HBox>
@@ -107,7 +107,7 @@
                         <Insets />
                      </HBox.margin>
                      <font>
-                        <Font size="18.0" />
+                        <Font size="13.0" />
                      </font>
                   </Button>
                   <Button fx:id="Buton_Borrar" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#OnAction_Buton_Borrar" text="Borrar">
@@ -115,7 +115,7 @@
                         <Insets left="20.0" />
                      </HBox.margin>
                      <font>
-                        <Font size="18.0" />
+                        <Font size="13.0" />
                      </font>
                   </Button>
                </children>

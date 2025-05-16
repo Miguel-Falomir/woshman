@@ -38,11 +38,11 @@
                <children>
                   <TextField fx:id="Input_Matricula" onKeyTyped="#OnKeyTyped_Input_Matricula" promptText="5555 XXX" HBox.hgrow="ALWAYS">
                      <font>
-                        <Font size="18.0" />
+                        <Font size="13.0" />
                      </font></TextField>
                   <Button fx:id="Buton_Agregar" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#OnAction_Buton_Agregar" text="Agregar">
                      <font>
-                        <Font size="18.0" />
+                        <Font size="13.0" />
                      </font>
                      <HBox.margin>
                         <Insets left="20.0" />
