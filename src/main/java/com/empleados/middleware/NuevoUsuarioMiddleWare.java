@@ -98,23 +98,27 @@ public class NuevoUsuarioMiddleWare extends MiddleWare {
 
             // (intentar) insertar empleado nuevo
             // el metodo dao.insert(emp) devuelve false si emp.username o emp.password se repiten en BD
-            if (dao.insert(emp)){
+            boolean completed = dao.insert(emp);
+            if (completed){
                 // configurar alerta tipo CONFIRMATION
                 alert.setAlertType(AlertType.INFORMATION);
                 alert.setHeaderText("Bienvenid@ al equipo, " + auxUsername + ".");
                 alert.setContentText("Por razones de seguridad, se le ha asignado el rol 'mecanico', el que menos permisos tiene.");
     
                 // lanzar alerta
-                alert.show();
+                alert.showAndWait();
     
                 // navegar a menu principal con nuevo usuario
                 app.setUser(emp);
-                app.changeStage("menu", "main", "WOSHMAN", 720, 540, true, MainMiddleWare.class);
+                app.changeStage("menu", "menu_principal", "WOSHMAN", 960, 540, true, MainMiddleWare.class);
             } else {
                 // configurar alerta tipo ERROR
                 alert.setAlertType(AlertType.ERROR);
                 alert.setHeaderText("Error base datos");
                 alert.setContentText("No se puede agregar el nuevo usuario porque username y/o password se repiten en la base de datos.");
+
+                // lanzar alerta
+                alert.show();
             }
 
         } else {

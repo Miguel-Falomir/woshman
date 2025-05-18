@@ -35,7 +35,7 @@ public class DAO_Empleado extends DAO implements DAO_Interface<Empleado, Integer
         List<Permiso> auxPermisos = new ArrayList<Permiso>();
         int update = 0;
         int nuevoID = 0;
-        boolean exito = false;
+        boolean success = false;
 
         // (intentar) ejecutar insercion
         try {
@@ -48,7 +48,10 @@ public class DAO_Empleado extends DAO implements DAO_Interface<Empleado, Integer
             resultado = statement.executeQuery();
             
             // forzar que 'resultado' apunte a la primera fila
-            resultado.first();
+            if (!resultado.isBeforeFirst()){
+                resultado.beforeFirst();
+            }
+            resultado.next();
 
             // materializar 'resultado' en booleano
             boolean userUnique = (resultado.getInt(1) == 0);
@@ -61,7 +64,10 @@ public class DAO_Empleado extends DAO implements DAO_Interface<Empleado, Integer
                 resultado = statement.executeQuery();
                 
                 // forzar que 'resultado' apunte a la primera fila
-                resultado.first();
+                if (!resultado.isBeforeFirst()){
+                    resultado.beforeFirst();
+                }
+                resultado.next();
                 
                 // asignar resultado al ID del nuevo usuario
                 nuevoID = resultado.getInt(1);
@@ -81,9 +87,9 @@ public class DAO_Empleado extends DAO implements DAO_Interface<Empleado, Integer
                 
                 // guardar primera fila en variable auxiliar
                 auxRol = new Rol(
-                resultado.getInt(1),
-                resultado.getString(2),
-                resultado.getString(3)
+                    resultado.getInt(1),
+                    resultado.getString(2),
+                    resultado.getString(3)
                 );
                 
                 // consulta 4: Buscar permisos del rol //////////////////
@@ -122,6 +128,7 @@ public class DAO_Empleado extends DAO implements DAO_Interface<Empleado, Integer
                 // ejecutar consulta
                 update = statement.executeUpdate();
                 System.out.println("INSERTAR EMPLEADO: " + update);
+                success = true;
             }
 
         // manejar excepciones
@@ -142,7 +149,7 @@ public class DAO_Empleado extends DAO implements DAO_Interface<Empleado, Integer
         }
 
         // devolver 'exito', para indicar si se ha completado insercion
-        return exito;
+        return success;
     }
 
     @Override
