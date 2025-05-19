@@ -194,7 +194,6 @@ public class EditarPiezaFormWare extends FormWare {
         String nombre = pieza.getNombre();
 
         // comprobar que se han rellenado todos los campos requeridos
-        System.out.println(pieza.getNombre() + "\t" + pieza.getNombre().length() + "\t" + Input_Nombre.getText());
         boolean nombreMissing = (pieza.getNombre() == "" || pieza.getNombre() == null || pieza.getNombre().length() == 0);
         boolean tipoMissing = (pieza.getTipo() == null);
         boolean proveedorMissing = (pieza.getProveedor() == null);

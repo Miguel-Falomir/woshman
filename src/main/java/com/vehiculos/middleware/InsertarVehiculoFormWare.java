@@ -25,7 +25,7 @@ public class InsertarVehiculoFormWare extends FormWare {
     // OBJETOS PUNTERO
 
     ListaVehiculosSubMenuWare menuWare;
-    DAO_Vehiculo dao;
+    DAO_Vehiculo daoVehiculo;
 
     // OBJETOS ALMACENAR DATOS INTERNOS
 
@@ -43,7 +43,7 @@ public class InsertarVehiculoFormWare extends FormWare {
     public InsertarVehiculoFormWare(ListaVehiculosSubMenuWare menuWare){
         this.vehiculo = new Vehiculo();
         this.menuWare = menuWare;
-        this.dao = this.menuWare.getDaoVehiculo();
+        this.daoVehiculo = this.menuWare.getDaoVehiculo();
         this.listaMarcas = this.menuWare.getDaoMarca().searchAll();
         this.listaModelos = this.menuWare.getDaoModelo().searchAll();
     }
@@ -129,21 +129,33 @@ public class InsertarVehiculoFormWare extends FormWare {
         // inicializar ventana alert
         Alert alert = new Alert(AlertType.NONE);
 
-        // (intentar) ejecutar actualizacion
-        boolean notFulfilled = vehiculo.getId() == null || vehiculo.getMatricula() == null || vehiculo.getModelo() != null;
-        boolean completed = dao.insert(vehiculo);
-        if(completed){
-            alert.setAlertType(AlertType.INFORMATION);
-            alert.setHeaderText("OPERACIÓN COMPLETADA");
-            alert.setContentText("El vehiculo " + vehiculo.getMatricula() + " se ha guardado en la base de datos.");
-        } else if (notFulfilled) {
+        // comprobar que se han rellenado todos los campos requeridos
+        boolean modeloMissing = (vehiculo.getModelo() == null);
+        boolean marcaMissing = (vehiculo.getModelo().getMarca() == null);
+        boolean matriculaMissing = (vehiculo.getMatricula() == "" || vehiculo.getMatricula() == null || vehiculo.getMatricula().length() <= 0);
+        if (modeloMissing) { // falta 'Modelo'
             alert.setAlertType(AlertType.ERROR);
             alert.setHeaderText("ERROR FORMULARIO");
-            alert.setContentText("Deben rellenarse TODOS los datos del formulario");
-        } else {
+            alert.setContentText("Campo 'Modelo' es obligatorio.");
+        } else if (marcaMissing) { // falta 'Marca'
             alert.setAlertType(AlertType.ERROR);
-            alert.setHeaderText("ERROR SQL");
-            alert.setContentText("Ya existe un vehiculo com matrícula " + vehiculo.getMatricula() + ". recuerde que las matrículas no pueden repetirse.");
+            alert.setHeaderText("ERROR FORMULARIO");
+            alert.setContentText("Campo 'Marca' es obligatorio.");
+        } else if (matriculaMissing) { // falta 'Matricula'
+            alert.setAlertType(AlertType.ERROR);
+            alert.setHeaderText("ERROR FORMULARIO");
+            alert.setContentText("Campo 'Matricula' es obligatorio.");
+        } else { // con todos los campos rellenados, (intentar) ejecutar actualizacion
+            boolean completed = daoVehiculo.insert(vehiculo);
+            if (completed) {
+                alert.setAlertType(AlertType.INFORMATION);
+                alert.setHeaderText("OPERACIÓN COMPLETADA");
+                alert.setContentText("El vehiculo " + vehiculo.getMatricula() + " ha sido actualizado.");
+            } else {
+                alert.setAlertType(AlertType.ERROR);
+                alert.setHeaderText("ERROR SQL");
+                alert.setContentText("Ya existe un vehiculo com matrícula " + vehiculo.getMatricula() + ". recuerde que las matrículas no pueden repetirse.");
+            }
         }
 
         // pase lo que pase, mostrarlo mediante la alert

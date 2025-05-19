@@ -26,7 +26,7 @@ public class EditarVehiculoFormWare extends FormWare {
 
     Vehiculo vehiculo;
     ListaVehiculosSubMenuWare menuWare;
-    DAO_Vehiculo dao;
+    DAO_Vehiculo daoVehiculo;
 
     // OBJETOS ALMACENAR DATOS INTERNOS
 
@@ -43,7 +43,7 @@ public class EditarVehiculoFormWare extends FormWare {
     public EditarVehiculoFormWare(Vehiculo vehiculo, ListaVehiculosSubMenuWare menuWare){
         this.vehiculo = vehiculo;
         this.menuWare = menuWare;
-        this.dao = this.menuWare.getDaoVehiculo();
+        this.daoVehiculo = this.menuWare.getDaoVehiculo();
         this.listaMarcas = this.menuWare.getDaoMarca().searchAllAlphabetically();
         this.listaModelos = this.menuWare.getDaoModelo().searchAll();
     }
@@ -146,7 +146,7 @@ public class EditarVehiculoFormWare extends FormWare {
             alert.setHeaderText("ERROR FORMULARIO");
             alert.setContentText("Campo 'Matricula' es obligatorio.");
         } else { // con todos los campos rellenados, (intentar) ejecutar actualizacion
-            boolean completed = dao.update(vehiculo);
+            boolean completed = daoVehiculo.update(vehiculo);
             if (completed) {
                 alert.setAlertType(AlertType.INFORMATION);
                 alert.setHeaderText("OPERACIÓN COMPLETADA");

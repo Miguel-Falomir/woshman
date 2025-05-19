@@ -17,7 +17,7 @@ public class EditarClienteFormWare extends FormWare {
     // OBJETOS PUNTERO
 
     ListaClientesSubMenuWare menuWare;
-    DAO_Cliente dao;
+    DAO_Cliente daoCliente;
 
     // OBJETOS ALMACENAR DATOS INTERNOS
 
@@ -30,7 +30,7 @@ public class EditarClienteFormWare extends FormWare {
     public EditarClienteFormWare(Cliente cliente, ListaClientesSubMenuWare menuWare){
         this.cliente = cliente;
         this.menuWare = menuWare;
-        this.dao = this.menuWare.getDaoCliente();
+        this.daoCliente = this.menuWare.getDaoCliente();
     }
 
     // ELEMENTOS UI
@@ -137,7 +137,7 @@ public class EditarClienteFormWare extends FormWare {
             alert.setHeaderText("ERROR FORMULARIO");
             alert.setContentText("Campo 'Direccion' es obligatorio.");
         } else { // con todos los campos rellenados, (intentar) ejecutar actualizacion
-            boolean completed = dao.update(cliente);
+            boolean completed = daoCliente.update(cliente);
             if (completed) {
                 alert.setAlertType(AlertType.INFORMATION);
                 alert.setHeaderText("OPERACIÓN COMPLETADA");

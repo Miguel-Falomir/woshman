@@ -31,11 +31,11 @@
          </rowConstraints>
          <children>
             <TextField fx:id="Input_Nombre" layoutX="144.0" layoutY="147.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="pieza" GridPane.rowIndex="2" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="nombre" GridPane.rowIndex="1" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="* pieza" GridPane.rowIndex="2" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="* nombre" GridPane.rowIndex="1" />
             <ComboBox fx:id="Combo_Tipo_Pieza" prefWidth="150.0" promptText="Tipo" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <ComboBox fx:id="Combo_Proveedor" prefWidth="150.0" promptText="Proveedor" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <Text layoutX="10.0" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0" text="precio / cantidad" GridPane.rowIndex="3" />
+            <Text layoutX="10.0" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0" text="* precio/cantidad" GridPane.rowIndex="3" />
             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <children>
                   <TextField fx:id="Input_Precio" promptText="0.00" />

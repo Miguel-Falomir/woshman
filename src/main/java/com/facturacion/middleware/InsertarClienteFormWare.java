@@ -17,7 +17,7 @@ public class InsertarClienteFormWare extends FormWare {
     // OBJETOS PUNTERO
 
     ListaClientesSubMenuWare menuWare;
-    DAO_Cliente dao;
+    DAO_Cliente daoCliente;
 
     // OBJETOS ALMACENAR DATOS INTERNOS
 
@@ -30,7 +30,7 @@ public class InsertarClienteFormWare extends FormWare {
     public InsertarClienteFormWare(ListaClientesSubMenuWare menuWare){
         this.cliente = new Cliente();
         this.menuWare = menuWare;
-        this.dao = this.menuWare.getDaoCliente();
+        this.daoCliente = this.menuWare.getDaoCliente();
     }
 
     // ELEMENTOS UI
@@ -109,21 +109,38 @@ public class InsertarClienteFormWare extends FormWare {
         Alert alert = new Alert(AlertType.NONE);
         String nombre = cliente.getNombre() + " " + cliente.getApellidos();
 
-        // (intentar) ejecutar insercion
-        boolean notFulfilled = cliente.getId() == null || cliente.getNombre() == null || cliente.getApellidos() == null || cliente.getDni() == null || cliente.getEmail() == null || cliente.getDireccion() == null;
-        boolean completed = dao.insert(cliente);
-        if(completed){
-            alert.setAlertType(AlertType.INFORMATION);
-            alert.setHeaderText("OPERACIÓN COMPLETADA");
-            alert.setContentText("El cliente " + nombre + " se ha guardado en la base de datos.");
-        } else if (notFulfilled) {
+        // comprobar que se han rellenado todos los campos obligatorios
+        boolean nombreMissing = (cliente.getNombre() == "" || cliente.getNombre() == null || cliente.getNombre().length() <= 0);
+        boolean dniMissing = (cliente.getDni() == "" || cliente.getDni() == null || cliente.getDni().length() <= 0);
+        boolean emailMissing = (cliente.getEmail() == "" || cliente.getEmail() == null || cliente.getEmail().length() <= 0);
+        boolean direccionMissing = (cliente.getDireccion() == "" || cliente.getDireccion() == null || cliente.getDireccion().length() <= 0);
+        if (nombreMissing) { // falta 'Nombre'
             alert.setAlertType(AlertType.ERROR);
             alert.setHeaderText("ERROR FORMULARIO");
-            alert.setContentText("Deben rellenarse TODOS los datos del formulario");
-        } else {
+            alert.setContentText("Campo 'Nombre' es obligatorio.");
+        } else if (dniMissing) { // falta 'DNI'
             alert.setAlertType(AlertType.ERROR);
-            alert.setHeaderText("ERROR SQL");
-            alert.setContentText("Datos duplicados en cliente " + nombre + ". Recuerde que tanto dni como email no pueden repetirse.");
+            alert.setHeaderText("ERROR FORMULARIO");
+            alert.setContentText("Campo 'DNI' es obligatorio.");
+        } else if (emailMissing) { // falta 'Email'
+            alert.setAlertType(AlertType.ERROR);
+            alert.setHeaderText("ERROR FORMULARIO");
+            alert.setContentText("Campo 'Email' es obligatorio.");
+        } else if (direccionMissing) { // falta 'Direccion'
+            alert.setAlertType(AlertType.ERROR);
+            alert.setHeaderText("ERROR FORMULARIO");
+            alert.setContentText("Campo 'Direccion' es obligatorio.");
+        } else { // con todos los campos rellenados, (intentar) ejecutar actualizacion
+            boolean completed = daoCliente.insert(cliente);
+            if (completed) {
+                alert.setAlertType(AlertType.INFORMATION);
+                alert.setHeaderText("OPERACIÓN COMPLETADA");
+                alert.setContentText("El cliente " + nombre + " se ha guardado en la base de datos.");
+            } else {
+                alert.setAlertType(AlertType.ERROR);
+                alert.setHeaderText("ERROR SQL");
+                alert.setContentText("Datos duplicados en cliente " + nombre + ". Recuerde que tanto dni como email no pueden repetirse.");
+            }
         }
 
         // pase lo que pase, mostrarlo mediante la alert
