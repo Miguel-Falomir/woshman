@@ -36,7 +36,7 @@ public class DAO_Cliente extends DAO implements DAO_Interface<Cliente, Integer> 
         // (intentar) ejecutar insercion
         try {
             // consulta 1: contar cantidad filas
-            statement = connect.prepareStatement("SELECT count(*) FROM cliente;");
+            statement = connect.prepareStatement("SELECT count(*) FROM cliente;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
             // ejecutar consulta
             resultado = statement.executeQuery();
@@ -51,7 +51,7 @@ public class DAO_Cliente extends DAO implements DAO_Interface<Cliente, Integer> 
             cantidadFilas = resultado.getInt(1);
 
             // consulta 2: buscar todos los clientes con cli.dni == obj.dni
-            statement = connect.prepareStatement("SELECT count(*) FROM cliente cli WHERE cli.dni = ?;");
+            statement = connect.prepareStatement("SELECT count(*) FROM cliente cli WHERE cli.dni = ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setString(1, obj.getDni());
 
             // ejecutar consulta
@@ -67,7 +67,7 @@ public class DAO_Cliente extends DAO implements DAO_Interface<Cliente, Integer> 
             boolean dniUnique = (resultado.getInt(1) == 0);
             
             // consulta 3: buscar todos los clientes con cli.email == obj.email
-            statement = connect.prepareStatement("SELECT count(*) FROM cliente cli WHERE cli.email = ?;");
+            statement = connect.prepareStatement("SELECT count(*) FROM cliente cli WHERE cli.email = ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setString(1, obj.getEmail());
 
             // ejecutar consulta
@@ -127,7 +127,7 @@ public class DAO_Cliente extends DAO implements DAO_Interface<Cliente, Integer> 
         // (intentar) ejecutar actualizacion
         try {
             // consulta 1: buscar todos los clientes con cli.dni == obj.dni
-            statement = connect.prepareStatement("SELECT count(*) FROM cliente cli WHERE cli.dni = ? AND cli.id_cliente <> ?;");
+            statement = connect.prepareStatement("SELECT count(*) FROM cliente cli WHERE cli.dni = ? AND cli.id_cliente <> ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setString(1, obj.getDni());
             statement.setInt(2, obj.getId());
 
@@ -144,7 +144,7 @@ public class DAO_Cliente extends DAO implements DAO_Interface<Cliente, Integer> 
             boolean dniUnique = (resultado.getInt(1) == 0);
             
             // consulta 2: buscar todos los clientes con cli.email == obj.email
-            statement = connect.prepareStatement("SELECT count(*) FROM cliente cli WHERE cli.email = ? AND cli.id_cliente <> ?;");
+            statement = connect.prepareStatement("SELECT count(*) FROM cliente cli WHERE cli.email = ? AND cli.id_cliente <> ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setString(1, obj.getEmail());
             statement.setInt(2, obj.getId());
 
@@ -206,7 +206,7 @@ public class DAO_Cliente extends DAO implements DAO_Interface<Cliente, Integer> 
         // (intentar) ejecutar eliminacion
         try {
             // consulta 1: comprobar que id cliente no aparece en ninguna averia
-            statement = connect.prepareStatement("SELECT count(*) FROM averia a WHERE a.fk_cliente = ?;");
+            statement = connect.prepareStatement("SELECT count(*) FROM averia a WHERE a.fk_cliente = ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setInt(1, obj.getId());
 
             // ejecutar consulta
@@ -222,7 +222,7 @@ public class DAO_Cliente extends DAO implements DAO_Interface<Cliente, Integer> 
             boolean zeroAverias = (resultado.getInt(1) == 0);
 
             // consulta 2: comprobar que id cliente no aparece en ninguna venta
-            statement = connect.prepareStatement("SELECT count(*) FROM venta v WHERE v.fk_cliente = ?;");
+            statement = connect.prepareStatement("SELECT count(*) FROM venta v WHERE v.fk_cliente = ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setInt(1, obj.getId());
 
             // ejecutar consulta
@@ -288,7 +288,7 @@ public class DAO_Cliente extends DAO implements DAO_Interface<Cliente, Integer> 
         // (intentar) ejecutar busqueda
         try {
             // consulta 1: buscar todos los datos del cliente cli.id_cliente = id
-            statement = connect.prepareStatement("SELECT cli.id_cliente, cli.dni, cli.nombre, cli.apellidos, cli.email, direccion FROM cliente cli WHERE cli.id_cliente = ?;");
+            statement = connect.prepareStatement("SELECT cli.id_cliente, cli.dni, cli.nombre, cli.apellidos, cli.email, direccion FROM cliente cli WHERE cli.id_cliente = ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setInt(1, id);
 
             // ejecutar consulta
@@ -341,7 +341,7 @@ public class DAO_Cliente extends DAO implements DAO_Interface<Cliente, Integer> 
         // (intentar) ejecutar busqueda
         try {
             // consulta 1: buscar todos los clientes
-            statement = connect.prepareStatement("SELECT cli.id_cliente, cli.dni, cli.nombre, cli.apellidos, cli.email, direccion FROM cliente cli;");
+            statement = connect.prepareStatement("SELECT cli.id_cliente, cli.dni, cli.nombre, cli.apellidos, cli.email, direccion FROM cliente cli;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
             // ejecutar consulta
             resultado = statement.executeQuery();
@@ -394,7 +394,7 @@ public class DAO_Cliente extends DAO implements DAO_Interface<Cliente, Integer> 
         // (intentar) ejecutar busqueda
         try {
             // consulta 1: buscar todos los clientes
-            statement = connect.prepareStatement("SELECT cli.id_cliente, cli.dni, cli.nombre, cli.apellidos, cli.email, direccion FROM cliente cli ORDER BY cli.nombre ASC;");
+            statement = connect.prepareStatement("SELECT cli.id_cliente, cli.dni, cli.nombre, cli.apellidos, cli.email, direccion FROM cliente cli ORDER BY cli.nombre ASC;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
             // ejecutar consulta
             resultado = statement.executeQuery();

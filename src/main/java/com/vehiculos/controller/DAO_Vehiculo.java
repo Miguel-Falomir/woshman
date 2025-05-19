@@ -39,7 +39,7 @@ public class DAO_Vehiculo extends DAO implements DAO_Interface<Vehiculo, Integer
         // (intentar) ejecutar insercion
         try {
             // consulta 1: buscar todos los vehiculos con v.matricula == obj.matricula
-            statement = connect.prepareStatement("SELECT count(*) FROM vehiculo v WHERE v.matricula = ?;");
+            statement = connect.prepareStatement("SELECT count(*) FROM vehiculo v WHERE v.matricula = ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setString(1, obj.getMatricula());
 
             // ejecutar consulta
@@ -55,7 +55,7 @@ public class DAO_Vehiculo extends DAO implements DAO_Interface<Vehiculo, Integer
             boolean matriculaUnique = (resultado.getInt(1) == 0);
             if (matriculaUnique) {
                 // consulta 2: contar cantidad filas
-                statement = connect.prepareStatement("SELECT count(*) FROM vehiculo;");
+                statement = connect.prepareStatement("SELECT count(*) FROM vehiculo;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
                 // ejecutar consulta
                 resultado = statement.executeQuery();
@@ -116,7 +116,7 @@ public class DAO_Vehiculo extends DAO implements DAO_Interface<Vehiculo, Integer
         // (intentar) ejecutar actualizacion
         try {
             // consulta 1: comprobar que la nueva matricula no se repite
-            statement = connect.prepareStatement("SELECT count(*) FROM vehiculo v WHERE v.matricula = ? AND v.id_vehiculo <> ?;");
+            statement = connect.prepareStatement("SELECT count(*) FROM vehiculo v WHERE v.matricula = ? AND v.id_vehiculo <> ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setString(1, obj.getMatricula());
             statement.setInt(2, obj.getId());
 
@@ -181,7 +181,7 @@ public class DAO_Vehiculo extends DAO implements DAO_Interface<Vehiculo, Integer
             // consulta 1: comprobar que obj.id no aparece en ninguna averia
             // si se intenta borrar un vehiculo que aparece en X averias, antes de borrar las averias
             // la base de datos lanza un error al programa
-            statement = connect.prepareStatement("SELECT count(*) FROM averia a JOIN vehiculo v ON a.fk_vehiculo = v.id_vehiculo WHERE v.id_vehiculo = ?;");
+            statement = connect.prepareStatement("SELECT count(*) FROM averia a JOIN vehiculo v ON a.fk_vehiculo = v.id_vehiculo WHERE v.id_vehiculo = ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setInt(1, obj.getId());
 
             // ejecutar consulta
@@ -250,7 +250,7 @@ public class DAO_Vehiculo extends DAO implements DAO_Interface<Vehiculo, Integer
         // (intentar) ejecutar busqueda
         try {
             // consulta 1: buscar todos los datos de vehiculo, modelo, categoria y marca relativos a vehiculo veh.id_vehiculo = id
-            statement = connect.prepareStatement("SELECT veh.id_vehiculo, veh.matricula, mo.id_modelo, mo.nombre, cat.id_categoria, cat.nombre, cat.descripcion, ma.id_marca, ma.nombre FROM vehiculo veh JOIN modelo mo ON mo.id_modelo = veh.fk_modelo JOIN categoria cat ON mo.fk_categoria = cat.id_categoria JOIN marca ma ON ma.id_marca = mo.fk_marca WHERE veh.id_vehiculo = ?;");
+            statement = connect.prepareStatement("SELECT veh.id_vehiculo, veh.matricula, mo.id_modelo, mo.nombre, cat.id_categoria, cat.nombre, cat.descripcion, ma.id_marca, ma.nombre FROM vehiculo veh JOIN modelo mo ON mo.id_modelo = veh.fk_modelo JOIN categoria cat ON mo.fk_categoria = cat.id_categoria JOIN marca ma ON ma.id_marca = mo.fk_marca WHERE veh.id_vehiculo = ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setInt(1, id);
 
             // ejecutar consulta
@@ -315,7 +315,7 @@ public class DAO_Vehiculo extends DAO implements DAO_Interface<Vehiculo, Integer
         // (intentar) ejecutar busqueda
         try {
             // consulta 1: buscar todos los datos de vehiculo, modelo, categoria y marca de una tajada
-            statement = connect.prepareStatement("SELECT veh.id_vehiculo, veh.matricula, mo.id_modelo, mo.nombre, cat.id_categoria, cat.nombre, cat.descripcion, ma.id_marca, ma.nombre FROM vehiculo veh JOIN modelo mo ON mo.id_modelo = veh.fk_modelo JOIN categoria cat ON mo.fk_categoria = cat.id_categoria JOIN marca ma ON ma.id_marca = mo.fk_marca ORDER BY veh.id_vehiculo ASC;");
+            statement = connect.prepareStatement("SELECT veh.id_vehiculo, veh.matricula, mo.id_modelo, mo.nombre, cat.id_categoria, cat.nombre, cat.descripcion, ma.id_marca, ma.nombre FROM vehiculo veh JOIN modelo mo ON mo.id_modelo = veh.fk_modelo JOIN categoria cat ON mo.fk_categoria = cat.id_categoria JOIN marca ma ON ma.id_marca = mo.fk_marca ORDER BY veh.id_vehiculo ASC;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
             // ejecutar consulta
             resultado = statement.executeQuery();

@@ -40,7 +40,7 @@ public class DAO_Empleado extends DAO implements DAO_Interface<Empleado, Integer
         // (intentar) ejecutar insercion
         try {
             // consulta 1: comprobar que obj.password y obj.username no se repitan
-            statement = connect.prepareStatement("SELECT count(*) FROM empleado e WHERE e.password = ? OR e.username = ?;");
+            statement = connect.prepareStatement("SELECT count(*) FROM empleado e WHERE e.password = ? OR e.username = ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setString(1, obj.getPassword());
             statement.setString(2, obj.getUsername());
 
@@ -58,7 +58,7 @@ public class DAO_Empleado extends DAO implements DAO_Interface<Empleado, Integer
 
             if (userUnique){
                 // consulta 2: buscar cantidad usuarios
-                statement = connect.prepareStatement("SELECT count(*) FROM empleado;");
+                statement = connect.prepareStatement("SELECT count(*) FROM empleado;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
                 
                 // ejecutar consulta
                 resultado = statement.executeQuery();
@@ -74,7 +74,7 @@ public class DAO_Empleado extends DAO implements DAO_Interface<Empleado, Integer
                 obj.setId(nuevoID);
                 
                 // consulta 3: buscar rol 1 (mecanico) por defecto //////
-                statement = connect.prepareStatement("SELECT * FROM rol r WHERE r.id_rol = 1");
+                statement = connect.prepareStatement("SELECT * FROM rol r WHERE r.id_rol = 1;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
                 
                 // ejecutar consulta
                 resultado = statement.executeQuery();
@@ -93,7 +93,7 @@ public class DAO_Empleado extends DAO implements DAO_Interface<Empleado, Integer
                 );
                 
                 // consulta 4: Buscar permisos del rol //////////////////
-                statement = connect.prepareStatement("SELECT p.* FROM permiso p JOIN rol_has_permiso h ON p.id_permiso = h.permiso JOIN rol r ON h.rol = r.id_rol WHERE r.id_rol = ?");
+                statement = connect.prepareStatement("SELECT p.* FROM permiso p JOIN rol_has_permiso h ON p.id_permiso = h.permiso JOIN rol r ON h.rol = r.id_rol WHERE r.id_rol = ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
                 statement.setLong(1, auxRol.getId());
                 
                 // ejecutar consulta
@@ -176,7 +176,7 @@ public class DAO_Empleado extends DAO implements DAO_Interface<Empleado, Integer
         // (intentar) ejecutar busqueda
         try {
             // consulta 1: Buscar usuario ///////////////////////////
-            statement = connect.prepareStatement("SELECT * FROM empleado e WHERE e.id_empleado = ?;");
+            statement = connect.prepareStatement("SELECT * FROM empleado e WHERE e.id_empleado = ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setLong(1, id);
 
             // ejecutar consulta
@@ -198,7 +198,7 @@ public class DAO_Empleado extends DAO implements DAO_Interface<Empleado, Integer
             );
 
             // consulta 2: Buscar rol del usuario ///////////////////
-            statement = connect.prepareStatement("SELECT * FROM rol r WHERE r.id_rol = ?");
+            statement = connect.prepareStatement("SELECT * FROM rol r WHERE r.id_rol = ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setLong(1, resultado.getInt(2));
 
             // ejecutar consulta
@@ -218,7 +218,7 @@ public class DAO_Empleado extends DAO implements DAO_Interface<Empleado, Integer
             );
 
             // consulta 3: Buscar permisos del rol //////////////////
-            statement = connect.prepareStatement("SELECT p.* FROM permiso p JOIN rol_has_permiso h ON p.id_permiso = h.permiso JOIN rol r ON h.rol = r.id_rol WHERE r.id_rol = ?");
+            statement = connect.prepareStatement("SELECT p.* FROM permiso p JOIN rol_has_permiso h ON p.id_permiso = h.permiso JOIN rol r ON h.rol = r.id_rol WHERE r.id_rol = ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setLong(1, auxRol.getId());
 
             // ejecutar consulta
@@ -279,7 +279,7 @@ public class DAO_Empleado extends DAO implements DAO_Interface<Empleado, Integer
         // (intentar) ejecutar busqueda
         try {
             // consulta 1: Buscar usuario ///////////////////////////
-            statement = connect.prepareStatement("SELECT * FROM empleado e WHERE e.username = ?;");
+            statement = connect.prepareStatement("SELECT * FROM empleado e WHERE e.username = ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setString(1, nombre);
 
             // ejecutar consulta
@@ -301,7 +301,7 @@ public class DAO_Empleado extends DAO implements DAO_Interface<Empleado, Integer
             );
 
             // consulta 2: Buscar rol ///////////////////////////////
-            statement = connect.prepareStatement("SELECT * FROM rol r WHERE r.id_rol = ?");
+            statement = connect.prepareStatement("SELECT * FROM rol r WHERE r.id_rol = ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setLong(1, resultado.getInt(2));
             
             // ejecutar consulta
@@ -321,7 +321,7 @@ public class DAO_Empleado extends DAO implements DAO_Interface<Empleado, Integer
             );
 
             // consulta 3: Buscar permisos del rol //////////////////
-            statement = connect.prepareStatement("SELECT p.* FROM permiso p JOIN rol_has_permiso h ON p.id_permiso = h.permiso JOIN rol r ON h.rol = r.id_rol WHERE r.id_rol = ?");
+            statement = connect.prepareStatement("SELECT p.* FROM permiso p JOIN rol_has_permiso h ON p.id_permiso = h.permiso JOIN rol r ON h.rol = r.id_rol WHERE r.id_rol = ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setLong(1, auxRol.getId());
         
             // ejecutar consulta

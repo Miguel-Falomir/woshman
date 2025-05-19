@@ -36,7 +36,7 @@ public class DAO_Marca extends DAO implements DAO_Interface<Marca, Integer> {
         // (intentar) ejecutar insercion
         try {
             // consulta 1: buscar todas las marcas con ma.nombre == obj.nombre
-            statement = connect.prepareStatement("SELECT count(*) FROM marca ma WHERE ma.nombre = ?;");
+            statement = connect.prepareStatement("SELECT count(*) FROM marca ma WHERE ma.nombre = ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setString(1, obj.getNombre());
 
             // ejecutar consulta
@@ -52,7 +52,7 @@ public class DAO_Marca extends DAO implements DAO_Interface<Marca, Integer> {
             boolean nombreUnique = (resultado.getInt(1) == 0);
             if (nombreUnique) {
                 // consulta 2: contar cantidad filas
-                statement = connect.prepareStatement("SELECT count(*) FROM marca;");
+                statement = connect.prepareStatement("SELECT count(*) FROM marca;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
                 // ejecutar consulta
                 resultado = statement.executeQuery();
@@ -111,7 +111,7 @@ public class DAO_Marca extends DAO implements DAO_Interface<Marca, Integer> {
         // (intentar) ejecutar actualizacion
         try {
             // consulta 1: comprobar que el nombre de la marca no se repite
-            statement = connect.prepareStatement("SELECT count(*) FROM marca ma WHERE ma.nombre = ? AND ma.id_marca <> ?;");
+            statement = connect.prepareStatement("SELECT count(*) FROM marca ma WHERE ma.nombre = ? AND ma.id_marca <> ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setString(1, obj.getNombre());
             statement.setInt(2, obj.getId());
 
@@ -174,7 +174,7 @@ public class DAO_Marca extends DAO implements DAO_Interface<Marca, Integer> {
         // (intentar) ejecutar borrado
         try {
             // consulta 1: comprobar que obj.id no aparece en ningun modelo
-            statement = connect.prepareStatement("SELECT count(*) FROM modelo mo JOIN marca ma ON mo.fk_marca = ma.id_marca WHERE ma.id_marca = ?;");
+            statement = connect.prepareStatement("SELECT count(*) FROM modelo mo JOIN marca ma ON mo.fk_marca = ma.id_marca WHERE ma.id_marca = ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setInt(1, obj.getId());
 
             // ejecutar consulta
@@ -241,7 +241,7 @@ public class DAO_Marca extends DAO implements DAO_Interface<Marca, Integer> {
         // (intentar) ejecutar busqueda
         try {
             // consulta 1: Buscar marca con ma.id_marca = id
-            statement = connect.prepareStatement("SELECT ma.id_marca, ma.nombre FROM marca ma WHERE ma.id_marca = ?;");
+            statement = connect.prepareStatement("SELECT ma.id_marca, ma.nombre FROM marca ma WHERE ma.id_marca = ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setInt(1, id);
 
             // ejecutar consulta
@@ -290,7 +290,7 @@ public class DAO_Marca extends DAO implements DAO_Interface<Marca, Integer> {
         // (intentar) ejecutar busqueda
         try {
             // consulta 1: Buscar todas las marcas
-            statement = connect.prepareStatement("SELECT ma.id_marca, ma.nombre FROM marca ma ORDER BY ma.id_marca ASC;");
+            statement = connect.prepareStatement("SELECT ma.id_marca, ma.nombre FROM marca ma ORDER BY ma.id_marca ASC;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
             // ejecutar consulta
             resultado = statement.executeQuery();
@@ -338,7 +338,7 @@ public class DAO_Marca extends DAO implements DAO_Interface<Marca, Integer> {
         // (intentar) ejecutar busqueda
         try {
             // consulta 1: Buscar todas las marcas por orden alfabetico
-            statement = connect.prepareStatement("SELECT ma.id_marca, ma.nombre FROM marca ma ORDER BY ma.nombre ASC;");
+            statement = connect.prepareStatement("SELECT ma.id_marca, ma.nombre FROM marca ma ORDER BY ma.nombre ASC;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
             // ejecutar consulta
             resultado = statement.executeQuery();

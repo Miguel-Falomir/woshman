@@ -53,7 +53,7 @@ public class DAO_Permiso extends DAO implements DAO_Interface<Permiso, Integer>{
         // (intentar) ejecutar busqueda
         try {
             // consulta 1: buscar todos los permisos ////////////////
-            statement = connect.prepareStatement("SELECT p.id_permiso, p.nombre, p.descripcion FROM permiso p WHERE p.id_permiso = ?;");
+            statement = connect.prepareStatement("SELECT p.id_permiso, p.nombre, p.descripcion FROM permiso p WHERE p.id_permiso = ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setInt(1, id);
 
             // ejecutar consulta
@@ -103,7 +103,7 @@ public class DAO_Permiso extends DAO implements DAO_Interface<Permiso, Integer>{
         // (intentar) ejecutar busqueda
         try {
             // consulta 1: buscar todos los permisos ////////////////
-            statement = connect.prepareStatement("SELECT p.id_permiso, p.nombre, p.descripcion FROM permiso p ORDER BY p.id_permiso ASC;");
+            statement = connect.prepareStatement("SELECT p.id_permiso, p.nombre, p.descripcion FROM permiso p ORDER BY p.id_permiso ASC;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
             // ejecutar consulta
             resultado = statement.executeQuery();
@@ -152,7 +152,7 @@ public class DAO_Permiso extends DAO implements DAO_Interface<Permiso, Integer>{
         // (intentar) ejecutar busqueda
         try {
             // consulta 1: buscar permisos del rol indicado /////////
-            statement = connect.prepareStatement("SELECT p.id_permiso, p.nombre, p.descripcion FROM permiso p JOIN rol_has_permiso h ON p.id_permiso = h.permiso WHERE h.rol = ? ORDER BY p.id_permiso ASC;");
+            statement = connect.prepareStatement("SELECT p.id_permiso, p.nombre, p.descripcion FROM permiso p JOIN rol_has_permiso h ON p.id_permiso = h.permiso WHERE h.rol = ? ORDER BY p.id_permiso ASC;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setInt(1, id_rol);
 
             // ejecutar consulta

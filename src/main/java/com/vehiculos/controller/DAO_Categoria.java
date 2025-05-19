@@ -36,7 +36,7 @@ public class DAO_Categoria extends DAO implements DAO_Interface<Categoria, Integ
         // (intentar) ejecutar insercion
         try {
             // consulta 1: buscar todas las categorias con cat.nombre == obj.nombre
-            statement = connect.prepareStatement("SELECT count(*) FROM categoria cat WHERE cat.nombre = ?;");
+            statement = connect.prepareStatement("SELECT count(*) FROM categoria cat WHERE cat.nombre = ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setString(1, obj.getNombre());
 
             // ejecutar consulta
@@ -52,7 +52,7 @@ public class DAO_Categoria extends DAO implements DAO_Interface<Categoria, Integ
             boolean nombreUnique = (resultado.getInt(1) == 0);
             if (nombreUnique) {
                 // consulta 2: contar cantidad filas
-                statement = connect.prepareStatement("SELECT count(*) FROM categoria;");
+                statement = connect.prepareStatement("SELECT count(*) FROM categoria;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
                 // ejecutar consulta
                 resultado = statement.executeQuery();
@@ -113,7 +113,7 @@ public class DAO_Categoria extends DAO implements DAO_Interface<Categoria, Integ
         // (intentar) ejecutar actualizacion
         try {
             // comprobar que el nuevo nombre no se repite
-            statement = connect.prepareStatement("SELECT count(*) FROM categoria cat WHERE cat.nombre = ? AND cat.id_marca <> ?;");
+            statement = connect.prepareStatement("SELECT count(*) FROM categoria cat WHERE cat.nombre = ? AND cat.id_marca <> ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setString(1, obj.getNombre());
             statement.setInt(2, obj.getId());
 
@@ -176,7 +176,7 @@ public class DAO_Categoria extends DAO implements DAO_Interface<Categoria, Integ
         // (intentar) ejecutar eliminacion
         try {
             // consulta 1: comprobar que obj.id no aparece en ningun modelo
-            statement = connect.prepareStatement("SELECT count(*) FROM modelo mo JOIN categoria cat ON cat.id_categoria = mo.fk_categoria WHERE cat.id_categoria = ?;");
+            statement = connect.prepareStatement("SELECT count(*) FROM modelo mo JOIN categoria cat ON cat.id_categoria = mo.fk_categoria WHERE cat.id_categoria = ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setInt(1, obj.getId());
 
             // ejecutar consulta
@@ -243,7 +243,7 @@ public class DAO_Categoria extends DAO implements DAO_Interface<Categoria, Integ
         // (intentar) ejecutar busqueda
         try{
             // consulta 1: Buscar categoria con cat.id_categoria = id
-            statement = connect.prepareStatement("SELECT cat.id_categoria, cat.nombre, cat.descripcion FROM categoria cat WHERE cat.id_categoria = ?;");
+            statement = connect.prepareStatement("SELECT cat.id_categoria, cat.nombre, cat.descripcion FROM categoria cat WHERE cat.id_categoria = ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setInt(1, id);
 
             // ejecutar consulta
@@ -293,7 +293,7 @@ public class DAO_Categoria extends DAO implements DAO_Interface<Categoria, Integ
         // (intentar) ejecutar busqueda
         try {
             // consulta 1: Buscar todas las categorias
-            statement = connect.prepareStatement("SELECT cat.id_categoria, cat.nombre, cat.descripcion FROM categoria cat;");
+            statement = connect.prepareStatement("SELECT cat.id_categoria, cat.nombre, cat.descripcion FROM categoria cat;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
             // ejecutar consulta
             resultado = statement.executeQuery();

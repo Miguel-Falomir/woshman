@@ -35,7 +35,7 @@ public class DAO_Tipo_Pieza extends DAO implements DAO_Interface<Tipo_Pieza, Int
         // (intentar) ejecutar insercion
         try{
             // consulta 1: contar tipos pieza con tipi.nombre == obj.nombre
-            statement = connect.prepareStatement("SELECT count(*) FROM tipo_pieza tipi WHERE tipi.nombre = ?;");
+            statement = connect.prepareStatement("SELECT count(*) FROM tipo_pieza tipi WHERE tipi.nombre = ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setString(1, obj.getNombre());
 
             // ejecutar consulta
@@ -51,7 +51,7 @@ public class DAO_Tipo_Pieza extends DAO implements DAO_Interface<Tipo_Pieza, Int
             boolean nombreUnique = (resultado.getInt(1) == 0);
             if (nombreUnique) {
                 // consulta 2: contar cantidad filas
-                statement = connect.prepareStatement("SELECT count(*) FROM tipo_pieza;");
+                statement = connect.prepareStatement("SELECT count(*) FROM tipo_pieza;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
                 // ejecutar consulta
                 resultado = statement.executeQuery();
@@ -112,7 +112,7 @@ public class DAO_Tipo_Pieza extends DAO implements DAO_Interface<Tipo_Pieza, Int
         // (intentar) ejecutar actualizacion
         try {
             // consulta 1: contar tipos pieza con tipi.nombre == obj.nombre
-            statement = connect.prepareStatement("SELECT count(*) FROM tipo_pieza tipi WHERE tipi.nombre = ?;");
+            statement = connect.prepareStatement("SELECT count(*) FROM tipo_pieza tipi WHERE tipi.nombre = ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setString(1, obj.getNombre());
 
             // ejecutar consulta
@@ -174,7 +174,7 @@ public class DAO_Tipo_Pieza extends DAO implements DAO_Interface<Tipo_Pieza, Int
         // (intentar) ejecutar borrado
         try{
             // consulta 1: comprobar que el tipo no se encuentra en ninguna pieza
-            statement = connect.prepareStatement("SELECT count(*) FROM pieza pi WHERE pi.fk_tipo_pieza = ?;");
+            statement = connect.prepareStatement("SELECT count(*) FROM pieza pi WHERE pi.fk_tipo_pieza = ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setInt(1, obj.getId());
 
             // ejecutar consulta
@@ -241,7 +241,7 @@ public class DAO_Tipo_Pieza extends DAO implements DAO_Interface<Tipo_Pieza, Int
         // (intentar) ejecutar busqueda
         try{
             // consulta 1: buscar tipo pieza por ID
-            statement = connect.prepareStatement("SELECT tipi.id_tipo_pieza, tipi.nombre, tipi.descripcion FROM tipo_pieza tipi WHERE tipi.id_tipo_pieza = ?;");
+            statement = connect.prepareStatement("SELECT tipi.id_tipo_pieza, tipi.nombre, tipi.descripcion FROM tipo_pieza tipi WHERE tipi.id_tipo_pieza = ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setInt(1, id);
 
             // ejecutar consulta
@@ -291,7 +291,7 @@ public class DAO_Tipo_Pieza extends DAO implements DAO_Interface<Tipo_Pieza, Int
         // (intentar) ejecutar busqueda
         try{
             // consulta 1: buscar tipo pieza por ID
-            statement = connect.prepareStatement("SELECT tipi.id_tipo_pieza, tipi.nombre, tipi.descripcion FROM tipo_pieza tipi;");
+            statement = connect.prepareStatement("SELECT tipi.id_tipo_pieza, tipi.nombre, tipi.descripcion FROM tipo_pieza tipi;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
             // ejecutar consulta
             resultado = statement.executeQuery();

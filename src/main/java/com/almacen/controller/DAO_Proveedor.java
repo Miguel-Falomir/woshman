@@ -36,7 +36,7 @@ public class DAO_Proveedor extends DAO implements DAO_Interface<Proveedor, Integ
         // (intentar) ejecutar insercion
         try{
             // consulta 1: contar proveedores con prov.cif == obj.cif || prov.nombre == obj.nombre || prov.email == obj.email
-            statement = connect.prepareStatement("SELECT count(*) FROM proveedor prov WHERE prov.cif = ? OR prov.nombre = ? OR email = ?;");
+            statement = connect.prepareStatement("SELECT count(*) FROM proveedor prov WHERE prov.cif = ? OR prov.nombre = ? OR email = ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setString(1, obj.getCif());
             statement.setString(2, obj.getNombre());
             statement.setString(3, obj.getEmail());
@@ -54,7 +54,7 @@ public class DAO_Proveedor extends DAO implements DAO_Interface<Proveedor, Integ
             boolean datosUnique = (resultado.getInt(1) == 0);
             if (datosUnique) {
                 // consulta 2: contar cantidad filas
-                statement = connect.prepareStatement("SELECT count(*) FROM proveedor;");
+                statement = connect.prepareStatement("SELECT count(*) FROM proveedor;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
                 // ejecutar consulta
                 resultado = statement.executeQuery();
@@ -117,7 +117,7 @@ public class DAO_Proveedor extends DAO implements DAO_Interface<Proveedor, Integ
         // (intentar) ejecutar actualizacion
         try {
             // consulta 1: buscar proveedores con prov.cif == obj.cif || prov.nombre == obj.nombre || prov.email == obj.email
-            statement = connect.prepareStatement("SELECT count(*) FROM proveedor prov WHERE (prov.cif = ? OR prov.nombre = ? OR email = ?) AND prov.id_proveedor <> ?;");
+            statement = connect.prepareStatement("SELECT count(*) FROM proveedor prov WHERE (prov.cif = ? OR prov.nombre = ? OR email = ?) AND prov.id_proveedor <> ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setString(1, obj.getCif());
             statement.setString(2, obj.getNombre());
             statement.setString(3, obj.getEmail());
@@ -184,7 +184,7 @@ public class DAO_Proveedor extends DAO implements DAO_Interface<Proveedor, Integ
         // (intentar) ejecutar borrado
         try{
             // consulta 1: comprobar que el proveedor no se encuentra en ninguna pieza
-            statement = connect.prepareStatement("SELECT count(*) FROM pieza pi WHERE pi.fk_proveedor = ?;");
+            statement = connect.prepareStatement("SELECT count(*) FROM pieza pi WHERE pi.fk_proveedor = ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setInt(1, obj.getId());
 
             // ejecutar consulta
@@ -251,7 +251,7 @@ public class DAO_Proveedor extends DAO implements DAO_Interface<Proveedor, Integ
         // (intentar) ejecutar busqueda
         try{
             // consulta 1: buscar pieza pi.id_pieza = id, tambien su tipo y proveedor
-            statement = connect.prepareStatement("SELECT prov.id_proveedor, prov.cif, prov.nombre, prov.email, prov.direccion FROM proveedor prov WHERE prov.id_proveedor = ?;");
+            statement = connect.prepareStatement("SELECT prov.id_proveedor, prov.cif, prov.nombre, prov.email, prov.direccion FROM proveedor prov WHERE prov.id_proveedor = ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setInt(1, id);
 
             // ejecutar consulta
@@ -303,7 +303,7 @@ public class DAO_Proveedor extends DAO implements DAO_Interface<Proveedor, Integ
         // (intentar) ejecutar busqueda
         try{
             // consulta 1: buscar pieza pi.id_pieza = id, tambien su tipo y proveedor
-            statement = connect.prepareStatement("SELECT prov.id_proveedor, prov.cif, prov.nombre, prov.email, prov.direccion FROM proveedor prov;");
+            statement = connect.prepareStatement("SELECT prov.id_proveedor, prov.cif, prov.nombre, prov.email, prov.direccion FROM proveedor prov;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
             // ejecutar consulta
             resultado = statement.executeQuery();
