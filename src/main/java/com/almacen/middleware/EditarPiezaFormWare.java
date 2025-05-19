@@ -193,21 +193,44 @@ public class EditarPiezaFormWare extends FormWare {
         Alert alert = new Alert(AlertType.WARNING);
         String nombre = pieza.getNombre();
 
-        // (intentar) ejecutar insercion
-        boolean notFulfilled = pieza.getId() == null || pieza.getNombre() == null || pieza.getDescripcion() == null || pieza.getTipo() == null || pieza.getProveedor() == null || pieza.getCantidad() == null || pieza.getPrecio() == null;
-        boolean completed = daoPieza.update(pieza);
-        if (completed) {
-            alert.setAlertType(AlertType.INFORMATION);
-            alert.setHeaderText("OPERACIÓN COMPLETADA");
-            alert.setContentText("La pieza '" + nombre + "' ha sido actualizada");
-        } else if (notFulfilled) {
+        // comprobar que se han rellenado todos los campos requeridos
+        System.out.println(pieza.getNombre() + "\t" + pieza.getNombre().length() + "\t" + Input_Nombre.getText());
+        boolean nombreMissing = (pieza.getNombre() == "" || pieza.getNombre() == null || pieza.getNombre().length() == 0);
+        boolean tipoMissing = (pieza.getTipo() == null);
+        boolean proveedorMissing = (pieza.getProveedor() == null);
+        boolean cantidadMissing = (pieza.getCantidad() == null || pieza.getCantidad() <= 0);
+        boolean precioMissing = (pieza.getPrecio() == null || pieza.getPrecio() <= 0.0);
+        if (nombreMissing) { // falta 'Nombre'
             alert.setAlertType(AlertType.ERROR);
             alert.setHeaderText("ERROR FORMULARIO");
-            alert.setContentText("Deben rellenarse TODOS los datos del formulario");
-        } else {
+            alert.setContentText("Campo 'Nombre' es obligatorio.");
+        } else if (tipoMissing) { // falta 'Tipo Pieza'
             alert.setAlertType(AlertType.ERROR);
-            alert.setHeaderText("ERROR SQL");
-            alert.setContentText("Datos duplicados en pieza '" + nombre + "'. Recuerde que el nombre no puede repetirse.");
+            alert.setHeaderText("ERROR FORMULARIO");
+            alert.setContentText("Campo 'Tipo Pieza' es obligatorio.");
+        } else if (proveedorMissing) { // falta 'Proveedor'
+            alert.setAlertType(AlertType.ERROR);
+            alert.setHeaderText("ERROR FORMULARIO");
+            alert.setContentText("Campo 'Proveedor' es obligatorio.");
+        } else if (cantidadMissing) { // falta 'cantidad'
+            alert.setAlertType(AlertType.ERROR);
+            alert.setHeaderText("ERROR FORMULARIO");
+            alert.setContentText("Campo 'Cantidad' es obligatorio.");
+        } else if (precioMissing) { // falta 'Precio'
+            alert.setAlertType(AlertType.ERROR);
+            alert.setHeaderText("ERROR FORMULARIO");
+            alert.setContentText("Campo 'Precio' es obligatorio.");
+        } else { // con todos los campos rellenados, (intentar) ejecutar actualizacion
+            boolean completed = daoPieza.update(pieza);
+            if (completed) {
+                alert.setAlertType(AlertType.INFORMATION);
+                alert.setHeaderText("OPERACIÓN COMPLETADA");
+                alert.setContentText("La pieza '" + nombre + "' ha sido actualizada");
+            } else {
+                alert.setAlertType(AlertType.ERROR);
+                alert.setHeaderText("ERROR SQL");
+                alert.setContentText("Datos duplicados en pieza '" + nombre + "'. Recuerde que el nombre no puede repetirse.");
+            }
         }
 
         // pase lo que pase, mostrarlo mediante la alert

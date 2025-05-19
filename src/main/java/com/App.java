@@ -14,6 +14,7 @@ import com.empleados.model.Permiso;
 import com.menu.middleware.MainMiddleWare;
 import com.utilities.DB_Connector;
 import com.utilities.MiddleWare;
+import com.vehiculos.middleware.ListaVehiculosSubMenuWare;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -62,7 +63,7 @@ public class App extends Application {
     // METODO CAMBIAR DE VENTANA
 
     public void changeStage(String newModule, String newStage, String title, int width, int heigth, Boolean resize, Class<? extends MiddleWare> midWareClass){
-        
+
         // preparar archivo .fxml
         FXMLLoader loader = new FXMLLoader(
             App.class.getResource(newModule + "/gui/" + newStage + ".fxml")
@@ -172,9 +173,15 @@ public class App extends Application {
                 mainStage.setMinWidth(width);
                 mainStage.setMinHeight(heigth);
             }
-
+            
             // mostrar ventana
             mainStage.show();
+
+            // abrir submenu 'Lista Vehiculos' cada vez que se inicializa 'MainMiddleWare'
+            if (midWareClass.equals(MainMiddleWare.class)){
+                MainMiddleWare main = (MainMiddleWare) loader.getController();
+                main.changeSubMenu("vehiculos", "submenu_lista_vehiculos", "Lista Vehiculos", ListaVehiculosSubMenuWare.class);
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
