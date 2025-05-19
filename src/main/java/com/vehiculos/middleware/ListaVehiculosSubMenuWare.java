@@ -149,14 +149,14 @@ public class ListaVehiculosSubMenuWare extends SubMenuWare {
             TreeItem<Titem> Titem_Marca = new TreeItem<Titem>( new Titem(
                 marca.getId(),
                 marca.getNombre(),
-                Titem.Tipo.MARCA
+                Titem.Tipo_Item.MARCA
             ));
             List<Modelo> auxModelos = daoModelo.searchByMarca(marca.getId());
             for (Modelo modelo : auxModelos) { // recorrer modelos de cada marca
                 TreeItem<Titem> Titem_Modelo = new TreeItem<Titem>( new Titem(
                     modelo.getId(),
                     modelo.getNombre(),
-                    Titem.Tipo.MODELO
+                    Titem.Tipo_Item.MODELO
                 ));
                 Titem_Marca.getChildren().add(Titem_Modelo); // agregar modelo a marca
             }
@@ -169,7 +169,6 @@ public class ListaVehiculosSubMenuWare extends SubMenuWare {
             if (newSelection != null) {
                 Func_Calculate_Predicate();
             }
-            
         });
         
         // asignar TreeItem al TreeView
@@ -190,7 +189,7 @@ public class ListaVehiculosSubMenuWare extends SubMenuWare {
         // recopilar TODOS los valores de entrada
         Titem titem = TreeV_Marca_Modelo.getSelectionModel().getSelectedItem().getValue();
         String regex = Input_Matricula.getText();
-        Titem.Tipo tipo = titem.getTipo();
+        Titem.Tipo_Item tipo = titem.getTipo();
         Integer id = titem.getId();
 
         // aplicar predicado
@@ -205,7 +204,7 @@ public class ListaVehiculosSubMenuWare extends SubMenuWare {
                 filterVehiculos.setPredicate(i -> i.getMatricula().contains(regex));
                 break;
             default:
-                System.out.println("No especificó ");
+                System.out.println("Este texto no debería poder imprimirse");
                 break;
         }
     }

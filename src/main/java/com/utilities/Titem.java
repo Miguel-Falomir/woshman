@@ -2,9 +2,9 @@ package com.utilities;
 
 public class Titem {
 
-    // LISTA TIPOS
+    // LISTA TIPOS 
 
-    public static enum Tipo {
+    public static enum Tipo_Item {
         MARCA,
         MODELO
     }
@@ -13,7 +13,7 @@ public class Titem {
 
     private Integer id;
     private String nombre;
-    private Tipo tipo;
+    private Tipo_Item tipo;
 
     // CONSTRUCTOR
 
@@ -21,7 +21,7 @@ public class Titem {
         this.nombre = nombre;
     }
 
-    public Titem(Integer id, String nombre, Tipo tipo){
+    public Titem(Integer id, String nombre, Tipo_Item tipo){
         this.id = id;
         this.nombre = nombre;
         this.tipo = tipo;
@@ -45,11 +45,11 @@ public class Titem {
         this.nombre = nombre;
     }
 
-    public Tipo getTipo() {
+    public Tipo_Item getTipo() {
         return tipo;
     }
 
-    public void setTipo(Tipo tipo) {
+    public void setTipo(Tipo_Item tipo) {
         this.tipo = tipo;
     }
 
