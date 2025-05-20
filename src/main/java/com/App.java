@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.empleados.controller.DAO_Empleado;
 import com.empleados.controller.DAO_Permiso;
 
 import com.empleados.middleware.LoginMiddleWare;

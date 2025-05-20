@@ -79,7 +79,6 @@ public class DAO_Vehiculo extends DAO implements DAO_Interface<Vehiculo, Integer
                 insert = statement.executeUpdate();
                 System.out.println("INSERTAR NUEVO VEHICULO: " + insert);
                 success = true;
-
             } else {
                 System.out.println("ERROR: MATRÍCULA REPETIDA");
             }
@@ -142,7 +141,6 @@ public class DAO_Vehiculo extends DAO implements DAO_Interface<Vehiculo, Integer
                 update = statement.executeUpdate();
                 System.out.println("ACTUALIZAR VEHICULO: " + update);
                 success = true;
-                
             } else {
                 System.out.println("ERROR: MATRÍCULA REPETIDA");
             }
