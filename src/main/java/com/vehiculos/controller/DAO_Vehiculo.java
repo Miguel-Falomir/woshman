@@ -173,7 +173,7 @@ public class DAO_Vehiculo extends DAO implements DAO_Interface<Vehiculo, Integer
         // variables internas
         PreparedStatement statement = null;
         ResultSet resultado = null;
-        int update;
+        int delete;
         boolean success = false;
 
         // (intentar) ejecutar eliminacion
@@ -201,8 +201,8 @@ public class DAO_Vehiculo extends DAO implements DAO_Interface<Vehiculo, Integer
                 statement.setInt(1, obj.getId());
 
                 // ejecutar eliminacion
-                update = statement.executeUpdate();
-                System.out.println("ELIMINAR VEHICULO: " + update);
+                delete = statement.executeUpdate();
+                System.out.println("ELIMINAR VEHICULO: " + delete);
 
                 // consulta 3: actualizar manualmente los IDs de los vehiculos posteriores
                 // ya se que deberia haber hecho la columna autoincremental,
@@ -212,8 +212,8 @@ public class DAO_Vehiculo extends DAO implements DAO_Interface<Vehiculo, Integer
 
                 // ejecutar actualizacion
                 // de nuevo, kashate boludo
-                update = statement.executeUpdate();
-                System.out.println("REORGANIZAR IDs MANUALMENTE: " + update);
+                delete = statement.executeUpdate();
+                System.out.println("REORGANIZAR IDs MANUALMENTE: " + delete);
                 success = true;
             } else {
                 System.out.println("ERROR, EL VEHÍCULO TIENE ASIGNADAS 1 O MÁS AVERÍAS.");

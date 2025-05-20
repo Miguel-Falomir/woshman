@@ -154,14 +154,135 @@ public class DAO_Empleado extends DAO implements DAO_Interface<Empleado, Integer
 
     @Override
     public boolean update(Empleado obj) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+        // variables internas
+        PreparedStatement statement = null;
+        ResultSet resultado = null;
+        int update;
+        boolean success = false;
+
+        // (intentar) ejecutar actualizacion
+        try {
+            // consulta 1: comprobar que el nuevo username no se repite
+            statement = connect.prepareStatement("SELECT count(*) FROM empleado emp WHERE emp.username = ? AND emp.id_empleado <> ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            statement.setString(1, obj.getUsername());
+            statement.setInt(2, obj.getId());
+
+            // ejecutar consulta
+            resultado = statement.executeQuery();
+
+            // forzar que 'resultado' apunte a primera fila
+            if (!resultado.isBeforeFirst()){
+                resultado.beforeFirst();
+            }
+            resultado.next();
+
+            // materializar 'resultado' en booleano
+            boolean usernameUnique = (resultado.getInt(1) == 0);
+            if (usernameUnique) {
+                // consulta 2: actualizar empleado
+                statement = connect.prepareStatement("UPDATE empleado emp SET emp.fk_rol = ?, emp.nombre = ?, emp.apellidos = ?, emp.username = ?, emp.password = ? WHERE emp.id_empleado = ?;");
+                statement.setInt(1, obj.getRol().getId());
+                statement.setString(2, obj.getNombre());
+                statement.setString(3, obj.getApellidos());
+                statement.setString(4, obj.getUsername());
+                statement.setString(5, obj.getPassword());
+                statement.setInt(6, obj.getId());
+
+                // ejecutar actualizacion
+                update = statement.executeUpdate();
+                System.out.println("ACTUALIZAR EMPLEADO: " + update);
+                success = true;
+
+            } else {
+                System.out.println("ERROR: USERNAME REPETIDO");
+            }
+
+        // manejar excepciones
+        } catch (SQLException e){
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        
+        // pase lo que pase, cerrar 'statement'
+        } finally {
+            if (statement != null){
+                try {
+                    statement.close();
+                } catch (SQLException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        // devolver 'success', para indicar si se ha completado la actualizacion
+        return success;
     }
 
     @Override
     public boolean delete(Empleado obj) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+        // variables internas
+        PreparedStatement statement = null;
+        ResultSet resultado = null;
+        int delete;
+        boolean success = false;
+
+        // (intentar) ejecutar eliminacion
+        try {
+            // consulta 1: comprobar que obj.id no aparece en ninguna averia
+            statement = connect.prepareStatement("SELECT count(*) FROM averia ave WHERE ave.fk_empleado = ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            statement.setInt(1, obj.getId());
+
+            // ejecutar consulta
+            resultado = statement.executeQuery();
+
+            // forzar que 'resultado' apunte a primera fila
+            if (!resultado.isBeforeFirst()){
+                resultado.beforeFirst();
+            }
+            resultado.next();
+
+            // materializar 'resultado' en booleano
+            boolean zeroAverias = (resultado.getInt(1) == 0);
+            if (zeroAverias) {
+                // consulta 2: borrar empleado
+                statement = connect.prepareStatement("DELETE FROM empleado emp WHERE emp.id_empleado = ?;");
+                statement.setInt(1, obj.getId());
+
+                // ejecutar eliminacion
+                delete = statement.executeUpdate();
+                System.out.println("ELIMINAR EMPLEADO: " + delete);
+
+                // consulta 3: actualizar manualmente IDs posteriores
+                statement = connect.prepareStatement("UPDATE empleado emp SET emp.id_Empleado = emp.id_empleado - 1 WHERE emp-id_empleado > ?;");
+                statement.setInt(1, obj.getId());
+
+                // ejecutar actualizacion
+                delete = statement.executeUpdate();
+                System.out.println("REORGANIZAR IDs MANUALMENTE: " + delete);
+                success = true;
+            } else {
+                System.out.println("ERROR, EL EMPLEADO TIENE ASIGNADAS 1 O MÁS AVERÍAS.");
+            }
+
+        // manejar excepciones
+        } catch (SQLException e){
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        
+        // pase lo que pase, cerrar 'statement'
+        } finally {
+            if (statement != null){
+                try {
+                    statement.close();
+                } catch (SQLException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        // devolver 'success', para indicar si se ha completado el borrado
+        return success;
     }
 
     @Override
@@ -264,8 +385,93 @@ public class DAO_Empleado extends DAO implements DAO_Interface<Empleado, Integer
 
     @Override
     public List<Empleado> searchAll() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'searchAll'");
+        // variables internas
+        PreparedStatement statement = null;
+        ResultSet resultado_1 = null;
+        ResultSet resultado_2 = null;
+        Empleado auxEmpleado = null;
+        Rol auxRol = null;
+        List<Permiso> auxPermisos = new ArrayList<Permiso>();
+        List<Empleado> respuesta = new ArrayList<Empleado>();
+
+        // (intentar) ejecutar busqueda
+        try {
+            // consulta 1: buscar todos los datos de rol y empleado
+            statement = connect.prepareStatement("SELECT e.id_empleado, e.nombre, e.apellidos, e.username, e.password, r.id_rol, r.nombre, r.descripcion FROM empleado e JOIN rol r ON e.fk_rol = r.id_rol;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        
+            // ejecutar consulta
+            resultado_1 = statement.executeQuery();
+
+            // asegurar que 'resultado' apunte antes de la primera fila
+            if (!resultado_1.isBeforeFirst()){
+                resultado_1.beforeFirst();
+            }
+
+            // agregar todos los resultados a lista 'respuesta'
+            while (resultado_1.next()){
+                // guardar empleado
+                auxEmpleado = new Empleado(
+                    resultado_1.getInt(1),
+                    resultado_1.getString(2),
+                    resultado_1.getString(3),
+                    resultado_1.getString(4),
+                    resultado_1.getString(5)
+                );
+
+                // guardar rol
+                auxRol = new Rol(
+                    resultado_1.getInt(6),
+                    resultado_1.getString(7),
+                    resultado_1.getString(8)
+                );
+
+                // consulta 2: buscar los permisos de cada rol
+                statement = connect.prepareStatement("SELECT per.id_permiso, per.nombre, per.descripcion FROM permiso per JOIN rol_has_permiso has ON per.id_permiso = has.permiso WHERE has.rol = ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                statement.setInt(1, auxRol.getId());
+
+                // ejecutar consulta
+                resultado_2 = statement.executeQuery();
+
+                // asegurar que 'resultado_2' apunte antes de la primera fila
+                if (!resultado_2.isBeforeFirst()){
+                    resultado_2.beforeFirst();
+                }
+
+                // agregar todos los resultados a lista 'auxPermisos'
+                auxPermisos.clear();
+                while (resultado_2.next()) {
+                    auxPermisos.add( new Permiso(
+                        resultado_2.getInt(1),
+                        resultado_2.getString(2),
+                        resultado_2.getString(3)
+                    ));
+                }
+
+                // agregar 'auxEmpleado' a lista 'respuesta'
+                auxRol.setListaPermisos(auxPermisos);
+                auxEmpleado.setRol(auxRol);
+                respuesta.add(auxEmpleado);
+            }
+
+        // manejar excepciones
+        } catch (SQLException e){
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        
+        // pase lo que pase, cerrar 'statement'
+        } finally {
+            if (statement != null){
+                try {
+                    statement.close();
+                } catch (SQLException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+        
+        // devolver respuesta
+        return respuesta;
     }
 
     public Empleado searchByNombre(String nombre){

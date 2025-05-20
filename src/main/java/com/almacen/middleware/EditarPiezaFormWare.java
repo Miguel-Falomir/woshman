@@ -164,16 +164,22 @@ public class EditarPiezaFormWare extends FormWare {
             }
         });
         // al pulsar 'Buton_Aceptar', se inserta pieza en base de datos
-        Buton_Aceptar.setOnAction(new EventHandler<ActionEvent>() {
+        Buton_Aceptar.setOnAction( new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 Func_Update_Pieza();
             }
         });
         // al pulsar 'Buton_Cancelar', se cierra el formulario
-        Buton_Cancelar.setOnAction(new EventHandler<ActionEvent>() {
+        Buton_Cancelar.setOnAction( new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                // mostrar mensaje cancelacion
+                Alert alert = new Alert(AlertType.WARNING);
+                alert.setHeaderText("OPERACIÓN CANCELADA");
+                alert.setContentText("");
+                alert.showAndWait();
+                // cerrar ventana
                 Func_Close();
             }
         });

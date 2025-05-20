@@ -12,6 +12,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -65,6 +66,8 @@ public class InsertarVehiculoFormWare extends FormWare {
     @FXML
     private Button Buton_Aceptar;
 
+    // EVENTOS
+
     // METODO INICIALIZAR
 
     public void initialize(){
@@ -102,18 +105,26 @@ public class InsertarVehiculoFormWare extends FormWare {
         Input_Matricula.textProperty().addListener((observable, oldValue, newValue) -> {
             vehiculo.setMatricula(newValue);
         });
-    }
-
-    // EVENTOS
-
-    @FXML
-    void OnAction_Buton_Cancelar(ActionEvent event){
-        Func_Close();
-    }
-
-    @FXML
-    void OnAction_Buton_Aceptar(ActionEvent event){
-        Func_Insert_Vehiculo();
+        // al pulsar 'Buton_Aceptar', se inserta pieza en base de datos
+        Buton_Aceptar.setOnAction( new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Func_Insert_Vehiculo();
+            }
+        });
+        // al pulsar 'Buton_Cancelar', se cierra el formulario
+        Buton_Cancelar.setOnAction( new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                // mostrar mensaje cancelacion
+                Alert alert = new Alert(AlertType.WARNING);
+                alert.setHeaderText("OPERACIÓN CANCELADA");
+                alert.setContentText("");
+                alert.showAndWait();
+                // cerrar ventana
+                Func_Close();
+            }
+        });
     }
 
     // METODO CERRAR FORMULARIO

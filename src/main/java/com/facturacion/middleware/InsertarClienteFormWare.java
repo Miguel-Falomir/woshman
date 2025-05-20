@@ -5,6 +5,7 @@ import com.facturacion.model.Cliente;
 import com.utilities.FormWare;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -58,16 +59,6 @@ public class InsertarClienteFormWare extends FormWare {
 
     // EVENTOS
 
-    @FXML
-    void OnAction_Buton_Aceptar(ActionEvent event) {
-        Func_Insert_Cliente();
-    }
-
-    @FXML
-    void OnAction_Buton_Cancelar(ActionEvent event) {
-        Func_Close();
-    }
-
     // METODO INICIALIZAR
 
     public void initialize(){
@@ -92,7 +83,26 @@ public class InsertarClienteFormWare extends FormWare {
         Input_Direccion.textProperty().addListener((observable, oldValue, newValue) -> {
             cliente.setDireccion(newValue);
         });
-
+        // al pulsar 'Buton_Aceptar', se inserta pieza en base de datos
+        Buton_Aceptar.setOnAction( new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Func_Insert_Cliente();
+            }
+        });
+        // al pulsar 'Buton_Cancelar', se cierra el formulario
+        Buton_Cancelar.setOnAction( new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                // mostrar mensaje cancelacion
+                Alert alert = new Alert(AlertType.WARNING);
+                alert.setHeaderText("OPERACIÓN CANCELADA");
+                alert.setContentText("");
+                alert.showAndWait();
+                // cerrar ventana
+                Func_Close();
+            }
+        });
     }
 
     // METODO CERRAR FORMULARIO
