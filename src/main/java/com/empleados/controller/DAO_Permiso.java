@@ -246,13 +246,13 @@ public class DAO_Permiso extends DAO implements DAO_Interface<Permiso, Integer>{
             // ejecutar consulta
             resultado = statement.executeQuery();
 
-            // asegurar que 'resultado' a de la primera fila
+            // asegurar que 'resultado' apunte a de la primera fila
             if (!resultado.isBeforeFirst()){
                 resultado.beforeFirst();
             }
             resultado.next();
 
-            // agregar todas las respuestas a lista 'auxMarcas'
+            // guardar datos en objeto 'respuesta'
             respuesta = new Permiso(
                 resultado.getInt(1), 
                 resultado.getString(2),

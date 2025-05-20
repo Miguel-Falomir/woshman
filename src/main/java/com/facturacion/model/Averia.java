@@ -1,5 +1,6 @@
 package com.facturacion.model;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -19,8 +20,8 @@ public class Averia extends Cargo {
     private Estado_Averia estado;
     private Tipo_Averia tipo;
     private Float precio = 0.0f;
-    private LocalDate entrada;
-    private LocalDate salida;
+    private Date entrada;
+    private Date salida;
     private String descripcion;
     private String solucion;
     private String observaciones;
@@ -30,32 +31,29 @@ public class Averia extends Cargo {
 
     public Averia(){}
 
-    public Averia(Integer id, Vehiculo vehiculo, Estado_Averia estado, Tipo_Averia tipo, List<Pieza> listaPiezas, String descripcion, LocalDate entrada){
+    public Averia (Integer id, Float precio, String descripcion, Date entrada, Date salida, String solucion, String observaciones){
         this.id = id;
-        this.vehiculo = vehiculo;
-        this.estado = estado;
-        this.tipo = tipo;
+        this.precio = precio;
         this.descripcion = descripcion;
         this.entrada = entrada;
-        this.listaPiezas = listaPiezas;
-        for (Pieza pieza : this.listaPiezas) {
-            precio += (pieza.getCantidad() * pieza.getPrecio());
-        }
+        this.salida = salida;
+        this.solucion = solucion;
+        this.observaciones = observaciones;
     }
 
-    public Averia(Integer id, Empleado empleado, Vehiculo vehiculo, Cliente cliente, Estado_Averia estado, Tipo_Averia tipo, Float precio, LocalDate entrada, LocalDate salida, String descripcion, String solucion, String observaciones, List<Pieza> listaPiezas){
+    public Averia (Integer id, Float precio, String descripcion, Date entrada, Date salida, String solucion, String observaciones, Empleado empleado, Vehiculo vehiculo, Cliente cliente, Estado_Averia estado, Tipo_Averia tipo, List<Pieza> listaPiezas){
         this.id = id;
+        this.precio = precio;
+        this.descripcion = descripcion;
+        this.entrada = entrada;
+        this.salida = salida;
+        this.solucion = solucion;
+        this.observaciones = observaciones;
         this.empleado = empleado;
         this.vehiculo = vehiculo;
         this.cliente = cliente;
         this.estado = estado;
         this.tipo = tipo;
-        this.precio = precio;
-        this.entrada = entrada;
-        this.salida = salida;
-        this.descripcion = descripcion;
-        this.solucion = solucion;
-        this.observaciones = observaciones;
         this.listaPiezas = listaPiezas;
     }
 
@@ -117,19 +115,19 @@ public class Averia extends Cargo {
         this.precio = precio;
     }
 
-    public LocalDate getEntrada() {
+    public Date getEntrada() {
         return entrada;
     }
 
-    public void setEntrada(LocalDate entrada) {
+    public void setEntrada(Date entrada) {
         this.entrada = entrada;
     }
 
-    public LocalDate getSalida() {
+    public Date getSalida() {
         return salida;
     }
 
-    public void setSalida(LocalDate salida) {
+    public void setSalida(Date salida) {
         this.salida = salida;
     }
 
