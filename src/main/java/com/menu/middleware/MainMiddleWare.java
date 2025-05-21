@@ -12,10 +12,15 @@ import com.almacen.middleware.EditarPiezaFormWare;
 import com.almacen.middleware.InsertarPiezaFormWare;
 import com.almacen.middleware.ListaPiezasSubMenuWare;
 import com.almacen.model.Pieza;
+import com.empleados.controller.DAO_Empleado;
 import com.empleados.middleware.LoginMiddleWare;
+import com.facturacion.controller.DAO_Averia;
 import com.facturacion.controller.DAO_Cliente;
+import com.facturacion.controller.DAO_Estado_Averia;
+import com.facturacion.controller.DAO_Tipo_Averia;
 import com.facturacion.middleware.EditarClienteFormWare;
 import com.facturacion.middleware.InsertarClienteFormWare;
+import com.facturacion.middleware.ListaAveriasSubMenuWare;
 import com.facturacion.middleware.ListaClientesSubMenuWare;
 import com.facturacion.model.Cliente;
 import com.utilities.DAO;
@@ -45,11 +50,11 @@ public class MainMiddleWare extends MiddleWare {
     // OBJETO APP
     // Entre otras cosas, contiene la conexion a BD
 
-    App app;
+    private App app;
 
     // OBJETOS ALMACENAR DATOS ENTRADA
 
-    SubMenuWare menuWare;
+    private SubMenuWare menuWare;
 
     // CONSTRUCTOR
 
@@ -65,6 +70,14 @@ public class MainMiddleWare extends MiddleWare {
 
     public void setMenuWare(SubMenuWare menuWare){
         this.menuWare = menuWare;
+    }
+
+    public App getApp(){
+        return this.app;
+    }
+
+    public void setApp(App app){
+        this.app = app;
     }
 
     // ELEMENTOS UI
@@ -151,8 +164,8 @@ public class MainMiddleWare extends MiddleWare {
     }
 
     @FXML
-    void OnAction_Mitem_Lista_Averias(ActionEvent event) {
-        
+    void OnAction_Mitem_Lista_Averias(ActionEvent event) { // Ç
+        changeSubMenu("facturacion", "submenu_lista_averias", "Lista Averías", ListaAveriasSubMenuWare.class);
     }
 
     @FXML
@@ -283,6 +296,14 @@ public class MainMiddleWare extends MiddleWare {
                     daoHashMap.put("tipo", new DAO_Tipo_Pieza(conn));
                     daoHashMap.put("proveedor", new DAO_Proveedor(conn));
                     return new ListaPiezasSubMenuWare(this, daoHashMap);
+                });
+            } else if (menuWareClass.equals(ListaAveriasSubMenuWare.class)){
+                loader.setControllerFactory(lambda -> {
+                    daoHashMap.put("averia", new DAO_Averia(conn));
+                    daoHashMap.put("empleado", new DAO_Empleado(conn));
+                    daoHashMap.put("estado", new DAO_Estado_Averia(conn));
+                    daoHashMap.put("tipo", new DAO_Tipo_Averia(conn));
+                    return new ListaAveriasSubMenuWare(this, daoHashMap);
                 });
             }
 

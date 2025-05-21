@@ -120,11 +120,8 @@ public class ListaVehiculosSubMenuWare extends SubMenuWare {
         listaModelos = daoModelo.searchAll();
         listaMarcas = daoMarca.searchAllAlphabetically();
 
-        // forzar que 'undefined' no sea visible si no se tiene permisos:
-        // 25 (Insertar Vehiculos)
-        // 26 (Modificar Vehiculos)
-        // 27 (Eliminar Vehiculos)
-        boolean prohibited = !(App.checkPermiso(25) && App.checkPermiso(26) && App.checkPermiso(27));
+        // solo 'admin' puede leer objetos undefined
+        boolean prohibited = !(App.checkRol(0));
         if (prohibited){
             listaMarcas.removeIf(marca -> marca.getId() == 0); // sugerencia de chatGPT
             listaModelos.removeIf(modelo -> modelo.getId() == 0);
@@ -223,11 +220,8 @@ public class ListaVehiculosSubMenuWare extends SubMenuWare {
         listaModelos = daoModelo.searchAll();
         listaMarcas = daoMarca.searchAllAlphabetically();
 
-        // forzar que 'undefined' no sea visible si no se tienen permisos:
-        // 25 (Insertar Vehiculos)
-        // 26 (Modificar Vehiculos)
-        // 27 (Eliminar Vehiculos)
-        boolean prohibited = !(App.checkPermiso(25) && App.checkPermiso(26) && App.checkPermiso(27));
+        // solo 'admin' puede leer objetos undefined
+        boolean prohibited = !(App.checkRol(0));
         if (prohibited){
             listaMarcas.removeIf(marca -> marca.getId() == 0); // sugerencia de chatGPT
             listaModelos.removeIf(modelo -> modelo.getId() == 0);

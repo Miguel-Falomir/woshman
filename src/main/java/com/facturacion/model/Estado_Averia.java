@@ -12,6 +12,11 @@ public class Estado_Averia {
 
     public Estado_Averia(){}
 
+    public Estado_Averia(Integer id, String nombre){
+        this.id = id;
+        this.nombre = nombre;
+    }
+
     public Estado_Averia(Integer id, String nombre, String descripcion){
         this.id = id;
         this.nombre = nombre;

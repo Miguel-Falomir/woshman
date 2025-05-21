@@ -172,12 +172,8 @@ public class ListaPiezasSubMenuWare extends SubMenuWare {
         listTipos = daoTipo.searchAll();
         listProveedores = daoProveedor.searchAll();
 
-        // forzar que 'undefined' no sea visible si no se tienen permisos:
-        // 32 (Insertar Pieza)
-        // 33 (Cambiar Proveedor Pieza)
-        // 34 (Modificar Pieza)
-        // 35 (Eliminar Pieza)
-        boolean prohibited = (!App.checkPermiso(32) && !App.checkPermiso(33) && !App.checkPermiso(34) && !App.checkPermiso(35));
+        // solo 'admin' puede leer objetos undefined
+        boolean prohibited = (!App.checkRol(0));
         if (prohibited) {
             listPiezas.removeIf(pieza -> pieza.getId() == 0);
             //listaTipos.removeIf(tipo -> tipo.getId() == 0);
@@ -392,12 +388,8 @@ public class ListaPiezasSubMenuWare extends SubMenuWare {
         // recopilar todas las piezas
         listPiezas = daoPieza.searchAll();
 
-        // forzar que 'undefined' no sea visible si no se tienen permisos:
-        // 32 (Insertar Pieza)
-        // 33 (Cambiar Proveedor Pieza)
-        // 34 (Modificar Pieza)
-        // 35 (Eliminar Pieza)
-        boolean prohibited = (!App.checkPermiso(32) && !App.checkPermiso(33) && !App.checkPermiso(34) && !App.checkPermiso(35));
+        // solo 'admin' puede leer objetos undefined
+        boolean prohibited = (!App.checkRol(0));
         if (prohibited) {
             listPiezas.removeIf(pieza -> pieza.getId() == 0);
             //listaTipos.removeIf(tipo -> tipo.getId() == 0);

@@ -6,11 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.empleados.controller.DAO_Permiso;
-
+import com.empleados.controller.DAO_Rol;
 import com.empleados.middleware.LoginMiddleWare;
 import com.empleados.middleware.NuevoUsuarioMiddleWare;
 import com.empleados.model.Empleado;
 import com.empleados.model.Permiso;
+import com.empleados.model.Rol;
 import com.menu.middleware.MainMiddleWare;
 import com.utilities.DB_Connector;
 import com.utilities.MiddleWare;
@@ -58,6 +59,14 @@ public class App extends Application {
         Permiso perm = dao.search(id_perm);
         List<Permiso> listaPermisos = user.getRol().getListaPermisos();
         return listaPermisos.contains(perm);
+    }
+
+    // METODO COMPROBAR SI USUARIO PERTENECE A X ROL
+
+    public static boolean checkRol(Integer id_rol){
+        DAO_Rol dao = new DAO_Rol(connector.getConnection());
+        Rol rol = dao.search(id_rol);
+        return user.getRol().equals(rol);
     }
 
     // METODO CAMBIAR DE VENTANA

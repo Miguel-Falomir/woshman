@@ -84,7 +84,7 @@ public class VehiculoCellWare extends CellWare {
         if (confirm) {
             // comprobar operacion
             boolean completed = dao.delete(vehiculo);
-            if(completed){
+            if (completed){
                 alert.setAlertType(AlertType.INFORMATION);
                 alert.setHeaderText("OPERACIÓN COMPLETADA");
                 alert.setContentText("El vehiculo " + matricula + " ha sido eliminado de la base de datos.");

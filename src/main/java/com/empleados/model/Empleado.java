@@ -15,12 +15,17 @@ public class Empleado {
 
     public Empleado(){}
 
-    public Empleado(String nombre, String contrasenya) {
+    public Empleado (String nombre, String contrasenya) {
         this.username = nombre;
         this.password = contrasenya;
     }
 
-    public Empleado(String nombre, String apellidos, String username, String password) {
+    public Empleado (Integer id, String nombre){
+        this.id = id;
+        this.nombre = nombre;
+    }
+
+    public Empleado (String nombre, String apellidos, String username, String password) {
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.username = username;
@@ -98,7 +103,7 @@ public class Empleado {
 
     @Override
     public String toString() {
-        return "Usuario [id=" + id + ", nombre=" + username + "]";
+        return nombre + " " + apellidos;
     }
 
     @Override

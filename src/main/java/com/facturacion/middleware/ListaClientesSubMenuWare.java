@@ -119,17 +119,14 @@ public class ListaClientesSubMenuWare extends SubMenuWare {
         // booleano permisos
         boolean prohibited;
 
-        // inicializar DAOs y 'Cliente'
+        // inicializar DAOs
         daoCliente = (DAO_Cliente) daoHashMap.get("cliente");
 
         // recopilar todos los clientes
         listaClientes = daoCliente.searchAll();
 
-        // forzar que 'undefined' no sea visible si no se tienen permisos:
-        // 76 (Insertar Clientes)
-        // 77 (Actualizar Datos Cliente)
-        // 78 (Eliminar Clientes)
-        prohibited = !(App.checkPermiso(76) && App.checkPermiso(77) && App.checkPermiso(78));
+        // solo 'admin' puede leer objetos undefined
+        prohibited = !(App.checkRol(0));
         if (prohibited) {
             listaClientes.removeIf(i -> i.getId() == 0);
         }
@@ -292,11 +289,8 @@ public class ListaClientesSubMenuWare extends SubMenuWare {
         // recopilar TODOS los clientes
         listaClientes = daoCliente.searchAll();
 
-        // forzar que 'undefined' no sea visible si no se tienen permisos:
-        // 76 (Insertar Clientes)
-        // 77 (Actualizar Datos Cliente)
-        // 78 (Eliminar Clientes)
-        boolean prohibited = (!App.checkPermiso(76) && !App.checkPermiso(77) && !App.checkPermiso(78));
+        // solo 'admin' puede leer objetos undefined
+        boolean prohibited = (!App.checkRol(0));
         if (prohibited) {
             listaClientes.removeIf(i -> i.getId() == 0);
         }

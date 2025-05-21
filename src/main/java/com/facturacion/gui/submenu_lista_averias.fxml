@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.facturacion.middleware.ListaAveriasMiddleWare">
+  <columnConstraints>
+    <ColumnConstraints hgrow="NEVER" maxWidth="200.0" minWidth="10.0" prefWidth="200.0" />
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <VBox prefHeight="200.0" prefWidth="100.0" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin>
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Cliente">
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
+            </Text>
+            <TextField fx:id="Input_Correo_Cliente" promptText="e.j. John@mail.com" />
+            <Text layoutX="30.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Vehiculo">
+               <VBox.margin>
+                  <Insets bottom="10.0" top="20.0" />
+               </VBox.margin>
+            </Text>
+            <TextField fx:id="Input_Matricula_Vehiculo" layoutX="30.0" layoutY="58.0" promptText="e.j. 1234 ABC" />
+            <Text layoutX="30.0" layoutY="122.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Empleado">
+               <VBox.margin>
+                  <Insets bottom="10.0" top="20.0" />
+               </VBox.margin>
+            </Text>
+            <ComboBox fx:id="Combo_Empleados" maxWidth="1.7976931348623157E308" prefWidth="150.0" promptText="Elegir Empleado" />
+            <Text layoutX="30.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Estado">
+               <VBox.margin>
+                  <Insets bottom="10.0" top="20.0" />
+               </VBox.margin>
+            </Text>
+            <ComboBox fx:id="Combo_Estados" layoutX="30.0" layoutY="132.0" maxWidth="1.7976931348623157E308" prefWidth="150.0" promptText="Elegir Estado" />
+            <Text layoutX="30.0" layoutY="192.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tipo Averia">
+               <VBox.margin>
+                  <Insets bottom="10.0" top="20.0" />
+               </VBox.margin>
+            </Text>
+            <ComboBox fx:id="Combo_Tipos" layoutX="30.0" layoutY="206.0" maxWidth="1.7976931348623157E308" prefWidth="150.0" promptText="Elegir Tipo" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Fecha Entrada">
+               <VBox.margin>
+                  <Insets bottom="10.0" top="20.0" />
+               </VBox.margin>
+            </Text>
+            <DatePicker fx:id="Dpick_Entrada_Min" promptText="Desde">
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
+            </DatePicker>
+            <DatePicker fx:id="Dpick_Entrada_Max" layoutX="30.0" layoutY="266.0" promptText="Hasta" />
+            <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <Button fx:id="Buton_Agregar" mnemonicParsing="false" text="Agregar" />
+               </children></HBox>
+         </children>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+      </VBox>
+      <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+         <children>
+            <TableView fx:id="TablV_Averia" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+              <columns>
+                <TableColumn fx:id="TVcol_Empleado" prefWidth="75.0" text="Empleado" />
+                <TableColumn fx:id="TVcol_Vehiculo" prefWidth="75.0" text="Vehiculo" />
+                  <TableColumn fx:id="TVcol_Cliente" prefWidth="75.0" text="Cliente" />
+                  <TableColumn fx:id="TVcol_Precio" prefWidth="75.0" text="Precio" />
+                  <TableColumn fx:id="TVcol_Fecha_Entrada" prefWidth="75.0" text="F. Entrada" />
+                  <TableColumn fx:id="TVcol_Fecha_Salida" prefWidth="75.0" text="F. Salida" />
+                  <TableColumn fx:id="TVcol_Descripcion" prefWidth="75.0" text="Descripción" />
+              </columns>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </TableView>
+            <HBox alignment="CENTER_LEFT" prefWidth="200.0">
+               <children>
+                  <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Text layoutX="10.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Para operar con una averia, selecciona una fila y pulsa un botón.">
+                           <font>
+                              <Font size="13.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </VBox>
+                  <Button fx:id="Buton_Resolver" mnemonicParsing="false" text="Resolver">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="Buton_Consultar" layoutX="601.0" layoutY="10.0" mnemonicParsing="false" text="Consultar">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="20.0" right="20.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="Buton_Borrar" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Borrar">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Button>
+               </children>
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+            </HBox>
+         </children>
+         <GridPane.margin>
+            <Insets bottom="20.0" right="20.0" top="20.0" />
+         </GridPane.margin>
+      </VBox>
+   </children>
+</GridPane>

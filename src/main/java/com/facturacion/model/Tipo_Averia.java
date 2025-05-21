@@ -12,6 +12,11 @@ public class Tipo_Averia {
 
     public Tipo_Averia(){}
 
+    public Tipo_Averia(Integer id, String nombre){
+        this.id = id;
+        this.nombre = nombre;
+    }
+
     public Tipo_Averia(Integer id, String nombre, String descripcion){
         this.id = id;
         this.nombre = nombre;
