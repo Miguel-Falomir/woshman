@@ -103,7 +103,7 @@ public class DAO_Tipo_Averia extends DAO implements DAO_Interface<Tipo_Averia, I
         // (intentar) ejecutar busqueda
         try {
             // consulta 1: buscar datos estado averia
-            statement = connect.prepareStatement("SELECT tav.id_tipo_averia, est.nombre, est.descripcion FROM tipo_averia tav;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            statement = connect.prepareStatement("SELECT tav.id_tipo_averia, tav.nombre, tav.descripcion FROM tipo_averia tav;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
             // ejecutar consulta
             resultado = statement.executeQuery();

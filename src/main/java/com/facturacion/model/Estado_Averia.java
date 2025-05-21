@@ -55,7 +55,7 @@ public class Estado_Averia {
 
     @Override
     public String toString() {
-        return "Estado_Averia [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + "]";
+        return nombre;
     }
 
     @Override

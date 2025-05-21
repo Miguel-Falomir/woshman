@@ -297,7 +297,7 @@ public class MainMiddleWare extends MiddleWare {
                     daoHashMap.put("proveedor", new DAO_Proveedor(conn));
                     return new ListaPiezasSubMenuWare(this, daoHashMap);
                 });
-            } else if (menuWareClass.equals(ListaAveriasSubMenuWare.class)){
+            } else if (menuWareClass.equals(ListaAveriasSubMenuWare.class)){ // submenu 'Lista Averias'
                 loader.setControllerFactory(lambda -> {
                     daoHashMap.put("averia", new DAO_Averia(conn));
                     daoHashMap.put("empleado", new DAO_Empleado(conn));

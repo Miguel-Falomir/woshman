@@ -2,9 +2,9 @@ package com.facturacion.middleware;
 
 import java.sql.Date;
 import java.time.LocalDate;
-import java.time.chrono.ChronoLocalDate;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Predicate;
 
 import com.App;
 import com.empleados.controller.DAO_Empleado;
@@ -129,10 +129,10 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
     private DatePicker Dpick_Entrada_Max;
 
     @FXML
-    private TextField Input_Correo_Cliente;
+    private TextField Input_Nombre_Cliente;
 
-    @FXML
-    private TextField Input_Matricula_Vehiculo;
+    //@FXML
+    //private TextField Input_Matricula_Vehiculo;
 
     @FXML
     private TableView<Averia> TablV_Averia;
@@ -247,13 +247,7 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
 
         // asignar manejadores de eventos
         // al escribir en 'Input_Correo_Cliente', filtrar lista 'filterAverias'
-        Input_Correo_Cliente.textProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null && newSelection != oldSelection){
-                Func_Calculate_Predicate();
-            }
-        });
-        // al escribir en 'Input_Matricula_Vehiculo', filtrar lista 'filterAverias'
-        Input_Matricula_Vehiculo.textProperty().addListener((obs, oldSelection, newSelection) -> {
+        Input_Nombre_Cliente.textProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null && newSelection != oldSelection){
                 Func_Calculate_Predicate();
             }
@@ -278,30 +272,14 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
         });
         // al seleccionar fecha en 'Dpick_Entrada_Min', filtrar lista 'filterAverias'
         Dpick_Entrada_Min.valueProperty().addListener((obs, oldSelection, newSelection) -> {
-            ChronoLocalDate maxFecha = Dpick_Entrada_Max.getValue();
-            boolean notEmpty = newSelection != null;
-            boolean notAfterMax = !(newSelection.isAfter(maxFecha));
-            if (notEmpty && notAfterMax){
+            if (newSelection != null) {
                 Func_Calculate_Predicate();
-            } else if (!notAfterMax){
-                Alert alert = new Alert(AlertType.WARNING);
-                alert.setHeaderText("ERROR FECHAS");
-                alert.setContentText("La fecha mínima no puede ser posterior a la fecha máxima");
-                alert.showAndWait();
             }
         });
         // al seleccionar fecha en 'Dpick_Entrada_Max', filtrar lista 'filterAverias'
         Dpick_Entrada_Max.valueProperty().addListener((obs, oldSelection, newSelection) -> {
-            LocalDate minFecha = Dpick_Entrada_Min.getValue();
-            boolean notEmpty = newSelection != null;
-            boolean notBeforeMin = !(newSelection.isBefore(minFecha));
-            if (notEmpty && notBeforeMin) {
+            if (newSelection != null) {
                 Func_Calculate_Predicate();
-            } else if (!notBeforeMin) {
-                Alert alert = new Alert(AlertType.WARNING);
-                alert.setHeaderText("ERROR FECHAS");
-                alert.setContentText("La fecha máxima no puede ser posterior a la fecha minima");
-                alert.showAndWait();
             }
         });
     }
@@ -309,14 +287,37 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
     // METODO CALCULAR PREDICADO
 
     private void Func_Calculate_Predicate(){
-        String correo = Input_Correo_Cliente.getText();
-        String matricula = Input_Matricula_Vehiculo.getText();
+        // capturar datos entrada
+        String nombre = Input_Nombre_Cliente.getText();
         Empleado empleado = Combo_Empleados.getSelectionModel().getSelectedItem();
         Estado_Averia estado = Combo_Estados.getSelectionModel().getSelectedItem();
         Tipo_Averia tipo = Combo_Tipos.getSelectionModel().getSelectedItem();
         LocalDate min = Dpick_Entrada_Min.getValue();
         LocalDate max = Dpick_Entrada_Max.getValue();
-        System.out.println(correo + "\n" + matricula + "\n" + empleado + "\n" + estado + "\n" + tipo + "\n" + min + "\n" + max);
+
+        // definir predicado basico
+        Predicate<Averia> pred = lambda -> lambda.getId() >= -1;
+        
+        // asignar predicados adicionales segun valores no vacios
+        if (!(nombre.equals(""))) { // nombre
+            pred = pred.and(i -> {
+                String str = i.getCliente().getNombre() + " " + i.getCliente().getApellidos();
+                return str.contains(nombre);
+            });
+        }
+        if (empleado.getId() > -1) { // empleado
+            pred = pred.and(i -> i.getEmpleado().equals(empleado));
+        }
+        if (estado.getId() > -1) { // estado
+            pred = pred.and(i -> i.getEstado().equals(estado));
+        }
+        if (tipo.getId() > -1) { // tipo
+            pred = pred.and(i -> i.getTipo().equals(tipo));
+        }
+
+        // implementar predicado en 'filterAverias'
+        filterAverias.setPredicate(pred);
+        
     }
 
     // METODO INSERTAR AVERIA

@@ -103,7 +103,7 @@ public class Empleado {
 
     @Override
     public String toString() {
-        return nombre + " " + apellidos;
+        return (apellidos == null) ? nombre : nombre + " " + apellidos;
     }
 
     @Override
