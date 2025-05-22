@@ -91,7 +91,7 @@ public class Cliente {
 
     @Override
     public String toString() {
-        return "Cliente [id=" + id + ", dni=" + dni + ", nombre=" + nombre + ", apellidos=" + apellidos + ", email=" + email + ", direccion=" + direccion + "]";
+        return (apellidos == null) ? nombre : nombre + " " + apellidos;
     }
 
     @Override

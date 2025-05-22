@@ -28,6 +28,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.SelectionMode;
@@ -50,6 +51,7 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
     private List<Empleado> listEmpleados;
     private List<Estado_Averia> listEstados;
     private List<Tipo_Averia> listTipos;
+    private Averia averia;
 
     // DAOs
 
@@ -253,23 +255,26 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
         TablV_Averia.setItems(filterAverias);
 
         // asignar empleados a 'Combo_Empleados'
-        obserEmpleados = FXCollections.observableArrayList(listEmpleados);
         Empleado clearEmpleadoSelection = new Empleado(-1, "Elegir Empleado");
-        obserEmpleados.addFirst(clearEmpleadoSelection);
+        listEmpleados.removeFirst();
+        listEmpleados.addFirst(clearEmpleadoSelection);
+        obserEmpleados = FXCollections.observableArrayList(listEmpleados);
         Combo_Empleados.setItems(obserEmpleados);
         Combo_Empleados.getSelectionModel().select(clearEmpleadoSelection);
 
         // asignar estados a 'Combo_Estados'
-        obserEstados = FXCollections.observableArrayList(listEstados);
         Estado_Averia clearEstadoSelection = new Estado_Averia(-1, "Elegir Estado Av.");
-        obserEstados.addFirst(clearEstadoSelection);
+        listEmpleados.removeFirst();
+        listEstados.addFirst(clearEstadoSelection);
+        obserEstados = FXCollections.observableArrayList(listEstados);
         Combo_Estados.setItems(obserEstados);
         Combo_Estados.getSelectionModel().select(clearEstadoSelection);
 
         // asignar tipos a 'Combo_Tipos'
-        obserTipos = FXCollections.observableArrayList(listTipos);
         Tipo_Averia clearTipoSelection = new Tipo_Averia(-1, "Elegir Tipo Av.");
-        obserTipos.addFirst(clearTipoSelection);
+        listTipos.removeFirst();
+        listTipos.addFirst(clearTipoSelection);
+        obserTipos = FXCollections.observableArrayList(listTipos);
         Combo_Tipos.setItems(obserTipos);
         Combo_Tipos.getSelectionModel().select(clearTipoSelection);
 
@@ -308,7 +313,7 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
         });
         // al pulsar 'Buton_Borrar', se elimina la averia seleccionada
         Buton_Borrar.setOnAction((action) -> {
-            System.out.println(action);
+            Func_Delete_Averia();
         });
         // al pulsar 'Buton_Resolver', se abre el formulario para resolver averias
         Buton_Resolver.setOnAction((action) -> {
@@ -330,25 +335,27 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
         });
         // al seleccionar averia en 'TablV_Averia':
         TablV_Averia.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            // deshabilitar botones
-            Buton_Asignar.setDisable(true);
-            Buton_Resolver.setDisable(true);
-            Buton_Consultar.setDisable(true);
-            switch (newSelection.getEstado().getId()) {
-                case 0: // si averia.estado.id == 0, se habilita 'Buton_Asignar
-                    Buton_Asignar.setDisable(false);
-                    break;
-                case 1: // si averia.estado.id != 1, se habilita 'Buton_Resolver'
-                    Buton_Resolver.setDisable(false);
-                    break;
-                case 2: // si averia.estado.id != 2, se habilita 'Buton_Consultar'
-                    Buton_Consultar.setDisable(false);
-                    break;
-                default:
-                    break;
+            if (newSelection != null) {
+                // deshabilitar botones
+                Buton_Asignar.setDisable(true);
+                Buton_Resolver.setDisable(true);
+                Buton_Consultar.setDisable(true);
+                switch (newSelection.getEstado().getId()) {
+                    case 0: // si averia.estado.id == 0, se habilita 'Buton_Asignar
+                        Buton_Asignar.setDisable(false);
+                        break;
+                    case 1: // si averia.estado.id != 1, se habilita 'Buton_Resolver'
+                        Buton_Resolver.setDisable(false);
+                        break;
+                    case 2: // si averia.estado.id != 2, se habilita 'Buton_Consultar'
+                        Buton_Consultar.setDisable(false);
+                        break;
+                    default:
+                        break;
+                }
+                // habilitar 'Buton_Borrar'
+                Buton_Borrar.setDisable(false);
             }
-            // habilitar 'Buton_Borrar'
-            Buton_Borrar.setDisable(false);
         });
         // al seleccionar fecha en 'Dpick_Entrada_Min', filtrar lista 'filterAverias'
         Dpick_Entrada_Min.valueProperty().addListener((obs, oldSelection, newSelection) -> {
@@ -479,6 +486,45 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
 
     // METODO BORRAR AVERIA
 
+    private void Func_Delete_Averia(){
+        // inicializar ventana alert
+        Alert alert = new Alert(AlertType.NONE);
+
+        // comprobar seleccion
+        boolean selected = !(TablV_Averia.getSelectionModel().isEmpty());
+        if (selected) {
+            // tomar valores
+            averia = TablV_Averia.getSelectionModel().getSelectedItem();
+            // pregunta de seguridad
+            alert.setAlertType(AlertType.CONFIRMATION);
+            alert.setHeaderText("¿ESTÁ SEGURO?");
+            alert.setContentText("Esta acción borrará la avería seleccionada");
+            alert.showAndWait();
+            boolean confirm = alert.getResult().equals(ButtonType.OK);
+            if (confirm) {
+                // (intentar) ejecutar borrado
+                boolean completed = daoAveria.delete(averia);
+                if (completed){
+                    alert.setAlertType(AlertType.INFORMATION);
+                    alert.setHeaderText("OPERACIÓN COMPLETADA");
+                    alert.setContentText("La avería ha sido eliminada de la base de datos.");
+                } else {
+                    alert.setAlertType(AlertType.ERROR);
+                    alert.setHeaderText("ERROR SQL");
+                    alert.setContentText("No se puede eliminar la avería");
+                }
+                // reiniciar lista piezas
+                alert.showAndWait();
+                Func_Reboot_ObserAverias();
+            } else {
+                // mostrar advertencia pieza no elegida
+                alert.setAlertType(AlertType.WARNING);
+                alert.setHeaderText("ELIGE UNA AVERÍA");
+                alert.setContentText("");
+            }
+        }
+    }
+
     // METODO REFRESCAR LISTA
 
     public void Func_Reboot_ObserAverias(){
@@ -504,12 +550,12 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
         // acutalizar lista observable
         obserAverias.clear();
         obserAverias.setAll(listAverias);
-        obserEmpleados.clear();
-        obserEmpleados.setAll(listEmpleados);
-        obserEstados.clear();
-        obserEstados.setAll(listEstados);
-        obserTipos.clear();
-        obserTipos.setAll(listTipos);
+        
+        // limpiar filtros
+        Input_Nombre_Cliente.setText("");
+        Combo_Empleados.getSelectionModel().selectFirst();
+        Combo_Estados.getSelectionModel().selectFirst();
+        Combo_Tipos.getSelectionModel().selectFirst();
 
         // refrescar TableView
         TablV_Averia.refresh();

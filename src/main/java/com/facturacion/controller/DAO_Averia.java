@@ -1,6 +1,7 @@
 package com.facturacion.controller;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -41,7 +42,6 @@ public class DAO_Averia extends DAO implements DAO_Interface<Averia, Integer> {
 
     @Override
     public boolean insert(Averia obj) {
-        // INSERT INTO averia(id_averia, fk_cliente, fk_vehiculo, fk_tipo_averia, fk_estado_averia, precio_averia, descripcion, fecha_entrada) VALUES (?, ?, ?, ?, ?, ?, ?, ?);
         // variables internas
         PreparedStatement statement = null;
         ResultSet resultado = null;
@@ -50,7 +50,38 @@ public class DAO_Averia extends DAO implements DAO_Interface<Averia, Integer> {
 
         // (intentar) ejecutar insercion
         try{
-            
+            // consulta 1: contar cantidad filas
+            statement = connect.prepareStatement("SELECT count(*) FROM averia;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+
+            // ejecutar consulta
+            resultado = statement.executeQuery();
+
+            // asegurar que 'resultado' apunte a la primera fila
+            if (!resultado.isBeforeFirst()) {
+                resultado.beforeFirst();
+            }
+            resultado.next();
+
+            // guardar cantidad filas
+            int cantidadFilas = resultado.getInt(1);
+
+            // consulta 2: insertar averia
+            statement = connect.prepareStatement("INSERT INTO averia(id_averia, fk_vehiculo, fk_cliente, fk_estado_averia, fk_tipo_averia, precio_averia, descripcion, fecha_entrada, solucion, observaciones) VALUES (?,?,?,?,?,?,?,?,?,?);");
+            statement.setInt(1, cantidadFilas);
+            statement.setInt(2, (obj.getVehiculo() == null) ? 0 : obj.getVehiculo().getId());
+            statement.setInt(3, (obj.getCliente() == null) ? 0 : obj.getCliente().getId());
+            statement.setInt(4, (obj.getCliente() == null) ? 0 : 1);
+            statement.setInt(5, (obj.getTipo() == null) ? 0 : obj.getTipo().getId());
+            statement.setFloat(6, (obj.getPrecio() == null) ? 0.0f : obj.getPrecio());
+            statement.setString(7, (obj.getDescripcion() == null) ? "" : obj.getDescripcion());
+            statement.setDate(8, (obj.getEntrada() == null) ? Date.valueOf(LocalDate.of(1970, 01, 01)) : Date.valueOf(obj.getEntrada()));
+            statement.setString(9, (obj.getSolucion() == null) ? "" : obj.getSolucion());
+            statement.setString(10, (obj.getObservaciones() == null) ? "" : obj.getObservaciones());
+
+            // ejecutar insercion
+            insert = statement.executeUpdate();
+            System.out.println("INSERTAR AVERÍA: " + insert);
+            success = true;
 
         // manejar excepciones
         } catch (SQLException e){
@@ -81,8 +112,91 @@ public class DAO_Averia extends DAO implements DAO_Interface<Averia, Integer> {
 
     @Override
     public boolean delete(Averia obj) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+        // variables internas
+        PreparedStatement statement = null;
+        ResultSet resultado = null;
+        int idFactura = -1;
+        int delete;
+        Float precio = -1.0f;
+        boolean success = false;
+
+        // (intentar) ejecutar borrado
+        try{
+            // consulta 1: guardar id_factura y precio
+            statement = connect.prepareStatement("SELECT ave.fk_factura, ave.precio_averia FROM averia ave WHERE ave.id_averia = ? AND ave.fk_factura <> ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            statement.setInt(1, obj.getId());
+            statement.setInt(2, 0);
+
+            // ejecutar consulta
+            resultado = statement.executeQuery();
+
+            // asegurar que 'resultado' apunte anted de la primera fila
+            if (!(resultado.isBeforeFirst())) {
+                resultado.beforeFirst();
+            }
+
+            // recopilar atributos (si los hay)
+            if (resultado.next()) {
+                idFactura = resultado.getInt(1);
+                precio = resultado.getFloat(2);
+            }
+
+            // consulta 2: borrar averia
+            statement = connect.prepareStatement("DELETE FROM averia ave WHERE ave.id_averia = ?;");
+            statement.setInt(1, obj.getId());
+
+            // ejecutar borrado
+            delete = statement.executeUpdate();
+            System.out.println("ELIMINAR AVERÍA: " + delete);
+
+            // consulta 3: reorganizar IDs manualmente
+            statement = connect.prepareStatement("UPDATE averia ave SET ave.id_averia = ave.id_averia + 1 WHERE ave.id_averia > ?;");
+            statement.setInt(1, obj.getId());
+
+            // ejecutar actualizacion
+            delete = statement.executeUpdate();
+            System.out.println("REORGANIZAR IDs: " + delete);
+            success = true;
+
+            if (idFactura > -1) {
+                // consulta 4: restar precio a precio_bruto factura
+                statement = connect.prepareStatement("UPDATE factura fac SET fac.precio_bruto = fac.precio_bruto - ? WHERE fac.id_factura = ?;");
+                statement.setFloat(1, precio);
+                statement.setInt(2, idFactura);
+
+                // ejecutar actualizacion
+                delete = statement.executeUpdate();
+                System.out.println("RESTAR PRECIO BRUTO: " + delete);
+
+                // consulta 5: actualizar precio_total factura
+                statement = connect.prepareStatement("UPDATE factura fac SET fac.precio_total = fac.precio_bruto * (fac.iva / 100) WHERE fac.id_factura = ?;");
+                statement.setFloat(1, precio);
+                statement.setInt(2, idFactura);
+
+                // ejecutar actualizacion
+                delete = statement.executeUpdate();
+                System.out.println("ACTUALIZAR PRECIO TOTAL: " + delete);
+            }
+
+        // manejar excepciones
+        } catch (SQLException e){
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        
+        // pase lo que pase, cerrar 'statement'
+        } finally {
+            if (statement != null){
+                try {
+                    statement.close();
+                } catch (SQLException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        // devolver 'success', para indicar si se ha completado la actualizacion
+        return success;
     }
 
     @Override

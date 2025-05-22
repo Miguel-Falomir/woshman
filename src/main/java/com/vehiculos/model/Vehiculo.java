@@ -53,7 +53,7 @@ public class Vehiculo {
 
     @Override
     public String toString() {
-        return "Vehiculo [id=" + id + ", matricula=" + matricula + ", modelo=" + modelo + "]";
+        return matricula;
     }
 
     @Override

@@ -3,7 +3,6 @@ package com.facturacion.middleware;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.almacen.middleware.ListaPiezasSubMenuWare;
 import com.facturacion.controller.DAO_Averia;
 import com.facturacion.model.Averia;
 import com.facturacion.model.Cliente;
@@ -84,13 +83,19 @@ public class InsertarAveriaFormWare extends FormWare {
 
     public void initialize(){
         // inicializar listas observables...
-        Cliente clearClienteSelection = new Cliente((-1),"Cliente");
+        // obserClientes
+        Cliente clearClienteSelection = new Cliente(-1,"Cliente");
+        listClientes.removeFirst();
         listClientes.addFirst(clearClienteSelection);
         obserClientes = FXCollections.observableArrayList(listClientes);
-        Vehiculo clearVehiculoSelection = new Vehiculo((-1), "Vehiculo");
+        // obserVehiculos
+        Vehiculo clearVehiculoSelection = new Vehiculo(-1, "Vehiculo");
+        listVehiculos.removeFirst();
         listVehiculos.addFirst(clearVehiculoSelection);
         obserVehiculos = FXCollections.observableArrayList(listVehiculos);
-        Tipo_Averia clearTipoSelection = new Tipo_Averia((-1), "Tipo");
+        // obserTipos
+        Tipo_Averia clearTipoSelection = new Tipo_Averia(-1, "Tipo");
+        listTipos.removeFirst();
         listTipos.addFirst(clearTipoSelection);
         obserTipos = FXCollections.observableArrayList(listTipos);
         // ...y asignar a elementos ComboBox
@@ -168,18 +173,18 @@ public class InsertarAveriaFormWare extends FormWare {
         Alert alert = new Alert(AlertType.ERROR);
 
         // comprobar que se han rellenado todos los campos obligatorios
-        boolean clienteMissing = (averia.getCliente().getId() <= -1);
-        boolean vehiculoMissing = (averia.getVehiculo().getId() <= -1);
-        boolean tipoMissing = (averia.getTipo().getId() <= -1);
+        boolean vehiculoMissing = (averia.getVehiculo() == null || averia.getVehiculo().getId() <= -1);
+        boolean clienteMissing = (averia.getCliente() == null || averia.getCliente().getId() <= -1);
+        boolean tipoMissing = (averia.getTipo() == null || averia.getTipo().getId() <= -1);
         boolean entradaMissing = (averia.getEntrada() == null);
-        boolean entradaFuture = (averia.getEntrada().isAfter(LocalDate.now()));
-        boolean descripcionMissing = (averia.getDescripcion().equals("") || averia.getDescripcion() == null | averia.getDescripcion().length() <= 0);
-        if (clienteMissing) { // falta 'Cliente'
-            alert.setHeaderText("ERROR FORMULARIO");
-            alert.setContentText("Campo 'Cliente' es obligatorio.");
-        } else if (vehiculoMissing) { // falta 'Vehiculo'
+        boolean entradaFuture = (entradaMissing) ? false : averia.getEntrada().isAfter(LocalDate.now());
+        boolean descripcionMissing = (averia.getDescripcion() == null) ? true : averia.getDescripcion().length() <= 0;
+        if (vehiculoMissing) { // falta 'Cliente'
             alert.setHeaderText("ERROR FORMULARIO");
             alert.setContentText("Campo 'Vehiculo' es obligatorio.");
+        } else if (clienteMissing) { // falta 'Vehiculo'
+            alert.setHeaderText("ERROR FORMULARIO");
+            alert.setContentText("Campo 'Cliente' es obligatorio.");
         } else if (tipoMissing) { // falta 'Tipo Averia'
             alert.setHeaderText("ERROR FORMULARIO");
             alert.setContentText("Campo 'Tipo' es obligatorio.");
