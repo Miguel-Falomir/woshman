@@ -2,6 +2,7 @@ package com.facturacion.middleware;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Predicate;
 
 import com.App;
 import com.facturacion.controller.DAO_Cliente;
@@ -197,8 +198,16 @@ public class ListaClientesSubMenuWare extends SubMenuWare {
         // recopilar valores de entrada
         String regex = Input_Email.getText();
 
-        // aplicar predicado
-        filterClientes.setPredicate(i -> i.getEmail().contains(regex));
+        // definir predicado basico
+        Predicate<Cliente> pred = (lambda -> lambda.getId() > -1);
+
+        // aplicar predicados adicionales segun valores no vacios
+        if (!(regex.equals(pred))){
+            pred = pred.and(i -> i.getEmail().contains(regex));
+        }
+
+        // implementar predicado
+        filterClientes.setPredicate(pred);
     }
 
     // METODO INSERTAR CLIENTE

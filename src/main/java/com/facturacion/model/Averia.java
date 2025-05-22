@@ -1,6 +1,7 @@
 package com.facturacion.model;
 
 import java.sql.Date;
+import java.time.LocalDate;
 //import java.time.LocalDate;
 import java.util.List;
 
@@ -20,8 +21,8 @@ public class Averia extends Cargo {
     private Estado_Averia estado;
     private Tipo_Averia tipo;
     private Float precio = 0.0f;
-    private Date entrada;
-    private Date salida;
+    private LocalDate entrada;
+    private LocalDate salida;
     private String descripcion;
     private String solucion;
     private String observaciones;
@@ -31,7 +32,7 @@ public class Averia extends Cargo {
 
     public Averia(){}
 
-    public Averia (Integer id, Float precio, String descripcion, Date entrada, Date salida, String solucion, String observaciones){
+    public Averia (Integer id, Float precio, String descripcion, LocalDate entrada, LocalDate salida, String solucion, String observaciones){
         this.id = id;
         this.precio = precio;
         this.descripcion = descripcion;
@@ -41,7 +42,7 @@ public class Averia extends Cargo {
         this.observaciones = observaciones;
     }
 
-    public Averia (Integer id, Float precio, String descripcion, Date entrada, Date salida, String solucion, String observaciones, Empleado empleado, Vehiculo vehiculo, Cliente cliente, Estado_Averia estado, Tipo_Averia tipo, List<Pieza> listaPiezas){
+    public Averia (Integer id, Float precio, String descripcion, LocalDate entrada, LocalDate salida, String solucion, String observaciones, Empleado empleado, Vehiculo vehiculo, Cliente cliente, Estado_Averia estado, Tipo_Averia tipo, List<Pieza> listaPiezas){
         this.id = id;
         this.precio = precio;
         this.descripcion = descripcion;
@@ -115,19 +116,19 @@ public class Averia extends Cargo {
         this.precio = precio;
     }
 
-    public Date getEntrada() {
+    public LocalDate getEntrada() {
         return entrada;
     }
 
-    public void setEntrada(Date entrada) {
+    public void setEntrada(LocalDate entrada) {
         this.entrada = entrada;
     }
 
-    public Date getSalida() {
+    public LocalDate getSalida() {
         return salida;
     }
 
-    public void setSalida(Date salida) {
+    public void setSalida(LocalDate salida) {
         this.salida = salida;
     }
 

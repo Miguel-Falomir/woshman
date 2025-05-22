@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,6 +71,8 @@ public class DAO_Averia extends DAO implements DAO_Interface<Averia, Integer> {
         Estado_Averia auxEstado = null;
         Tipo_Averia auxTipo = null;
         List<Pieza> auxListaPiezas = new ArrayList<Pieza>();
+        LocalDate entrada;
+        LocalDate salida;
 
         // (intentar) ejecutar busqueda
         try {
@@ -113,13 +116,17 @@ public class DAO_Averia extends DAO implements DAO_Interface<Averia, Integer> {
             // (como la averia es null, se le pasa la clave primaria guardada al principio)
             auxListaPiezas = searchPiezasByAveria(idAveria);
 
+            // recopilar fechas entrada y salida
+            entrada = (resultado.getDate(4) == null) ? null : resultado.getDate(4).toLocalDate();
+            salida = (resultado.getDate(5) == null) ? null : resultado.getDate(5).toLocalDate();
+
             // guardar datos averia en 'respuesta'
             respuesta = new Averia(
                 resultado.getInt(1),
                 resultado.getFloat(2),
                 resultado.getString(3),
-                resultado.getDate(4),
-                resultado.getDate(5),
+                entrada,
+                salida,
                 resultado.getString(6),
                 resultado.getString(7),
                 auxEmpleado,
@@ -166,6 +173,8 @@ public class DAO_Averia extends DAO implements DAO_Interface<Averia, Integer> {
         Estado_Averia auxEstado = null;
         Tipo_Averia auxTipo = null;
         List<Pieza> auxListaPiezas = new ArrayList<Pieza>();
+        LocalDate entrada;
+        LocalDate salida;
 
         // (intentar) ejecutar busqueda
         try {
@@ -209,13 +218,17 @@ public class DAO_Averia extends DAO implements DAO_Interface<Averia, Integer> {
                 // (como la averia es null, se le pasa la clave primaria guardada al principio)
                 auxListaPiezas = searchPiezasByAveria(idAveria);
 
+                // recopilar fechas entrada y salida
+                entrada = (resultado.getDate(4) == null) ? null : resultado.getDate(4).toLocalDate();
+                salida = (resultado.getDate(5) == null) ? null : resultado.getDate(5).toLocalDate();
+
                 // guardar datos averia en 'auxAveria'
                 auxAveria = new Averia(
                     resultado.getInt(1),
                     resultado.getFloat(2),
                     resultado.getString(3),
-                    resultado.getDate(4),
-                    resultado.getDate(5),
+                    entrada,
+                    salida,
                     resultado.getString(6),
                     resultado.getString(7),
                     auxEmpleado,
@@ -265,6 +278,8 @@ public class DAO_Averia extends DAO implements DAO_Interface<Averia, Integer> {
         Estado_Averia auxEstado = null;
         Tipo_Averia auxTipo = null;
         List<Pieza> auxListaPiezas = new ArrayList<Pieza>();
+        LocalDate entrada;
+        LocalDate salida;
 
         // (intentar) ejecutar busqueda
         try {
@@ -308,13 +323,17 @@ public class DAO_Averia extends DAO implements DAO_Interface<Averia, Integer> {
                 // (como la averia es null, se le pasa la clave primaria guardada al principio)
                 auxListaPiezas = searchPiezasByAveria(idAveria);
 
+                // recopilar fechas entrada y salida
+                entrada = (resultado.getDate(4) == null) ? null : resultado.getDate(4).toLocalDate();
+                salida = (resultado.getDate(5) == null) ? null : resultado.getDate(5).toLocalDate();
+
                 // guardar datos averia en 'auxAveria'
                 auxAveria = new Averia(
                     resultado.getInt(1),
                     resultado.getFloat(2),
                     resultado.getString(3),
-                    resultado.getDate(4),
-                    resultado.getDate(5),
+                    entrada,
+                    salida,
                     resultado.getString(6),
                     resultado.getString(7),
                     auxEmpleado,

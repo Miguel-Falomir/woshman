@@ -2,6 +2,7 @@ package com.vehiculos.middleware;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Predicate;
 
 import com.App;
 import com.menu.middleware.MainMiddleWare;
@@ -189,21 +190,26 @@ public class ListaVehiculosSubMenuWare extends SubMenuWare {
         Titem.Tipo_Item tipo = titem.getTipo();
         Integer id = titem.getId();
 
-        // aplicar predicado
-        switch (tipo){
+        // definir predicado basico
+        Predicate<Vehiculo> pred = (lambda -> lambda.getId() > -1);
+
+        // aplicar predicados adicionales segun valores no vacios
+        if (!(regex.equals(""))) { // matricula
+            pred = pred.and(i -> i.getMatricula().contains(regex));
+        }
+        switch (tipo){ // treeview
             case MARCA:
-                filterVehiculos.setPredicate(i -> i.getModelo().getMarca().getId() == id && i.getMatricula().contains(regex));
+                pred = pred.and(i -> i.getModelo().getMarca().getId() == id);
                 break;
             case MODELO:
-                filterVehiculos.setPredicate(i -> i.getModelo().getId() == id && i.getMatricula().contains(regex));
-                break;
-            case null:
-                filterVehiculos.setPredicate(i -> i.getMatricula().contains(regex));
+                pred = pred.and(i -> i.getModelo().getId() == id);
                 break;
             default:
-                System.out.println("Este texto no debería poder imprimirse");
                 break;
         }
+
+        // implementar predicado
+        filterVehiculos.setPredicate(pred);
     }
 
     // METODO INSERTAR VEHICULO

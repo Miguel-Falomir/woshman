@@ -105,6 +105,9 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
     private Button Buton_Agregar;
 
     @FXML
+    private Button Buton_Asignar;
+
+    @FXML
     private Button Buton_Borrar;
 
     @FXML
@@ -112,6 +115,12 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
 
     @FXML
     private Button Buton_Resolver;
+
+    @FXML
+    private Button Buton_Clear_Entrada_Min;
+
+    @FXML
+    private Button Buton_Clear_Entrada_Max;
 
     @FXML
     private ComboBox<Empleado> Combo_Empleados;
@@ -130,9 +139,6 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
 
     @FXML
     private TextField Input_Nombre_Cliente;
-
-    //@FXML
-    //private TextField Input_Matricula_Vehiculo;
 
     @FXML
     private TableView<Averia> TablV_Averia;
@@ -153,7 +159,7 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
     private TableColumn<Averia, Date> TVcol_Fecha_Salida;
 
     @FXML
-    private TableColumn<Averia, Float> TVcol_Precio;
+    private TableColumn<Averia, String> TVcol_Estado;
 
     @FXML
     private TableColumn<Averia, String> TVcol_Vehiculo;
@@ -194,7 +200,7 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
 
         // inicializar TableColumns
         TVcol_Empleado.setCellValueFactory(lambda -> new SimpleStringProperty(
-            lambda.getValue().getEmpleado().getNombre() + " " + lambda.getValue().getEmpleado().getApellidos()
+            (lambda.getValue().getEstado().getId() == 0) ? "" : (lambda.getValue().getEmpleado().getNombre() + " " + lambda.getValue().getEmpleado().getApellidos())
         ));
         TVcol_Vehiculo.setCellValueFactory(lambda -> new SimpleStringProperty(
             lambda.getValue().getVehiculo().getMatricula() + " [" + lambda.getValue().getVehiculo().getModelo().getMarca().getNombre() + " " + lambda.getValue().getVehiculo().getModelo().getNombre() + "]"
@@ -202,9 +208,9 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
         TVcol_Cliente.setCellValueFactory(lambda -> new SimpleStringProperty(
             lambda.getValue().getCliente().getNombre() + " " + lambda.getValue().getCliente().getApellidos()
         ));
-        TVcol_Precio.setCellValueFactory(
-            new PropertyValueFactory<Averia, Float>("precio")
-        );
+        TVcol_Estado.setCellValueFactory(lambda -> new SimpleStringProperty(
+            lambda.getValue().getEstado().getNombre()
+        ));
         TVcol_Fecha_Entrada.setCellValueFactory(
             new PropertyValueFactory<Averia, Date>("entrada")
         );
@@ -270,18 +276,118 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
                 Func_Calculate_Predicate();
             }
         });
+        // al pulsar 'Buton_Agregar', se abre el formulario para agregar averias
+        Buton_Agregar.setOnAction((action) -> {
+            System.out.println(action);
+        });
+        // al pulsar 'Buton_Asignar', se abre el formulario para asignar averias a empleados
+        Buton_Asignar.setOnAction((action) -> {
+            System.out.println(action);
+        });
+        // al pulsar 'Buton_Borrar', se elimina la averia seleccionada
+        Buton_Borrar.setOnAction((action) -> {
+            System.out.println(action);
+        });
+        // al pulsar 'Buton_Resolver', se abre el formulario para resolver averias
+        Buton_Resolver.setOnAction((action) -> {
+            System.out.println(action);
+        });
+        // al pulsar 'Buton_Consultar', se muestra la solucion de la averia
+        Buton_Consultar.setOnAction((action) -> {
+            System.out.println(action);
+        });
+        // al pulsar 'Buton_Clear_Entrada_Min', se limpia la fecha de 'Dpick_Entrada_Min'
+        Buton_Clear_Entrada_Min.setOnAction((action) -> {
+            Dpick_Entrada_Min.setValue(null);
+            Func_Calculate_Predicate();
+        });
+        // al pulsar 'Buton_Clear_Entrada_Max', se limpia la fecha de 'Dpick_Entrada_Max'
+        Buton_Clear_Entrada_Max.setOnAction((action) -> {
+            Dpick_Entrada_Max.setValue(null);
+            Func_Calculate_Predicate();
+        });
+        // al seleccionar averia en 'TablV_Averia':
+        TablV_Averia.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            // deshabilitar botones
+            Buton_Asignar.setDisable(true);
+            Buton_Resolver.setDisable(true);
+            Buton_Consultar.setDisable(true);
+            switch (newSelection.getEstado().getId()) {
+                case 0: // si averia.estado.id == 0, se habilita 'Buton_Asignar
+                    Buton_Asignar.setDisable(false);
+                    break;
+                case 1: // si averia.estado.id != 1, se habilita 'Buton_Resolver'
+                    Buton_Resolver.setDisable(false);
+                    break;
+                case 2: // si averia.estado.id != 2, se habilita 'Buton_Consultar'
+                    Buton_Consultar.setDisable(false);
+                    break;
+                default:
+                    break;
+            }
+            // habilitar 'Buton_Borrar'
+            Buton_Borrar.setDisable(false);
+        });
         // al seleccionar fecha en 'Dpick_Entrada_Min', filtrar lista 'filterAverias'
         Dpick_Entrada_Min.valueProperty().addListener((obs, oldSelection, newSelection) -> {
+            // variables auxiliares
+            LocalDate max = Dpick_Entrada_Max.getValue();
+            Alert alert = new Alert(AlertType.WARNING);
+            boolean passed = true;
+            // realizar comprobaciones antes de ejecutar filtrado
             if (newSelection != null) {
-                Func_Calculate_Predicate();
+                if (max != null){
+                    if (newSelection.isAfter(max)) {passed = false;}
+                }
+                if (passed) {
+                    Func_Calculate_Predicate();
+                } else {
+                    Dpick_Entrada_Min.setValue(oldSelection);
+                    alert.setHeaderText("ERROR FECHAS");
+                    alert.setContentText("Fecha mínima no puede ser posterior a fecha máxima");
+                    alert.showAndWait();
+                }
             }
         });
         // al seleccionar fecha en 'Dpick_Entrada_Max', filtrar lista 'filterAverias'
         Dpick_Entrada_Max.valueProperty().addListener((obs, oldSelection, newSelection) -> {
+            // variables auxiliares
+            LocalDate min = Dpick_Entrada_Min.getValue();
+            Alert alert = new Alert(AlertType.WARNING);
+            boolean passed = true;
+            // realizar comprobaciones antes de ejecutar filtrado
             if (newSelection != null) {
-                Func_Calculate_Predicate();
+                if (min != null) {
+                    if (newSelection.isBefore(min)) {passed = false;}
+                }
+                if (passed) {
+                    Func_Calculate_Predicate();
+                } else {
+                    Dpick_Entrada_Max.setValue(oldSelection);
+                    alert.setHeaderText("ERROR FECHAS");
+                    alert.setContentText("Fecha máxima no puede ser anterior a fecha mínima");
+                    alert.showAndWait();
+                }
             }
         });
+
+        // deshabilitar elementos UI segun permisos
+        Buton_Asignar.setDisable(true);
+        Buton_Resolver.setDisable(true);
+        Buton_Consultar.setDisable(true);
+        Buton_Borrar.setDisable(true);
+        if (App.checkRol(1)){
+            Buton_Asignar.setManaged(false);
+        }
+        if (!(App.checkPermiso(1))) {
+            Buton_Agregar.setManaged(false);
+        }
+        if (!(App.checkPermiso(2))) {
+            Buton_Resolver.setManaged(false);
+        }
+        if (!(App.checkPermiso(3))) {
+            Buton_Borrar.setManaged(false);
+        }
     }
 
     // METODO CALCULAR PREDICADO
@@ -296,9 +402,9 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
         LocalDate max = Dpick_Entrada_Max.getValue();
 
         // definir predicado basico
-        Predicate<Averia> pred = lambda -> lambda.getId() >= -1;
+        Predicate<Averia> pred = (lambda -> lambda.getId() > -1);
         
-        // asignar predicados adicionales segun valores no vacios
+        // aplicar predicados adicionales segun valores no vacios
         if (!(nombre.equals(""))) { // nombre
             pred = pred.and(i -> {
                 String str = i.getCliente().getNombre() + " " + i.getCliente().getApellidos();
@@ -313,6 +419,15 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
         }
         if (tipo.getId() > -1) { // tipo
             pred = pred.and(i -> i.getTipo().equals(tipo));
+        }
+        if (min != null && max != null) { // fechas
+            pred = pred.and(i -> !(i.getEntrada().isAfter(max)) && !(i.getEntrada().isBefore(min)));
+        } else if (min != null) {
+            pred = pred.and(i -> !(i.getEntrada().isBefore(min)));
+        } else if (max != null) {
+            pred = pred.and(i -> !(i.getEntrada().isAfter(max)));
+        } else {
+            System.out.println("No se aplican filtros de fechas");
         }
 
         // implementar predicado en 'filterAverias'

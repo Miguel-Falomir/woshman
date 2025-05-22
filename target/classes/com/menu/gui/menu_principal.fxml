@@ -69,13 +69,7 @@
     </HBox>
     <!-- CONTENEDOR INTERFAZ GRAFICA -->
     <HBox fx:id="Central_Box" maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS" alignment="center">
-      <children>
-        <Box depth="100" height="100" rotate="90.0" width="100.0">
-          <rotationAxis>
-            <Point3D y="1.0" z="1.0" />
-          </rotationAxis>
-        </Box>
-      </children>
+
     </HBox>
   </children>
 </VBox>

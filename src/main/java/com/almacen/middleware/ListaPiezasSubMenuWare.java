@@ -2,6 +2,7 @@ package com.almacen.middleware;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Predicate;
 
 import com.App;
 import com.almacen.controller.DAO_Pieza;
@@ -278,26 +279,31 @@ public class ListaPiezasSubMenuWare extends SubMenuWare {
     // METODO CALCULAR PREDICADO
 
     private void Func_Calculate_Predicate(){
-        // recopilar valores
+        // recopilar datos entrada
         String regex = Input_Nombre.getText();
         int tipoID = Combo_Tipos.getSelectionModel().getSelectedItem().getId();
         int provID = Combo_Proveedores.getSelectionModel().getSelectedItem().getId();
         int cantidad = (int) Math.floor( Slide_Cantidad.getValue());
 
-        // aplicar predicado
-        boolean selectTipo = (tipoID > -1);
-        boolean selectProv = (provID > -1);
-        boolean selectBoth = selectTipo && selectProv;
-        boolean selectNone = !(selectTipo) && !(selectProv);
-        if (selectNone) {
-            filterPiezas.setPredicate(i -> i.getNombre().contains(regex) && i.getCantidad() >= cantidad);
-        } else if (selectBoth) {
-            filterPiezas.setPredicate(i -> i.getNombre().contains(regex) && i.getCantidad() >= cantidad && i.getTipo().getId() == tipoID && i.getProveedor().getId() == provID);
-        } else if (selectTipo) {
-            filterPiezas.setPredicate(i -> i.getNombre().contains(regex) && i.getCantidad() >= cantidad && i.getTipo().getId() == tipoID);
-        } else if (selectProv) {
-            filterPiezas.setPredicate(i -> i.getNombre().contains(regex) && i.getCantidad() >= cantidad && i.getProveedor().getId() == provID);
+        // definir predicado basico
+        Predicate<Pieza> pred = (lambda -> lambda.getId() > -1);
+
+        // aplicar predicados adicionales segun valores no vacios
+        if (!(regex.equals(""))) { // nombre
+            pred = pred.and(i -> i.getNombre().contains(regex));
         }
+        if (tipoID > -1) {
+            pred = pred.and(i -> i.getTipo().getId() == tipoID);
+        }
+        if (provID > -1) {
+            pred = pred.and(i -> i.getProveedor().getId() == provID);
+        }
+        if (cantidad > 0) {
+            pred = pred.and(i -> i.getCantidad() >= cantidad);
+        }
+
+        // implementar predicado
+        filterPiezas.setPredicate(pred);
     }
 
     // METODO INSERTAR PIEZA
