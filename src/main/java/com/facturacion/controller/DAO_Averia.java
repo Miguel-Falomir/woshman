@@ -41,8 +41,36 @@ public class DAO_Averia extends DAO implements DAO_Interface<Averia, Integer> {
 
     @Override
     public boolean insert(Averia obj) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'insert'");
+        // INSERT INTO averia(id_averia, fk_cliente, fk_vehiculo, fk_tipo_averia, fk_estado_averia, precio_averia, descripcion, fecha_entrada) VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+        // variables internas
+        PreparedStatement statement = null;
+        ResultSet resultado = null;
+        int insert;
+        boolean success = false;
+
+        // (intentar) ejecutar insercion
+        try{
+            
+
+        // manejar excepciones
+        } catch (SQLException e){
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        
+        // pase lo que pase, cerrar 'statement'
+        } finally {
+            if (statement != null){
+                try {
+                    statement.close();
+                } catch (SQLException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+        
+        // devolver 'success', para indicar si se ha completado la insercion
+        return success;
     }
 
     @Override

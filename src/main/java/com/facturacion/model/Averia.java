@@ -1,8 +1,6 @@
 package com.facturacion.model;
 
-import java.sql.Date;
 import java.time.LocalDate;
-//import java.time.LocalDate;
 import java.util.List;
 
 import com.almacen.model.Pieza;
@@ -32,14 +30,20 @@ public class Averia extends Cargo {
 
     public Averia(){}
 
-    public Averia (Integer id, Float precio, String descripcion, LocalDate entrada, LocalDate salida, String solucion, String observaciones){
+    public Averia (Integer id, String descripcion, Empleado empleado, Vehiculo vehiculo, Cliente cliente, Estado_Averia estado, Tipo_Averia tipo, LocalDate entrada){
         this.id = id;
-        this.precio = precio;
+        this.precio = 0.0f;
         this.descripcion = descripcion;
         this.entrada = entrada;
-        this.salida = salida;
-        this.solucion = solucion;
-        this.observaciones = observaciones;
+        this.salida = null;
+        this.solucion = "";
+        this.observaciones = "";
+        this.empleado = empleado;
+        this.vehiculo = vehiculo;
+        this.cliente = cliente;
+        this.estado = estado;
+        this.tipo = tipo;
+        this.listaPiezas = null;
     }
 
     public Averia (Integer id, Float precio, String descripcion, LocalDate entrada, LocalDate salida, String solucion, String observaciones, Empleado empleado, Vehiculo vehiculo, Cliente cliente, Estado_Averia estado, Tipo_Averia tipo, List<Pieza> listaPiezas){

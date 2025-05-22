@@ -19,6 +19,7 @@ import com.facturacion.controller.DAO_Cliente;
 import com.facturacion.controller.DAO_Estado_Averia;
 import com.facturacion.controller.DAO_Tipo_Averia;
 import com.facturacion.middleware.EditarClienteFormWare;
+import com.facturacion.middleware.InsertarAveriaFormWare;
 import com.facturacion.middleware.InsertarClienteFormWare;
 import com.facturacion.middleware.ListaAveriasSubMenuWare;
 import com.facturacion.middleware.ListaClientesSubMenuWare;
@@ -303,6 +304,8 @@ public class MainMiddleWare extends MiddleWare {
                     daoHashMap.put("empleado", new DAO_Empleado(conn));
                     daoHashMap.put("estado", new DAO_Estado_Averia(conn));
                     daoHashMap.put("tipo", new DAO_Tipo_Averia(conn));
+                    daoHashMap.put("vehiculo", new DAO_Vehiculo(conn));
+                    daoHashMap.put("cliente", new DAO_Cliente(conn));
                     return new ListaAveriasSubMenuWare(this, daoHashMap);
                 });
             }
@@ -365,6 +368,13 @@ public class MainMiddleWare extends MiddleWare {
                 } else if (formWareClass.equals(InsertarPiezaFormWare.class)){ // formulario 'Insertar Pieza'
                     loader.setControllerFactory(lambda -> {
                         return new InsertarPiezaFormWare(submenu);
+                    });
+                }
+            } else if (menuWare instanceof ListaAveriasSubMenuWare) { // submenu 'Lista Averias'
+                ListaAveriasSubMenuWare submenu = (ListaAveriasSubMenuWare) menuWare;
+                if (formWareClass.equals(InsertarAveriaFormWare.class)) {
+                    loader.setControllerFactory(lambda -> {
+                        return new InsertarAveriaFormWare(menuWare);
                     });
                 }
             }

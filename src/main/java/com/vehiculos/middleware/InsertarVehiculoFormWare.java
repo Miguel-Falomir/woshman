@@ -156,7 +156,7 @@ public class InsertarVehiculoFormWare extends FormWare {
             alert.setAlertType(AlertType.ERROR);
             alert.setHeaderText("ERROR FORMULARIO");
             alert.setContentText("Campo 'Matricula' es obligatorio.");
-        } else { // con todos los campos rellenados, (intentar) ejecutar actualizacion
+        } else { // con todos los campos rellenados, (intentar) ejecutar insercion
             boolean completed = daoVehiculo.insert(vehiculo);
             if (completed) {
                 alert.setAlertType(AlertType.INFORMATION);

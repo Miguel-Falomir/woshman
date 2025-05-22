@@ -15,6 +15,11 @@ public class Cliente {
 
     public Cliente(){}
 
+    public Cliente(Integer id, String nombre){
+        this.id = id;
+        this.nombre = nombre;
+    }
+
     public Cliente(String dni, String nombre, String apellidos, String email, String direccion){
         this.dni = dni;
         this.nombre = nombre;

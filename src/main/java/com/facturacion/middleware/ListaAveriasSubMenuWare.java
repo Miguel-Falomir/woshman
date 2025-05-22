@@ -10,6 +10,7 @@ import com.App;
 import com.empleados.controller.DAO_Empleado;
 import com.empleados.model.Empleado;
 import com.facturacion.controller.DAO_Averia;
+import com.facturacion.controller.DAO_Cliente;
 import com.facturacion.controller.DAO_Estado_Averia;
 import com.facturacion.controller.DAO_Tipo_Averia;
 import com.facturacion.model.Averia;
@@ -18,6 +19,7 @@ import com.facturacion.model.Tipo_Averia;
 import com.menu.middleware.MainMiddleWare;
 import com.utilities.DAO;
 import com.utilities.SubMenuWare;
+import com.vehiculos.controller.DAO_Vehiculo;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -55,6 +57,8 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
     private DAO_Empleado daoEmpleado;
     private DAO_Estado_Averia daoEstado;
     private DAO_Tipo_Averia daoTipo;
+    private DAO_Vehiculo daoVehiculo;
+    private DAO_Cliente daoCliente;
 
     // CONSTRUCTORES
 
@@ -97,6 +101,22 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
 
     public void setDaoTipo(DAO_Tipo_Averia daoTipo) {
         this.daoTipo = daoTipo;
+    }
+
+    public DAO_Vehiculo getDaoVehiculo(){
+        return daoVehiculo;
+    }
+
+    public void setDaoVehiculo(DAO_Vehiculo daoVehiculo){
+        this.daoVehiculo = daoVehiculo;
+    }
+
+    public DAO_Cliente getDaoCliente(){
+        return daoCliente;
+    }
+
+    public void setDaoCliente(DAO_Cliente daoCliente){
+        this.daoCliente = daoCliente;
     }
 
     // ELEMENTOS UI
@@ -178,6 +198,8 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
         daoEmpleado = (DAO_Empleado) daoHashMap.get("empleado");
         daoEstado = (DAO_Estado_Averia) daoHashMap.get("estado");
         daoTipo = (DAO_Tipo_Averia) daoHashMap.get("tipo");
+        daoVehiculo = (DAO_Vehiculo) daoHashMap.get("vehiculo");
+        daoCliente = (DAO_Cliente) daoHashMap.get("cliente");
 
         // recopilar Averias, Empleados, Estados y Tipos
         if (App.checkRol(1)){
@@ -278,7 +300,7 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
         });
         // al pulsar 'Buton_Agregar', se abre el formulario para agregar averias
         Buton_Agregar.setOnAction((action) -> {
-            System.out.println(action);
+            mainController.openFormulary("facturacion", "form_insertar_averia", "Insertar Averia", 480, 360, InsertarAveriaFormWare.class, this, null);
         });
         // al pulsar 'Buton_Asignar', se abre el formulario para asignar averias a empleados
         Buton_Asignar.setOnAction((action) -> {
@@ -336,15 +358,22 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
             boolean passed = true;
             // realizar comprobaciones antes de ejecutar filtrado
             if (newSelection != null) {
-                if (max != null){
-                    if (newSelection.isAfter(max)) {passed = false;}
-                }
-                if (passed) {
-                    Func_Calculate_Predicate();
+                if (!(newSelection.isAfter(LocalDate.now()))){
+                    if (max != null){
+                        if (newSelection.isAfter(max)) {passed = false;}
+                    }
+                    if (passed) {
+                        Func_Calculate_Predicate();
+                    } else {
+                        Dpick_Entrada_Min.setValue(oldSelection);
+                        alert.setHeaderText("ERROR FECHAS");
+                        alert.setContentText("Fecha mínima no puede ser posterior a fecha máxima");
+                        alert.showAndWait();
+                    }
                 } else {
                     Dpick_Entrada_Min.setValue(oldSelection);
-                    alert.setHeaderText("ERROR FECHAS");
-                    alert.setContentText("Fecha mínima no puede ser posterior a fecha máxima");
+                    alert.setHeaderText("FECHA INVÁLIDA");
+                    alert.setContentText("La fecha introducida es posterior al día de hoy");
                     alert.showAndWait();
                 }
             }
@@ -357,15 +386,22 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
             boolean passed = true;
             // realizar comprobaciones antes de ejecutar filtrado
             if (newSelection != null) {
-                if (min != null) {
-                    if (newSelection.isBefore(min)) {passed = false;}
-                }
-                if (passed) {
-                    Func_Calculate_Predicate();
+                if (!(newSelection.isAfter(LocalDate.now()))){
+                    if (min != null) {
+                        if (newSelection.isBefore(min)) {passed = false;}
+                    }
+                    if (passed) {
+                        Func_Calculate_Predicate();
+                    } else {
+                        Dpick_Entrada_Max.setValue(oldSelection);
+                        alert.setHeaderText("ERROR FECHAS");
+                        alert.setContentText("Fecha máxima no puede ser anterior a fecha mínima");
+                        alert.showAndWait();
+                    }
                 } else {
-                    Dpick_Entrada_Max.setValue(oldSelection);
-                    alert.setHeaderText("ERROR FECHAS");
-                    alert.setContentText("Fecha máxima no puede ser anterior a fecha mínima");
+                    Dpick_Entrada_Min.setValue(oldSelection);
+                    alert.setHeaderText("FECHA INVÁLIDA");
+                    alert.setContentText("La fecha introducida es posterior al día de hoy");
                     alert.showAndWait();
                 }
             }
