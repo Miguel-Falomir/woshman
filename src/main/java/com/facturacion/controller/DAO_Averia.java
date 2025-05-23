@@ -110,6 +110,73 @@ public class DAO_Averia extends DAO implements DAO_Interface<Averia, Integer> {
         throw new UnsupportedOperationException("Unimplemented method 'update'");
     }
 
+    public boolean resolve(Averia obj) {
+        // variables internas
+        PreparedStatement statement = null;
+        ResultSet resultado = null;
+        int resolve;
+        boolean success = false;
+
+        // (intentar) ejecutar resolucion
+        try {
+            // consulta 1: asignar solucion, observaciones, precio y fecha actual
+            statement = connect.prepareStatement("UPDATE averia ave SET ave.solucion = ?, ave.observaciones = ?, ave.precio_averia = ?, ave.fecha_salida = ? WHERE ave.id_averia = ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            statement.setString(1, (obj.getSolucion() == null) ? "" : obj.getSolucion());
+            statement.setString(2, (obj.getObservaciones() == null) ? "" : obj.getObservaciones());
+            statement.setFloat(3, (obj.getPrecio() == null) ? 0.0f : obj.getPrecio());
+            statement.setDate(4, Date.valueOf(LocalDate.now()));
+            statement.setInt(5, obj.getId());
+
+            // ejecutar resolucion
+            resolve = statement.executeUpdate();
+            System.out.println("RESOLVER AVERÍA: " + resolve);
+
+            // recorrer 'obj.listaPiezas', y en cada iteracion:
+            for (Pieza pieza : obj.getListaPiezas()) {
+                // consulta 2: asignar pieza nueva a tabla 'pieza_has_averia'
+                statement = connect.prepareStatement("INSERT INTO pieza_has_averia(pieza, averia, cantidad) VALUES (?,?,?);");
+                statement.setInt(1, pieza.getId());
+                statement.setInt(2, obj.getId());
+                statement.setInt(3, pieza.getCantidad());
+
+                // ejecutar insercion
+                resolve = statement.executeUpdate();
+                System.out.println("INSERTAR PIEZA '" + pieza.getNombre() + "'' EN AVERÍA " + obj.getId() + ": " + resolve);
+
+                // consulta 3: restar cantidad a la tabla 'pieza'
+                statement = connect.prepareStatement("UPDATE pieza pi SET pi.cantidad = pi.cantidad - ? WHERE pi.id_pieza = ?;");
+                statement.setInt(1, pieza.getCantidad());
+                statement.setInt(2, pieza.getId());
+
+                // ejecutar actualizacion
+                resolve = statement.executeUpdate();
+                System.out.println("ACTUALIZAR CANTIDAD PIEZA '" + pieza.getNombre() + "': " + resolve);
+            }
+
+            // al final de todo, success = true para indicar que se ha completado la operacion
+            success = true;
+
+        // manejar excepciones
+        } catch (SQLException e){
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        
+        // pase lo que pase, cerrar 'statement'
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        // devolver 'success', para indicar si se ha completado la resolucion
+        return success;
+    }
+
     @Override
     public boolean delete(Averia obj) {
         // variables internas

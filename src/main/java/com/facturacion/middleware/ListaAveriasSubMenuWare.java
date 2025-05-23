@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import com.App;
+import com.almacen.controller.DAO_Pieza;
 import com.empleados.controller.DAO_Empleado;
 import com.empleados.model.Empleado;
 import com.facturacion.controller.DAO_Averia;
@@ -61,6 +62,7 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
     private DAO_Tipo_Averia daoTipo;
     private DAO_Vehiculo daoVehiculo;
     private DAO_Cliente daoCliente;
+    private DAO_Pieza daoPieza;
 
     // CONSTRUCTORES
 
@@ -119,6 +121,14 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
 
     public void setDaoCliente(DAO_Cliente daoCliente){
         this.daoCliente = daoCliente;
+    }
+
+    public DAO_Pieza getDaoPieza(){
+        return daoPieza;
+    }
+
+    public void setDaoPieza(DAO_Pieza daoPieza){
+        this.daoPieza = daoPieza;
     }
 
     // ELEMENTOS UI
@@ -202,6 +212,7 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
         daoTipo = (DAO_Tipo_Averia) daoHashMap.get("tipo");
         daoVehiculo = (DAO_Vehiculo) daoHashMap.get("vehiculo");
         daoCliente = (DAO_Cliente) daoHashMap.get("cliente");
+        daoPieza = (DAO_Pieza) daoHashMap.get("pieza");
 
         // recopilar Averias, Empleados, Estados y Tipos
         if (App.checkRol(1)){
@@ -224,7 +235,7 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
 
         // inicializar TableColumns
         TVcol_Empleado.setCellValueFactory(lambda -> new SimpleStringProperty(
-            (lambda.getValue().getEstado().getId() == 0) ? "" : (lambda.getValue().getEmpleado().getNombre() + " " + lambda.getValue().getEmpleado().getApellidos())
+            (lambda.getValue().getEmpleado().getId() == 0) ? "" : (lambda.getValue().getEmpleado().getNombre() + " " + lambda.getValue().getEmpleado().getApellidos())
         ));
         TVcol_Vehiculo.setCellValueFactory(lambda -> new SimpleStringProperty(
             lambda.getValue().getVehiculo().getMatricula() + " [" + lambda.getValue().getVehiculo().getModelo().getMarca().getNombre() + " " + lambda.getValue().getVehiculo().getModelo().getNombre() + "]"
@@ -305,7 +316,7 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
         });
         // al pulsar 'Buton_Agregar', se abre el formulario para agregar averias
         Buton_Agregar.setOnAction((action) -> {
-            mainController.openFormulary("facturacion", "form_insertar_averia", "Insertar Averia", 480, 360, InsertarAveriaFormWare.class, this, null);
+            mainController.openFormulary("facturacion", "form_insertar_averia", "Insertar Avería", 480, 360, InsertarAveriaFormWare.class, this, null);
         });
         // al pulsar 'Buton_Asignar', se abre el formulario para asignar averias a empleados
         Buton_Asignar.setOnAction((action) -> {
@@ -317,7 +328,7 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
         });
         // al pulsar 'Buton_Resolver', se abre el formulario para resolver averias
         Buton_Resolver.setOnAction((action) -> {
-            System.out.println(action);
+            mainController.openFormulary("facturacion", "form_resolver_averia", "Resolver Avería", 480, 360, ResolverAveriaFormWare.class, this, TablV_Averia.getSelectionModel().getSelectedItem());
         });
         // al pulsar 'Buton_Consultar', se muestra la solucion de la averia
         Buton_Consultar.setOnAction((action) -> {

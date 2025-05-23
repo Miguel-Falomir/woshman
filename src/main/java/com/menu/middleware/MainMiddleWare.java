@@ -23,6 +23,8 @@ import com.facturacion.middleware.InsertarAveriaFormWare;
 import com.facturacion.middleware.InsertarClienteFormWare;
 import com.facturacion.middleware.ListaAveriasSubMenuWare;
 import com.facturacion.middleware.ListaClientesSubMenuWare;
+import com.facturacion.middleware.ResolverAveriaFormWare;
+import com.facturacion.model.Averia;
 import com.facturacion.model.Cliente;
 import com.utilities.DAO;
 import com.utilities.FormWare;
@@ -306,6 +308,7 @@ public class MainMiddleWare extends MiddleWare {
                     daoHashMap.put("tipo", new DAO_Tipo_Averia(conn));
                     daoHashMap.put("vehiculo", new DAO_Vehiculo(conn));
                     daoHashMap.put("cliente", new DAO_Cliente(conn));
+                    daoHashMap.put("pieza", new DAO_Pieza(conn));
                     return new ListaAveriasSubMenuWare(this, daoHashMap);
                 });
             }
@@ -371,8 +374,19 @@ public class MainMiddleWare extends MiddleWare {
                     });
                 }
             } else if (menuWare instanceof ListaAveriasSubMenuWare) { // submenu 'Lista Averias'
-                ListaAveriasSubMenuWare submenu = (ListaAveriasSubMenuWare) menuWare;
-                if (formWareClass.equals(InsertarAveriaFormWare.class)) {
+                /* Por alguna razon java ha decidido que, si se le pasa un 'ListaAveriasSubmenuWare' al loader,
+                 * el programa tiene que colapsar. Por eso al contructor se le pasa un menuWare que luego se
+                 * moldea dentro para ser 'ListaAveriasSubMenuWare'.
+                 * 
+                 * ListaAveriasSubMenuWare submenu = (ListaAveriasSubMenuWare) menuWare;
+                 */
+                if (formWareClass.equals(ResolverAveriaFormWare.class) && obj instanceof Averia) {
+                    loader.setControllerFactory(lambda -> {
+                        ListaAveriasSubMenuWare submenu = (ListaAveriasSubMenuWare) menuWare;
+                        Averia averia = (Averia) obj;
+                        return new ResolverAveriaFormWare((ListaAveriasSubMenuWare) submenu, averia);
+                    });
+                } else if (formWareClass.equals(InsertarAveriaFormWare.class)) {
                     loader.setControllerFactory(lambda -> {
                         return new InsertarAveriaFormWare(menuWare);
                     });

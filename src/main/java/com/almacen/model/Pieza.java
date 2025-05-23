@@ -96,7 +96,7 @@ public class Pieza {
 
     @Override
     public String toString() {
-        return "Pieza [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", precio=" + precio + ", cantidad=" + cantidad + ", tipo=" + tipo + ", proveedor=" + proveedor + "]";
+        return nombre;
     }
 
     @Override

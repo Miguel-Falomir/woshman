@@ -202,11 +202,11 @@ public class InsertarAveriaFormWare extends FormWare {
             if (completed) {
                 alert.setAlertType(AlertType.INFORMATION);
                 alert.setHeaderText("OPERACIÓN COMPLETADA");
-                alert.setContentText(".");
+                alert.setContentText("La avería se ha insertado en la base de datos.");
             } else {
                 alert.setAlertType(AlertType.ERROR);
                 alert.setHeaderText("ERROR SQL");
-                alert.setContentText(".");
+                alert.setContentText("Se ha producido un error en la base de datos.");
             }
         }
 
