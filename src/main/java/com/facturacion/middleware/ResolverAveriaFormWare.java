@@ -5,7 +5,9 @@ import java.util.List;
 import com.almacen.model.Pieza;
 import com.facturacion.controller.DAO_Averia;
 import com.facturacion.model.Averia;
+import com.facturacion.model.Estado_Averia;
 import com.utilities.FormWare;
+import com.utilities.SubMenuWare;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -32,6 +34,7 @@ public class ResolverAveriaFormWare extends FormWare {
     private Averia averia;
     private Pieza pieza;
     private int max;
+    private Estado_Averia estResuelto;
     private List<Pieza> listPiezas;
     private ObservableList<Pieza> obserPiezas;
 
@@ -39,11 +42,12 @@ public class ResolverAveriaFormWare extends FormWare {
 
     public ResolverAveriaFormWare(){}
 
-    public ResolverAveriaFormWare(ListaAveriasSubMenuWare menuWare, Averia averia){
-        this.menuWare = menuWare;
+    public ResolverAveriaFormWare(SubMenuWare menuWare, Averia averia){
+        this.menuWare = (ListaAveriasSubMenuWare) menuWare;
         this.averia = averia;
         this.daoAveria = this.menuWare.getDaoAveria();
         this.listPiezas = this.menuWare.getDaoPieza().searchAll();
+        this.estResuelto = this.menuWare.getDaoEstado().search(2);
     }
 
     // ELEMENTOS UI
@@ -169,6 +173,9 @@ public class ResolverAveriaFormWare extends FormWare {
         }
         averia.setPrecio(precio);
 
+        // estado_averia = estResuelto
+        averia.setEstado(estResuelto);
+
         // comprobar que se han rellenado todos los campos obligatorios
         boolean piezaMissing = (averia.getListaPiezas().isEmpty() || averia.getListaPiezas() == null);
         boolean solucionMissing = (averia.getSolucion() == null || averia.getSolucion().equals("") || averia.getSolucion().length() <= 0);
@@ -183,11 +190,11 @@ public class ResolverAveriaFormWare extends FormWare {
             if (completed) {
                 alert.setAlertType(AlertType.INFORMATION);
                 alert.setHeaderText("OPERACIÓN COMPLETADA");
-                alert.setContentText(".");
+                alert.setContentText("La resolución de la avería se ha guardado en la base de datos.");
             } else {
                 alert.setAlertType(AlertType.ERROR);
                 alert.setHeaderText("ERROR SQL");
-                alert.setContentText(".");
+                alert.setContentText("No se ha podido actualizar la avería en la base de datos.");
             }
         }
 

@@ -70,7 +70,7 @@ public class DAO_Averia extends DAO implements DAO_Interface<Averia, Integer> {
             statement.setInt(1, cantidadFilas);
             statement.setInt(2, (obj.getVehiculo() == null) ? 0 : obj.getVehiculo().getId());
             statement.setInt(3, (obj.getCliente() == null) ? 0 : obj.getCliente().getId());
-            statement.setInt(4, (obj.getCliente() == null) ? 0 : 1);
+            statement.setInt(4, (obj.getEmpleado() == null) ? 0 : 1);
             statement.setInt(5, (obj.getTipo() == null) ? 0 : obj.getTipo().getId());
             statement.setFloat(6, (obj.getPrecio() == null) ? 0.0f : obj.getPrecio());
             statement.setString(7, (obj.getDescripcion() == null) ? "" : obj.getDescripcion());
@@ -113,19 +113,19 @@ public class DAO_Averia extends DAO implements DAO_Interface<Averia, Integer> {
     public boolean resolve(Averia obj) {
         // variables internas
         PreparedStatement statement = null;
-        ResultSet resultado = null;
         int resolve;
         boolean success = false;
 
         // (intentar) ejecutar resolucion
         try {
             // consulta 1: asignar solucion, observaciones, precio y fecha actual
-            statement = connect.prepareStatement("UPDATE averia ave SET ave.solucion = ?, ave.observaciones = ?, ave.precio_averia = ?, ave.fecha_salida = ? WHERE ave.id_averia = ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            statement.setString(1, (obj.getSolucion() == null) ? "" : obj.getSolucion());
-            statement.setString(2, (obj.getObservaciones() == null) ? "" : obj.getObservaciones());
-            statement.setFloat(3, (obj.getPrecio() == null) ? 0.0f : obj.getPrecio());
-            statement.setDate(4, Date.valueOf(LocalDate.now()));
-            statement.setInt(5, obj.getId());
+            statement = connect.prepareStatement("UPDATE averia ave SET ave.fk_estado_averia = ?, ave.solucion = ?, ave.observaciones = ?, ave.precio_averia = ?, ave.fecha_salida = ? WHERE ave.id_averia = ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            statement.setInt(1, (obj.getEstado() == null) ? 2 : obj.getEstado().getId());
+            statement.setString(2, (obj.getSolucion() == null) ? "" : obj.getSolucion());
+            statement.setString(3, (obj.getObservaciones() == null) ? "" : obj.getObservaciones());
+            statement.setFloat(4, (obj.getPrecio() == null) ? 0.0f : obj.getPrecio());
+            statement.setDate(5, Date.valueOf(LocalDate.now()));
+            statement.setInt(6, obj.getId());
 
             // ejecutar resolucion
             resolve = statement.executeUpdate();
@@ -141,7 +141,7 @@ public class DAO_Averia extends DAO implements DAO_Interface<Averia, Integer> {
 
                 // ejecutar insercion
                 resolve = statement.executeUpdate();
-                System.out.println("INSERTAR PIEZA '" + pieza.getNombre() + "'' EN AVERÍA " + obj.getId() + ": " + resolve);
+                System.out.println("INSERTAR PIEZA '" + pieza.getNombre() + "' EN AVERÍA " + obj.getId() + ": " + resolve);
 
                 // consulta 3: restar cantidad a la tabla 'pieza'
                 statement = connect.prepareStatement("UPDATE pieza pi SET pi.cantidad = pi.cantidad - ? WHERE pi.id_pieza = ?;");
@@ -154,6 +154,48 @@ public class DAO_Averia extends DAO implements DAO_Interface<Averia, Integer> {
             }
 
             // al final de todo, success = true para indicar que se ha completado la operacion
+            success = true;
+
+        // manejar excepciones
+        } catch (SQLException e){
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        
+        // pase lo que pase, cerrar 'statement'
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        // devolver 'success', para indicar si se ha completado la resolucion
+        return success;
+    }
+
+    public boolean assign(Averia obj){
+        // variables internas
+        PreparedStatement statement = null;
+        int assing;
+        boolean success = false;
+
+        // (intentar) ejecutar resolucion
+        try {
+            // consulta 1: asignar averia a empleado
+            statement = connect.prepareStatement("UPDATE averia ave SET ave.fk_empleado = ?, ave.fk_estado_averia = ? WHERE ave.id_averia = ?;");
+            statement.setInt(1, obj.getEmpleado().getId());
+            statement.setInt(2, obj.getEstado().getId());
+            statement.setInt(3, obj.getId());
+
+            // ejecutar asignacion
+            assing = statement.executeUpdate();
+            Integer id = obj.getId();
+            String nombre = obj.getEmpleado().getNombre() + " " + obj.getEmpleado().getApellidos();
+            System.out.println("ASIGNAR AVERÍA " + id + " A EMPLEADO '" + nombre + "': " + assing);
             success = true;
 
         // manejar excepciones
@@ -901,7 +943,7 @@ public class DAO_Averia extends DAO implements DAO_Interface<Averia, Integer> {
         // (intentar) ejecutar busqueda
         try{
             // consulta 1: buscar todas las piezas, tambien el tipo y proveedor de cada una, relacionadas con 'averia.id'
-            statement = connect.prepareStatement("SELECT pi.id_pieza, pi.nombre, pi.descripcion, pi.precio, pi.cantidad, pr.id_proveedor, pr.cif, pr.nombre, pr.email, pr.direccion, tp.id_tipo_pieza, tp.nombre, tp.descripcion FROM pieza pi JOIN tipo_pieza tp ON pi.fk_tipo_pieza = tp.id_tipo_pieza JOIN proveedor pr ON pi.fk_proveedor = pr.id_proveedor JOIN pieza_has_averia has ON pi.id_pieza = has.pieza JOIN averia ave ON has.averia = ave.id_averia WHERE ave.id_averia = ?", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            statement = connect.prepareStatement("SELECT pi.id_pieza, pi.nombre, pi.descripcion, pi.precio, has.cantidad, pr.id_proveedor, pr.cif, pr.nombre, pr.email, pr.direccion, tp.id_tipo_pieza, tp.nombre, tp.descripcion FROM pieza pi JOIN tipo_pieza tp ON pi.fk_tipo_pieza = tp.id_tipo_pieza JOIN proveedor pr ON pi.fk_proveedor = pr.id_proveedor JOIN pieza_has_averia has ON pi.id_pieza = has.pieza JOIN averia ave ON has.averia = ave.id_averia WHERE ave.id_averia = ?", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setInt(1, averia);
             
             // ejecutar consulta

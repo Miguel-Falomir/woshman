@@ -10,6 +10,7 @@ public class Empleado {
     private String apellidos;
     private String username;
     private String password;
+    private Integer cantAverias;
     
     // CONSTRUCTORES
 
@@ -23,6 +24,12 @@ public class Empleado {
     public Empleado (Integer id, String nombre){
         this.id = id;
         this.nombre = nombre;
+    }
+
+    public Empleado (Integer id, String nombre, Integer cantAverias){
+        this.id = id;
+        this.nombre = nombre;
+        this.cantAverias = cantAverias;
     }
 
     public Empleado (String nombre, String apellidos, String username, String password) {
@@ -97,6 +104,14 @@ public class Empleado {
 
     public void setPassword(String contrasenya) {
         this.password = contrasenya;
+    }
+
+    public Integer getCantAverias(){
+        return cantAverias;
+    }
+
+    public void setCantAverias(Integer cantAverias){
+        this.cantAverias = cantAverias;
     }
 
     // TOSTRING, HASHCODE Y EQUALS

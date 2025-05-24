@@ -235,7 +235,7 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
 
         // inicializar TableColumns
         TVcol_Empleado.setCellValueFactory(lambda -> new SimpleStringProperty(
-            (lambda.getValue().getEmpleado().getId() == 0) ? "" : (lambda.getValue().getEmpleado().getNombre() + " " + lambda.getValue().getEmpleado().getApellidos())
+            (lambda.getValue().getEmpleado().getId() == 0 || lambda.getValue().getEstado().getId() == 0) ? "" : (lambda.getValue().getEmpleado().getNombre() + " " + lambda.getValue().getEmpleado().getApellidos())
         ));
         TVcol_Vehiculo.setCellValueFactory(lambda -> new SimpleStringProperty(
             lambda.getValue().getVehiculo().getMatricula() + " [" + lambda.getValue().getVehiculo().getModelo().getMarca().getNombre() + " " + lambda.getValue().getVehiculo().getModelo().getNombre() + "]"
@@ -320,7 +320,7 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
         });
         // al pulsar 'Buton_Asignar', se abre el formulario para asignar averias a empleados
         Buton_Asignar.setOnAction((action) -> {
-            System.out.println(action);
+            mainController.openFormulary("facturacion", "form_asignar_averia", "Asignar Avería", 480, 360, AsignarAveriaFormWare.class, this, TablV_Averia.getSelectionModel().getSelectedItem());
         });
         // al pulsar 'Buton_Borrar', se elimina la averia seleccionada
         Buton_Borrar.setOnAction((action) -> {
@@ -332,7 +332,7 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
         });
         // al pulsar 'Buton_Consultar', se muestra la solucion de la averia
         Buton_Consultar.setOnAction((action) -> {
-            System.out.println(action);
+            mainController.openFormulary("facturacion", "form_consultar_averia", "Consultar Avería", 480, 360, ConsultarAveriaFormWare.class, this, TablV_Averia.getSelectionModel().getSelectedItem());
         });
         // al pulsar 'Buton_Clear_Entrada_Min', se limpia la fecha de 'Dpick_Entrada_Min'
         Buton_Clear_Entrada_Min.setOnAction((action) -> {

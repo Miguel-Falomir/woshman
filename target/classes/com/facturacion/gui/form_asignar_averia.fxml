@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="360.0" prefWidth="480.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.facturacion.middleware.AsignarAveriaFormWare">
+   <children>
+      <GridPane hgap="20.0" layoutX="133.0" layoutY="116.0" vgap="20.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints minHeight="10.0" vgrow="ALWAYS" />
+            <RowConstraints minHeight="10.0" vgrow="NEVER" />
+        </rowConstraints>
+         <children>
+            <TableView fx:id="TablV_Empleados" prefHeight="200.0" prefWidth="200.0">
+              <columns>
+                <TableColumn fx:id="TVcol_Nombre_Empleado" prefWidth="75.0" text="Nombre Completo" />
+                <TableColumn fx:id="TVcol_Rol_Empleado" prefWidth="75.0" text="Rol" />
+                  <TableColumn fx:id="TVcol_Cantidad_Averias" prefWidth="75.0" text="Nº Averías" />
+              </columns>
+            </TableView>
+            <HBox alignment="CENTER_LEFT" prefWidth="200.0" GridPane.rowIndex="1" GridPane.vgrow="NEVER">
+               <children>
+                  <VBox prefWidth="100.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Para asignar avería a un empleado," />
+                        <Text layoutX="10.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" text="selecciona una fila y pulsa &quot;Aceptar&quot;" />
+                     </children>
+                  </VBox>
+                  <Button fx:id="Buton_Cancelar" mnemonicParsing="false" text="Cancelar" />
+                  <Button fx:id="Buton_Aceptar" mnemonicParsing="false" text="Aceptar">
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </GridPane>
+   </children>
+</AnchorPane>

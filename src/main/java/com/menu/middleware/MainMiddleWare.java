@@ -18,6 +18,8 @@ import com.facturacion.controller.DAO_Averia;
 import com.facturacion.controller.DAO_Cliente;
 import com.facturacion.controller.DAO_Estado_Averia;
 import com.facturacion.controller.DAO_Tipo_Averia;
+import com.facturacion.middleware.AsignarAveriaFormWare;
+import com.facturacion.middleware.ConsultarAveriaFormWare;
 import com.facturacion.middleware.EditarClienteFormWare;
 import com.facturacion.middleware.InsertarAveriaFormWare;
 import com.facturacion.middleware.InsertarClienteFormWare;
@@ -376,15 +378,22 @@ public class MainMiddleWare extends MiddleWare {
             } else if (menuWare instanceof ListaAveriasSubMenuWare) { // submenu 'Lista Averias'
                 /* Por alguna razon java ha decidido que, si se le pasa un 'ListaAveriasSubmenuWare' al loader,
                  * el programa tiene que colapsar. Por eso al contructor se le pasa un menuWare que luego se
-                 * moldea dentro para ser 'ListaAveriasSubMenuWare'.
-                 * 
-                 * ListaAveriasSubMenuWare submenu = (ListaAveriasSubMenuWare) menuWare;
+                 * moldea dentro para ser de clase 'ListaAveriasSubMenuWare'.
                  */
-                if (formWareClass.equals(ResolverAveriaFormWare.class) && obj instanceof Averia) {
+                if (formWareClass.equals(ResolverAveriaFormWare.class) && obj instanceof Averia) { // formulario 'Resolver Aveia'
                     loader.setControllerFactory(lambda -> {
-                        ListaAveriasSubMenuWare submenu = (ListaAveriasSubMenuWare) menuWare;
                         Averia averia = (Averia) obj;
-                        return new ResolverAveriaFormWare((ListaAveriasSubMenuWare) submenu, averia);
+                        return new ResolverAveriaFormWare(menuWare, averia);
+                    });
+                } else if (formWareClass.equals(ConsultarAveriaFormWare.class) && obj instanceof Averia) { // formulario 'Consultar Averia'
+                    loader.setControllerFactory(lambda -> {
+                        Averia averia = (Averia) obj;
+                        return new ConsultarAveriaFormWare(menuWare, averia);
+                    });
+                } else if (formWareClass.equals(AsignarAveriaFormWare.class) && obj instanceof Averia) { // formulario 'Asignar Averia'
+                    loader.setControllerFactory(lambda -> {
+                        Averia averia = (Averia) obj;
+                        return new AsignarAveriaFormWare(menuWare, averia);
                     });
                 } else if (formWareClass.equals(InsertarAveriaFormWare.class)) {
                     loader.setControllerFactory(lambda -> {

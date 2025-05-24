@@ -172,6 +172,9 @@ public class InsertarAveriaFormWare extends FormWare {
         // inicializar ventana alert
         Alert alert = new Alert(AlertType.ERROR);
 
+        // forzar que averia no tenga ningun empleado
+        //averia.setEmpleado(null);
+
         // comprobar que se han rellenado todos los campos obligatorios
         boolean vehiculoMissing = (averia.getVehiculo() == null || averia.getVehiculo().getId() <= -1);
         boolean clienteMissing = (averia.getCliente() == null || averia.getCliente().getId() <= -1);
