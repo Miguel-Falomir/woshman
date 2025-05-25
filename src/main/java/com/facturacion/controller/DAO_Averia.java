@@ -106,8 +106,7 @@ public class DAO_Averia extends DAO implements DAO_Interface<Averia, Integer> {
 
     @Override
     public boolean update(Averia obj) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+        return false;
     }
 
     public boolean resolve(Averia obj) {

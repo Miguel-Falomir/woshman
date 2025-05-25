@@ -16,6 +16,11 @@ public class Pieza {
 
     public Pieza(){}
 
+    public Pieza(Integer id, String nombre){
+        this.id = id;
+        this.nombre = nombre;
+    }
+
     public Pieza(Integer id, String nombre, String descripcion, Float precio, Integer cantidad){
         this.id = id;
         this.nombre = nombre;

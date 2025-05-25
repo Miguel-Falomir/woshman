@@ -14,7 +14,6 @@ import com.utilities.SubMenuWare;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -25,7 +24,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 
 public class ListaClientesSubMenuWare extends SubMenuWare {
@@ -200,7 +198,7 @@ public class ListaClientesSubMenuWare extends SubMenuWare {
         Predicate<Cliente> pred = (lambda -> lambda.getId() > -1);
 
         // aplicar predicados adicionales segun valores no vacios
-        if (!(regex.equals(pred))){
+        if (!(regex.equals(""))){
             pred = pred.and(i -> i.getEmail().contains(regex));
         }
 

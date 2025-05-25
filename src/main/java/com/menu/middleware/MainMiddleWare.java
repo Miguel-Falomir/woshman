@@ -18,6 +18,7 @@ import com.facturacion.controller.DAO_Averia;
 import com.facturacion.controller.DAO_Cliente;
 import com.facturacion.controller.DAO_Estado_Averia;
 import com.facturacion.controller.DAO_Tipo_Averia;
+import com.facturacion.controller.DAO_Venta;
 import com.facturacion.middleware.AsignarAveriaFormWare;
 import com.facturacion.middleware.ConsultarAveriaFormWare;
 import com.facturacion.middleware.EditarClienteFormWare;
@@ -25,6 +26,7 @@ import com.facturacion.middleware.InsertarAveriaFormWare;
 import com.facturacion.middleware.InsertarClienteFormWare;
 import com.facturacion.middleware.ListaAveriasSubMenuWare;
 import com.facturacion.middleware.ListaClientesSubMenuWare;
+import com.facturacion.middleware.ListaVentasSubMenuWare;
 import com.facturacion.middleware.ResolverAveriaFormWare;
 import com.facturacion.model.Averia;
 import com.facturacion.model.Cliente;
@@ -235,7 +237,7 @@ public class MainMiddleWare extends MiddleWare {
 
     @FXML
     void OnAction_Mitem_Lista_Ventas(ActionEvent event) {
-
+        changeSubMenu("facturacion", "submenu_lista_ventas", "Lista Ventas", ListaVentasSubMenuWare.class);
     }
 
     @FXML
@@ -285,6 +287,7 @@ public class MainMiddleWare extends MiddleWare {
             HashMap<String, DAO> daoHashMap = new HashMap<>();
             if (menuWareClass.equals(ListaVehiculosSubMenuWare.class)){ // submenu 'Lista Vehiculos'
                 loader.setControllerFactory(lambda -> {
+                    daoHashMap.clear();
                     daoHashMap.put("vehiculo", new DAO_Vehiculo(conn));
                     daoHashMap.put("modelo", new DAO_Modelo(conn));
                     daoHashMap.put("marca", new DAO_Marca(conn));
@@ -292,11 +295,13 @@ public class MainMiddleWare extends MiddleWare {
                 });
             } else if (menuWareClass.equals(ListaClientesSubMenuWare.class)){ // submenu 'Lista Clientes'
                 loader.setControllerFactory(lambda -> {
+                    daoHashMap.clear();
                     daoHashMap.put("cliente", new DAO_Cliente(conn));
                     return new ListaClientesSubMenuWare(this, daoHashMap);
                 });
             } else if (menuWareClass.equals(ListaPiezasSubMenuWare.class)){ // submenu 'Lista Piezas'
                 loader.setControllerFactory(lambda -> {
+                    daoHashMap.clear();
                     daoHashMap.put("pieza", new DAO_Pieza(conn));
                     daoHashMap.put("tipo", new DAO_Tipo_Pieza(conn));
                     daoHashMap.put("proveedor", new DAO_Proveedor(conn));
@@ -304,6 +309,7 @@ public class MainMiddleWare extends MiddleWare {
                 });
             } else if (menuWareClass.equals(ListaAveriasSubMenuWare.class)){ // submenu 'Lista Averias'
                 loader.setControllerFactory(lambda -> {
+                    daoHashMap.clear();
                     daoHashMap.put("averia", new DAO_Averia(conn));
                     daoHashMap.put("empleado", new DAO_Empleado(conn));
                     daoHashMap.put("estado", new DAO_Estado_Averia(conn));
@@ -312,6 +318,13 @@ public class MainMiddleWare extends MiddleWare {
                     daoHashMap.put("cliente", new DAO_Cliente(conn));
                     daoHashMap.put("pieza", new DAO_Pieza(conn));
                     return new ListaAveriasSubMenuWare(this, daoHashMap);
+                });
+            } else if (menuWareClass.equals(ListaVentasSubMenuWare.class)){
+                loader.setControllerFactory(lambda -> {
+                    daoHashMap.clear();
+                    daoHashMap.put("venta", new DAO_Venta(conn));
+                    daoHashMap.put("pieza", new DAO_Pieza(conn));
+                    return new ListaVentasSubMenuWare(this, daoHashMap);
                 });
             }
 

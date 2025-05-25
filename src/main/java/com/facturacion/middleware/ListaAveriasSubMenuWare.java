@@ -283,7 +283,7 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
 
         // asignar tipos a 'Combo_Tipos'
         Tipo_Averia clearTipoSelection = new Tipo_Averia(-1, "Elegir Tipo Av.");
-        listTipos.removeFirst();
+        if (!App.checkRol(0)) {listTipos.removeFirst();}
         listTipos.addFirst(clearTipoSelection);
         obserTipos = FXCollections.observableArrayList(listTipos);
         Combo_Tipos.setItems(obserTipos);
@@ -417,7 +417,7 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
                         alert.showAndWait();
                     }
                 } else {
-                    Dpick_Entrada_Min.setValue(oldSelection);
+                    Dpick_Entrada_Max.setValue(oldSelection);
                     alert.setHeaderText("FECHA INVÁLIDA");
                     alert.setContentText("La fecha introducida es posterior al día de hoy");
                     alert.showAndWait();
@@ -459,7 +459,7 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
         Predicate<Averia> pred = (lambda -> lambda.getId() > -1);
         
         // aplicar predicados adicionales segun valores no vacios
-        if (!(nombre.equals(""))) { // nombre
+        if (!(nombre.equals(""))) { // nombre cliente
             pred = pred.and(i -> {
                 String str = i.getCliente().getNombre() + " " + i.getCliente().getApellidos();
                 return str.contains(nombre);
@@ -486,7 +486,6 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
 
         // implementar predicado en 'filterAverias'
         filterAverias.setPredicate(pred);
-        
     }
 
     // METODO INSERTAR AVERIA

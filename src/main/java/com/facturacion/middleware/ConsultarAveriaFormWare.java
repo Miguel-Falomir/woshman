@@ -50,8 +50,11 @@ public class ConsultarAveriaFormWare extends FormWare {
     // METODO INICIALIZAR
 
     public void initialize(){
+        // hacer que VSCode se calle un minuto
+        System.out.println(menuWare.getClass());
+
         // guardar primera pieza
-        Pieza pieza = averia.getListaPiezas().getFirst(); 
+        Pieza pieza = averia.getListaPiezas().getFirst();
 
         // asignar datos a elementos UI
         Field_Descripcion.setText(averia.getDescripcion());
