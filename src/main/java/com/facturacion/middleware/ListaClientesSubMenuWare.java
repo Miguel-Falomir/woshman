@@ -94,26 +94,6 @@ public class ListaClientesSubMenuWare extends SubMenuWare {
 
     // EVENTOS
 
-    @FXML
-    void OnAction_Buton_Agregar(ActionEvent event){
-        Func_Insert_Cliente();
-    }
-
-    @FXML
-    void OnAction_Buton_Editar(ActionEvent event){
-        Func_Update_Cliente();
-    }
-
-    @FXML
-    void OnAction_Buton_Borrar(ActionEvent event){
-        Func_Delete_Cliente();
-    }
-
-    @FXML
-    void OnKeyTyped_Input_Email(KeyEvent event){
-        Func_Calculate_Predicate();
-    }
-
     // INICIALIZAR
 
     public void initialize(){
@@ -155,6 +135,24 @@ public class ListaClientesSubMenuWare extends SubMenuWare {
         obserClientes = FXCollections.observableArrayList(listaClientes);
         filterClientes = new FilteredList<>(obserClientes);
         TablV_Clientes.setItems(filterClientes);
+
+        // asignar manejadores de eventos a elementos UI
+        // al pulsar 'Buton_Agregar', se invoca el metodo 'Func_Insert_Cliente'
+        Buton_Agregar.setOnAction((action) -> {
+            Func_Insert_Cliente();
+        });
+        // al pulsar 'Buton_Editar', se invoca el metodo 'Func_Update_Cliente'
+        Buton_Editar.setOnAction((action) -> {
+            Func_Update_Cliente();
+        });
+        // al pulsar 'Buton_Borrar', se invoca el metodo 'Func_Delete_Cliente'
+        Buton_Borrar.setOnAction((action) -> {
+            Func_Delete_Cliente();
+        });
+        // al escribir en 'Input_Email', se invoca el metodo 'Func_Calculate_Predicate'
+        Input_Email.setOnKeyTyped((action) -> {
+            Func_Calculate_Predicate();
+        });
 
         // deshabilitar 'Buton_Agregar' si no se tiene permiso 76 (Insertar Clientes)
         prohibited = (!App.checkPermiso(76));

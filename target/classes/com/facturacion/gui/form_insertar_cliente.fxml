@@ -33,8 +33,8 @@
             <Text layoutX="10.0" layoutY="145.0" strokeType="OUTSIDE" strokeWidth="0.0" text="contactos" GridPane.rowIndex="3" />
             <TextField fx:id="Input_Email" promptText="* Email" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3" />
             <TextField fx:id="Input_Direccion" promptText="* Dirección" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4" />
-            <Button fx:id="Buton_Aceptar" mnemonicParsing="false" onAction="#OnAction_Buton_Aceptar" text="Aceptar" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="5" GridPane.valignment="TOP" />
-            <Button fx:id="Buton_Cancelar" layoutX="390.0" layoutY="300.0" mnemonicParsing="false" onAction="#OnAction_Buton_Cancelar" text="Cancelar" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="5" GridPane.valignment="TOP" />
+            <Button fx:id="Buton_Aceptar" mnemonicParsing="false" text="Aceptar" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="5" GridPane.valignment="TOP" />
+            <Button fx:id="Buton_Cancelar" layoutX="390.0" layoutY="300.0" mnemonicParsing="false" text="Cancelar" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="5" GridPane.valignment="TOP" />
          </children>
       </GridPane>
    </children>

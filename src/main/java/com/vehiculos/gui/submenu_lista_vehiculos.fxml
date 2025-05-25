@@ -25,7 +25,7 @@
    <children>
       <VBox prefHeight="200.0" prefWidth="100.0" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
          <GridPane.margin>
-            <Insets />
+            <Insets bottom="29.0" left="29.0" right="29.0" top="29.0" />
          </GridPane.margin>
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Matrícula">
@@ -62,12 +62,12 @@
          <children>
             <ListView fx:id="ListV_Vehiculos" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                <VBox.margin>
-                  <Insets left="20.0" />
+                  <Insets />
                </VBox.margin></ListView>
          </children>
+         <GridPane.margin>
+            <Insets bottom="20.0" right="20.0" top="20.0" />
+         </GridPane.margin>
       </VBox>
    </children>
-   <padding>
-      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-   </padding>
 </GridPane>

@@ -5,10 +5,10 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -16,40 +16,43 @@
 
 <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.facturacion.middleware.ListaClientesSubMenuWare">
   <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="20.0" prefWidth="100.0" />
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="80.0" prefWidth="100.0" />
   </columnConstraints>
   <rowConstraints>
-    <RowConstraints minHeight="10.0" vgrow="NEVER" />
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <HBox prefWidth="200.0" GridPane.vgrow="NEVER">
+      <VBox prefHeight="200.0" prefWidth="100.0">
          <children>
-            <TextField fx:id="Input_Email" maxWidth="1.7976931348623157E308" onKeyTyped="#OnKeyTyped_Input_Email" promptText="\@mail.com" HBox.hgrow="ALWAYS">
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Email">
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
+            </Text>
+            <TextField fx:id="Input_Email" maxWidth="1.7976931348623157E308" promptText="johnDoe@mail.com">
                <font>
                   <Font size="13.0" />
                </font>
             </TextField>
-            <Button fx:id="Buton_Agregar" mnemonicParsing="false" onAction="#OnAction_Buton_Agregar" text="Agregar">
-               <font>
-                  <Font size="13.0" />
-               </font>
-               <HBox.margin>
-                  <Insets left="20.0" />
-               </HBox.margin>
-            </Button>
+            <Pane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+            <HBox alignment="CENTER" VBox.vgrow="NEVER">
+               <children>
+                  <Button fx:id="Buton_Agregar" mnemonicParsing="false" text="Agregar">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
          </children>
          <GridPane.margin>
-            <Insets left="20.0" right="20.0" top="20.0" />
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </GridPane.margin>
-      </HBox>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+      </VBox>
+      <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
          <children>
-            <TableView fx:id="TablV_Clientes" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <TableView fx:id="TablV_Clientes" VBox.vgrow="ALWAYS">
                <columns>
                   <TableColumn fx:id="TVcol_DNI" text="DNI" />
                   <TableColumn fx:id="TVcol_Nombre" text="Nombre" />
@@ -58,39 +61,38 @@
                   <TableColumn fx:id="TVcol_Direccion" text="Dirección" />
                </columns>
             </TableView>
-         </children>
-         <GridPane.margin>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-         </GridPane.margin>
-      </AnchorPane>
-      <HBox alignment="CENTER_LEFT" layoutX="30.0" layoutY="30.0" prefWidth="200.0" GridPane.rowIndex="2">
-         <children>
-            <VBox HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" prefWidth="200.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Debido a limitaciones técnicas, no se han podido implementar botones de &quot;Editar&quot; y &quot;Borrar&quot; en cada fila." />
-                  <Text layoutX="10.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Para editar o borrar un cliente, selecciona la fila del cliente y pulsa el botón de la acción." />
+                  <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Para editar o borrar un cliente, selecciona la fila del cliente y pulsa un botón." />
+                     </children>
+                  </VBox>
+                  <Button fx:id="Buton_Editar" mnemonicParsing="false" text="Editar">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="Buton_Borrar" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Borrar">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin>
+                  </Button>
                </children>
-            </VBox>
-            <Button fx:id="Buton_Editar" mnemonicParsing="false" onAction="#OnAction_Buton_Editar" text="Editar">
-               <font>
-                  <Font size="13.0" />
-               </font>
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-            </Button>
-            <Button fx:id="Buton_Borrar" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#OnAction_Buton_Borrar" text="Borrar">
-               <font>
-                  <Font size="13.0" />
-               </font>
-               <HBox.margin>
-                  <Insets left="20.0" />
-               </HBox.margin>
-            </Button>
+               <padding>
+                  <Insets top="20.0" />
+               </padding>
+            </HBox>
          </children>
          <GridPane.margin>
-            <Insets bottom="20.0" left="20.0" right="20.0" />
+            <Insets bottom="20.0" right="20.0" top="20.0" />
          </GridPane.margin>
-      </HBox>
+      </VBox>
    </children>
 </GridPane>
