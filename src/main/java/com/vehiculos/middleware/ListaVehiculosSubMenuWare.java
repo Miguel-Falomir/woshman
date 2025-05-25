@@ -185,10 +185,10 @@ public class ListaVehiculosSubMenuWare extends SubMenuWare {
 
     private void Func_Calculate_Predicate(){
         // recopilar TODOS los valores de entrada
-        Titem titem = TreeV_Marca_Modelo.getSelectionModel().getSelectedItem().getValue();
+        Titem titem = (TreeV_Marca_Modelo.getSelectionModel().getSelectedItem() == null) ? null : TreeV_Marca_Modelo.getSelectionModel().getSelectedItem().getValue();
         String regex = Input_Matricula.getText();
-        Titem.Tipo_Item tipo = titem.getTipo();
-        Integer id = titem.getId();
+        Titem.Tipo_Item tipo = (titem == null) ? null : titem.getTipo();
+        Integer id = (titem == null) ? null : titem.getId();
 
         // definir predicado basico
         Predicate<Vehiculo> pred = (lambda -> lambda.getId() > -1);
@@ -204,7 +204,10 @@ public class ListaVehiculosSubMenuWare extends SubMenuWare {
             case MODELO:
                 pred = pred.and(i -> i.getModelo().getId() == id);
                 break;
+            case null:
+                break;
             default:
+                System.out.println("ListaVehiculosSubMenuWare.java\nLinea 211\n> Este mensaje no deberia poder mostrarse en terminal.");
                 break;
         }
 

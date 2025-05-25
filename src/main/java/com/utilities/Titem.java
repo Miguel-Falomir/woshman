@@ -17,6 +17,8 @@ public class Titem {
 
     // CONSTRUCTOR
 
+    public Titem(){}
+
     public Titem(String nombre){
         this.nombre = nombre;
     }
