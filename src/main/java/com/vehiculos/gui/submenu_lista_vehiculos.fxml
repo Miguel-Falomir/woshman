@@ -15,8 +15,8 @@
 
 <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.vehiculos.middleware.ListaVehiculosSubMenuWare">
   <columnConstraints>
-    <ColumnConstraints hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="10.0" percentWidth="20.0" prefWidth="200.0" />
-    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="80.0" prefWidth="100.0" />
+    <ColumnConstraints hgrow="NEVER" maxWidth="200.0" minWidth="10.0" prefWidth="200.0" />
+    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
   </columnConstraints>
   <rowConstraints>
     <RowConstraints />

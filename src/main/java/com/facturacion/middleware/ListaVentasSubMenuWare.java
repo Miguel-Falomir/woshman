@@ -222,6 +222,17 @@ public class ListaVentasSubMenuWare extends SubMenuWare {
                 }
             }
         });
+
+        // deshabilitar elementos UI segun si no se tienen permisos:
+        if (!App.checkPermiso(13)){ // 13) agregar venta
+            Buton_Agregar.setManaged(false);
+        }
+        if (!App.checkPermiso(14)){ // 14) modificar venta
+            Buton_Editar.setManaged(false);
+        }
+        if (!App.checkPermiso(15)){ // 15) eliminar venta
+            Buton_Borrar.setManaged(false);
+        }
     }
 
     // METODO CALCULAR PREDICADO
