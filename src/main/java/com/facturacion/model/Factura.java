@@ -16,7 +16,7 @@ public class Factura {
     private Float precioBruto;
     private Float precioTotal;
     private LocalDate pago;
-    private List<Cargo> listaCargos;
+    private List<Cargo> listCargos;
 
     // CONSTRUCTORES
 
@@ -28,7 +28,7 @@ public class Factura {
         this.precioBruto = averia.getPrecio();
         this.precioTotal = 0.0f;
         this.pago = null;
-        this.listaCargos = new ArrayList<Cargo>( Arrays.asList(
+        this.listCargos = new ArrayList<Cargo>( Arrays.asList(
             averia
         ));
     }
@@ -36,12 +36,32 @@ public class Factura {
     public Factura(Integer id, Venta venta){
         this.id = id;
         this.iva = 21;
-        //this.precioBruto = venta.getPrecio();
+        this.precioBruto = venta.getPrecio();
         this.precioTotal = 0.0f;
         this.pago = null;
-        this.listaCargos = new ArrayList<Cargo>( Arrays.asList(
+        this.listCargos = new ArrayList<Cargo>( Arrays.asList(
             venta
         ));
+    }
+
+    public Factura(Integer id, Integer iva, Float precioBruto, Float precioTotal, LocalDate pago, List<Cargo> listCargos){
+        this.id = id;
+        this.iva = iva;
+        this.precioBruto = precioBruto;
+        this.precioTotal = precioTotal;
+        this.pago = pago;
+        Cargo first = listCargos.getFirst();
+        if (first instanceof Averia) {
+            this.listCargos = new ArrayList<>( Arrays.asList(
+                (Averia) first
+            ));
+        } else if (first instanceof Venta) {
+            this.listCargos = new ArrayList<>( Arrays.asList(
+                (Venta) first
+            ));
+        } else {
+            this.listCargos = null;
+        }
     }
 
     // GETTERS Y SETTERS
@@ -86,29 +106,29 @@ public class Factura {
         this.pago = pago;
     }
 
-    public List<Cargo> getListaCargos() {
-        return listaCargos;
+    public List<Cargo> getListCargos() {
+        return listCargos;
     }
 
-    public void setListaCargos(List<Cargo> listaCargos) {
-        this.listaCargos = listaCargos;
+    public void setListCargos(List<Cargo> listaCargos) {
+        this.listCargos = listaCargos;
     }
 
     // METODO AGREGAR CARGO
 
     public void insertCargo(Cargo cargo) {
         // recopilar clases 'cargo' y 'listaCargos.getFirst()' para comparar
-        Class<? extends Cargo> listaClass = listaCargos.getFirst().getClass();
+        Class<? extends Cargo> listaClass = listCargos.getFirst().getClass();
         Class<? extends Cargo> cargoClass = cargo.getClass();
         // comprobar que las clases coinciden
         if (cargoClass.equals(listaClass)) {
             if (cargo instanceof Averia) { // guardar 'cargo' como averia
                 Averia averia = (Averia) cargo;
-                listaCargos.add(averia);
+                listCargos.add(averia);
                 precioBruto += averia.getPrecio();
             } else if (cargo instanceof Venta) { // guardar 'cargo' como venta
                 Venta venta = (Venta) cargo;
-                listaCargos.add(venta);
+                listCargos.add(venta);
                 //precioBruto += venta.getPrecio();
             }
         // si no coinciden, mostrar mensaje error
@@ -128,7 +148,7 @@ public class Factura {
         if (cargo instanceof Averia){
             // quitar averia de 'listaCargos'
             Averia averia = (Averia) cargo;
-            listaCargos.removeIf(i -> {
+            listCargos.removeIf(i -> {
                 Averia a = (Averia) i;
                 return a.getId() == averia.getId();
             });
@@ -161,7 +181,7 @@ public class Factura {
     @Override
     public String toString() {
         return "Factura [id=" + id + ", iva=" + iva + ", precioBruto=" + precioBruto + ", precioTotal=" + precioTotal
-                + ", pago=" + pago + ", listaCargos=" + listaCargos + "]";
+                + ", pago=" + pago + ", listaCargos=" + listCargos + "]";
     }
 
     @Override
@@ -173,7 +193,7 @@ public class Factura {
         result = prime * result + ((precioBruto == null) ? 0 : precioBruto.hashCode());
         result = prime * result + ((precioTotal == null) ? 0 : precioTotal.hashCode());
         result = prime * result + ((pago == null) ? 0 : pago.hashCode());
-        result = prime * result + ((listaCargos == null) ? 0 : listaCargos.hashCode());
+        result = prime * result + ((listCargos == null) ? 0 : listCargos.hashCode());
         return result;
     }
 
@@ -211,10 +231,10 @@ public class Factura {
                 return false;
         } else if (!pago.equals(other.pago))
             return false;
-        if (listaCargos == null) {
-            if (other.listaCargos != null)
+        if (listCargos == null) {
+            if (other.listCargos != null)
                 return false;
-        } else if (!listaCargos.equals(other.listaCargos))
+        } else if (!listCargos.equals(other.listCargos))
             return false;
         return true;
     }

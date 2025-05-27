@@ -172,9 +172,6 @@ public class InsertarAveriaFormWare extends FormWare {
         // inicializar ventana alert
         Alert alert = new Alert(AlertType.ERROR);
 
-        // forzar que averia no tenga ningun empleado
-        //averia.setEmpleado(null);
-
         // comprobar que se han rellenado todos los campos obligatorios
         boolean vehiculoMissing = (averia.getVehiculo() == null || averia.getVehiculo().getId() <= -1);
         boolean clienteMissing = (averia.getCliente() == null || averia.getCliente().getId() <= -1);
@@ -182,10 +179,10 @@ public class InsertarAveriaFormWare extends FormWare {
         boolean entradaMissing = (averia.getEntrada() == null);
         boolean entradaFuture = (entradaMissing) ? false : averia.getEntrada().isAfter(LocalDate.now());
         boolean descripcionMissing = (averia.getDescripcion() == null) ? true : averia.getDescripcion().length() <= 0;
-        if (vehiculoMissing) { // falta 'Cliente'
+        if (vehiculoMissing) { // falta 'Vehiculo'
             alert.setHeaderText("ERROR FORMULARIO");
             alert.setContentText("Campo 'Vehiculo' es obligatorio.");
-        } else if (clienteMissing) { // falta 'Vehiculo'
+        } else if (clienteMissing) { // falta 'Cliente'
             alert.setHeaderText("ERROR FORMULARIO");
             alert.setContentText("Campo 'Cliente' es obligatorio.");
         } else if (tipoMissing) { // falta 'Tipo Averia'

@@ -11,6 +11,7 @@ public class Venta extends Cargo {
     // ATRIBUTOS
 
     private Integer id;
+    private Integer idFactura;
     private Cliente cliente;
     private Float precio = 0.0f;
     private LocalDate fechaVenta;
@@ -20,8 +21,9 @@ public class Venta extends Cargo {
 
     public Venta(){}
 
-    public Venta(Integer id, Cliente cliente, LocalDate fechaVenta, List<Pieza> listPiezas){
+    public Venta(Integer id, Integer idFactura, Cliente cliente, LocalDate fechaVenta, List<Pieza> listPiezas){
         this.id = id;
+        this.idFactura = idFactura;
         this.cliente = cliente;
         this.fechaVenta = fechaVenta;
         this.listPiezas = listPiezas;
@@ -32,8 +34,9 @@ public class Venta extends Cargo {
         }
     }
 
-    public Venta(Integer id, Cliente cliente, Float precio, LocalDate fechaVenta, List<Pieza> listPiezas){
+    public Venta(Integer id, Integer idFactura, Cliente cliente, Float precio, LocalDate fechaVenta, List<Pieza> listPiezas){
         this.id = id;
+        this.idFactura = idFactura;
         this.cliente = cliente;
         this.precio = precio;
         this.fechaVenta = fechaVenta;
@@ -101,6 +104,7 @@ public class Venta extends Cargo {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + ((idFactura == null) ? 0 : idFactura.hashCode());
         result = prime * result + ((cliente == null) ? 0 : cliente.hashCode());
         result = prime * result + ((precio == null) ? 0 : precio.hashCode());
         result = prime * result + ((fechaVenta == null) ? 0 : fechaVenta.hashCode());
@@ -121,6 +125,11 @@ public class Venta extends Cargo {
             if (other.id != null)
                 return false;
         } else if (!id.equals(other.id))
+            return false;
+        if (idFactura == null) {
+            if (other.idFactura != null)
+                return false;
+        } else if (!idFactura.equals(other.idFactura))
             return false;
         if (cliente == null) {
             if (other.cliente != null)

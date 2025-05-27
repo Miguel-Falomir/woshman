@@ -121,7 +121,7 @@ public class App extends Application {
                 if (checkPermiso(4)) {mitemsList.add("Mitem_Estado_Averia"); notFacturacion = false;}
                 if (checkPermiso(8)) {mitemsList.add("Mitem_Tipo_Averia"); notFacturacion = false;}
                 if (checkPermiso(12)) {mitemsList.add("Mitem_Lista_Ventas"); notFacturacion = false;}
-                if (checkPermiso(13)) {mitemsList.add("Mitem_Realizar_Venta"); notFacturacion = false;}
+                if (checkPermiso(13) && checkRol(1)) {mitemsList.add("Mitem_Realizar_Venta"); notFacturacion = false;}
                 if (checkPermiso(16)) {mitemsList.add("Mitem_Lista_Facturas"); notFacturacion = false;}
                 if (checkPermiso(75)) {mitemsList.add("Mitem_Lista_Clientes"); notFacturacion = false;}
                 // Almacen

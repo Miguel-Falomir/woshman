@@ -1,6 +1,7 @@
 package com.facturacion.controller;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -31,26 +32,247 @@ public class DAO_Venta extends DAO implements DAO_Interface<Venta, Integer> {
 
     @Override
     public boolean insert(Venta obj) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'insert'");
+        // variables internas
+        PreparedStatement statement = null;
+        ResultSet resultado = null;
+        int cantFacturas;
+        int cantVentas;
+        int insert;
+        boolean success = false;
+
+        // (intentar) ejecutar insercion
+        try{
+            // consulta 1: contar cantidad filas (tabla factura)
+            // , ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE
+            statement = connect.prepareStatement("SELECT count(*) FROM factura;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+
+            // ejecutar consulta
+            resultado = statement.executeQuery();
+
+            // asegurar que 'resultado' apunte a la primera fila
+            if (!resultado.isBeforeFirst()) {
+                resultado.beforeFirst();
+            }
+            resultado.next();
+
+            // guardar cantidad facturas
+            cantFacturas = resultado.getInt(1);
+
+            // consulta 2: insertar factura de la venta
+            statement = connect.prepareStatement("INSERT INTO factura(id_factura, iva, precio_bruto, precio_total, fecha_pago) VALUES (?, ?, ?, ?, ?);");
+            statement.setInt(1, cantFacturas);
+            statement.setInt(2, 21);
+            statement.setFloat(3, obj.getPrecio());
+            statement.setFloat(4, (float) (obj.getPrecio() * 1.21));
+            statement.setDate(5, Date.valueOf(obj.getFechaVenta()));
+
+            // ejecutar insercion
+            insert = statement.executeUpdate();
+            System.out.println("CREAR FACTURA NUEVA: " + insert);
+
+            // consulta 3: contar cantidad ventas
+            statement = connect.prepareStatement("SELECT count(*) FROM venta;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+
+            // ejecutar consulta
+            resultado = statement.executeQuery();
+
+            // asegurar que 'resultado' apunte a la primera fila
+            if (!resultado.isBeforeFirst()) {
+                resultado.beforeFirst();
+            }
+            resultado.next();
+
+            // guardar cantidad filas
+            cantVentas = resultado.getInt(1);
+
+            // consulta 4: insertar venta nueva
+            statement = connect.prepareStatement("INSERT INTO venta(id_venta, fk_factura, fk_cliente, precio_venta, fecha_venta) VALUES (?, ?, ?, ?, ?);");
+            statement.setInt(1, cantVentas);
+            statement.setInt(2, cantFacturas);
+            statement.setInt(3, obj.getCliente().getId());
+            statement.setFloat(4, obj.getPrecio());
+            statement.setDate(5, Date.valueOf(obj.getFechaVenta()));
+
+            // ejecutar insercion
+            insert = statement.executeUpdate();
+            System.out.println("INSERTAR VENTA: " + insert);
+
+            // recorrer 'obj.listaPiezas', y en cada iteracion:
+            for (Pieza pieza : obj.getListPiezas()) {
+                // consulta 5: asignar pieza nueva a tabla 'venta_has_pieza'
+                statement = connect.prepareStatement("INSERT INTO venta_has_pieza(venta, pieza, cantidad) VALUES (?, ?, ?);");
+                statement.setInt(1, cantVentas);
+                statement.setInt(2, pieza.getId());
+                statement.setInt(3, pieza.getCantidad());
+
+                // ejecutar insercion
+                insert = statement.executeUpdate();
+                System.out.println("INSERTAR PIEZA '" + pieza.getNombre() + "' EN VENTA " + cantVentas + ": " + insert);
+
+                // consulta 3: restar cantidad a la tabla 'pieza'
+                statement = connect.prepareStatement("UPDATE pieza pi SET pi.cantidad = pi.cantidad - ? WHERE pi.id_pieza = ?;");
+                statement.setInt(1, pieza.getCantidad());
+                statement.setInt(2, pieza.getId());
+
+                // ejecutar actualizacion
+                insert = statement.executeUpdate();
+                System.out.println("ACTUALIZAR CANTIDAD PIEZA '" + pieza.getNombre() + "': " + insert);
+            }
+
+            success = true;
+
+        // manejar excepciones
+        } catch (SQLException e){
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        
+        // pase lo que pase, cerrar 'statement'
+        } finally {
+            if (statement != null){
+                try {
+                    statement.close();
+                } catch (SQLException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+        
+        // devolver 'success', para indicar si se ha completado la insercion
+        return success;
     }
 
     @Override
     public boolean update(Venta obj) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+        //throw new UnsupportedOperationException("Unimplemented method 'update'");
+        return false;
     }
 
     @Override
     public boolean delete(Venta obj) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+        // variables internas
+        PreparedStatement statement = null;
+        ResultSet resultado = null;
+        int delete;
+        boolean zeroFactura;
+        boolean success = false;
+
+        // (intentar) ejecutar borrado
+        try{
+            // consulta 1: comprobar que la venta no pertenezca a ninguna factura
+            statement = connect.prepareStatement("SELECT ven.fk_factura FRO venta ven WHERE ven.id_venta = ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            statement.setInt(1, obj.getId());
+
+            // ejecutar consulta
+            resultado = statement.executeQuery();
+
+            // asegurar que 'resultado' apunte a la primera fila
+            if (!(resultado.isBeforeFirst())) {
+                resultado.beforeFirst();
+            }
+            resultado.next();
+
+            // materializar 'resultado' en booleano
+            zeroFactura = (resultado.getInt(1) <= 0);
+
+            if (zeroFactura) {
+                // consulta 2: borrar piezas asignadas a la venta
+                statement = connect.prepareStatement("DELETE FROM venta_has_pieza has WHERE has.venta = ?;");
+                statement.setInt(1, obj.getId());
+
+                // ejecutar borrado
+                delete = statement.executeUpdate();
+                System.out.println("ELIMINAR REF. PIEZAS: " + delete);
+
+                // consulta 3: borrar venta
+                statement = connect.prepareStatement("DELETE FROM venta ven WHERE ven.id_venta = ?;");
+                statement.setInt(1, obj.getId());
+
+                // ejecutar borrado
+                delete = statement.executeUpdate();
+                System.out.println("ELIMINAR VENTA: " + delete);
+
+                // consulta 4: reorganizar IDs manualmente
+                statement = connect.prepareStatement("UPDATE venta ven SET ven.id_venta = ven.id_venta - 1 WHERE ven.id_venta > ?;");
+                statement.setInt(1, obj.getId());
+
+                // ejecutar actualizacion
+                delete = statement.executeUpdate();
+                System.out.println("REORGANIZAR IDs: " + delete);
+                success = true;
+            }
+
+        // manejar excepciones
+        } catch (SQLException e){
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        
+        // pase lo que pase, cerrar 'statement'
+        } finally {
+            if (statement != null){
+                try {
+                    statement.close();
+                } catch (SQLException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        // devolver 'success', para indicar si se ha completado el borrado
+        return success;
     }
 
     @Override
     public Venta search(Integer id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'search'");
+        // variables internas
+        PreparedStatement statement = null;
+        ResultSet resultado = null;
+        Venta respuesta = null;
+
+        // (intentar) ejecutar busqueda
+        try{
+            // consulta 1: buscar todas las ventas
+            statement = connect.prepareStatement("SELECT ven.id_venta, ven.fk_factura, ven.fk_cliente, ven.precio_venta, ven.fecha_venta FROM venta ven;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+
+            // ejecutar consulta
+            resultado = statement.executeQuery();
+
+            // asegurar que 'resultado' apunte a la primera fila
+            if (!resultado.isBeforeFirst()){
+                resultado.beforeFirst();
+            }
+            resultado.next();
+
+            // agregar resultados a 'respuesta'
+            respuesta = new Venta(
+                resultado.getInt(1),
+                resultado.getInt(2),
+                searchCliente(resultado.getInt(3)),
+                resultado.getFloat(4),
+                resultado.getDate(5).toLocalDate(),
+                searchListPiezas(resultado.getInt(1))
+            );
+
+        // manejar excepciones
+        } catch (SQLException e){
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        
+        // pase lo que pase, cerrar 'statement'
+        } finally {
+            if (statement != null){
+                try {
+                    statement.close();
+                } catch (SQLException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+        
+        // devolver respuesta
+        return respuesta;
     }
 
     @Override
@@ -63,7 +285,7 @@ public class DAO_Venta extends DAO implements DAO_Interface<Venta, Integer> {
         // (intentar) ejecutar busqueda
         try{
             // consulta 1: buscar todas las ventas
-            statement = connect.prepareStatement("SELECT ven.id_venta, ven.fk_cliente, ven.precio_venta, ven.fecha_venta FROM venta ven;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            statement = connect.prepareStatement("SELECT ven.id_venta, ven.fk_factura, ven.fk_cliente, ven.precio_venta, ven.fecha_venta FROM venta ven;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
             // ejecutar consulta
             resultado = statement.executeQuery();
@@ -77,9 +299,10 @@ public class DAO_Venta extends DAO implements DAO_Interface<Venta, Integer> {
             while (resultado.next()) {
                 Venta venta = new Venta(
                     resultado.getInt(1),
-                    searchCliente(resultado.getInt(2)),
-                    resultado.getFloat(3),
-                    resultado.getDate(4).toLocalDate(),
+                    resultado.getInt(2),
+                    searchCliente(resultado.getInt(3)),
+                    resultado.getFloat(4),
+                    resultado.getDate(5).toLocalDate(),
                     searchListPiezas(resultado.getInt(1))
                 );
                 respuesta.add(venta);

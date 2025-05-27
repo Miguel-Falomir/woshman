@@ -24,6 +24,7 @@ import com.facturacion.middleware.ConsultarAveriaFormWare;
 import com.facturacion.middleware.EditarClienteFormWare;
 import com.facturacion.middleware.InsertarAveriaFormWare;
 import com.facturacion.middleware.InsertarClienteFormWare;
+import com.facturacion.middleware.InsertarVentaFormWare;
 import com.facturacion.middleware.ListaAveriasSubMenuWare;
 import com.facturacion.middleware.ListaClientesSubMenuWare;
 import com.facturacion.middleware.ListaVentasSubMenuWare;
@@ -158,6 +159,12 @@ public class MainMiddleWare extends MiddleWare {
     @FXML
     private HBox Central_Box;
 
+    // METODO ACTIVAR / DESACTIVAR CENTRAL_BOX
+
+    public void setCentralBox(boolean disabled){
+        Central_Box.setDisable(disabled);
+    }
+
     // EVENTOS
 
     @FXML
@@ -171,7 +178,7 @@ public class MainMiddleWare extends MiddleWare {
     }
 
     @FXML
-    void OnAction_Mitem_Lista_Averias(ActionEvent event) { // Ç
+    void OnAction_Mitem_Lista_Averias(ActionEvent event) {
         changeSubMenu("facturacion", "submenu_lista_averias", "Lista Averías", ListaAveriasSubMenuWare.class);
     }
 
@@ -241,8 +248,8 @@ public class MainMiddleWare extends MiddleWare {
     }
 
     @FXML
-    void OnAction_Mitem_Realizar_Venta(ActionEvent event) {
-
+    void OnAction_Mitem_Realizar_Venta(ActionEvent event) { // Ç
+        openFormulary("facturacion", "form_insertar_venta", "Insertar Venta", 480, 360, InsertarVentaFormWare.class, menuWare, -1);
     }
 
     @FXML
@@ -324,6 +331,7 @@ public class MainMiddleWare extends MiddleWare {
                     daoHashMap.clear();
                     daoHashMap.put("venta", new DAO_Venta(conn));
                     daoHashMap.put("pieza", new DAO_Pieza(conn));
+                    daoHashMap.put("cliente", new DAO_Cliente(conn));
                     return new ListaVentasSubMenuWare(this, daoHashMap);
                 });
             }
@@ -345,6 +353,9 @@ public class MainMiddleWare extends MiddleWare {
     // METODO ABRIR VENTANA FORMULARIO
 
     public void openFormulary(String newModule, String newStage, String title, int width, int heigth, Class<? extends FormWare> formWareClass, SubMenuWare menuWare, Object obj){
+        // desactivar 'Central_Box'
+        Central_Box.setDisable(true);
+
         // preparar archivo .fxml
         FXMLLoader loader = new FXMLLoader(
             App.class.getResource(newModule + "/gui/" + newStage + ".fxml")
@@ -352,7 +363,15 @@ public class MainMiddleWare extends MiddleWare {
 
         try {
             // elegir controlador
-            if (menuWare instanceof ListaVehiculosSubMenuWare){ // submenu 'Lista Vehiculos'
+            if (formWareClass.equals(InsertarVentaFormWare.class) && obj.equals(-1)){ // formulario 'Insertar Venta' desde 'Mitem_Realizar_Venta'
+                loader.setControllerFactory(lambda -> {
+                    return new InsertarVentaFormWare(
+                        new DAO_Venta(app.getConnection()),
+                        new DAO_Pieza(app.getConnection()),
+                        new DAO_Cliente(app.getConnection())
+                    );
+                });
+            } else if (menuWare instanceof ListaVehiculosSubMenuWare){ // submenu 'Lista Vehiculos'
                 ListaVehiculosSubMenuWare submenu = (ListaVehiculosSubMenuWare) menuWare;
                 if (formWareClass.equals(EditarVehiculoFormWare.class) && obj instanceof Vehiculo) { // formulario 'Actualizar Vehiculo'
                     loader.setControllerFactory(lambda -> {
@@ -408,11 +427,19 @@ public class MainMiddleWare extends MiddleWare {
                         Averia averia = (Averia) obj;
                         return new AsignarAveriaFormWare(menuWare, averia);
                     });
-                } else if (formWareClass.equals(InsertarAveriaFormWare.class)) {
+                } else if (formWareClass.equals(InsertarAveriaFormWare.class)) { // formulario 'Insertar Averia'
                     loader.setControllerFactory(lambda -> {
                         return new InsertarAveriaFormWare(menuWare);
                     });
                 }
+            } else if (menuWare instanceof ListaVentasSubMenuWare) { // submenu 'Lista Ventas'
+                if (formWareClass.equals(InsertarVentaFormWare.class)){ // formulario 'Insertar Venta'
+                    loader.setControllerFactory(lambda -> {
+                        return new InsertarVentaFormWare(menuWare);
+                    });
+                }
+            } else {
+
             }
 
             // cargar escena y archivo .fxml
@@ -434,7 +461,10 @@ public class MainMiddleWare extends MiddleWare {
             formulary.setResizable(false);
 
             // mostrar ventana
-            formulary.show();
+            formulary.showAndWait();
+
+            // reactivar 'Central_Box' al cerrar formulario
+            Central_Box.setDisable(false);
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -106,13 +106,16 @@ public class DAO_Averia extends DAO implements DAO_Interface<Averia, Integer> {
 
     @Override
     public boolean update(Averia obj) {
+        //throw new UnsupportedOperationException("Unimplemented method 'update'");
         return false;
     }
 
     public boolean resolve(Averia obj) {
         // variables internas
         PreparedStatement statement = null;
-        int resolve;
+        ResultSet resultado = null;
+        int cantFacturas = 0;
+        int resolve = 0;
         boolean success = false;
 
         // (intentar) ejecutar resolucion
@@ -152,7 +155,39 @@ public class DAO_Averia extends DAO implements DAO_Interface<Averia, Integer> {
                 System.out.println("ACTUALIZAR CANTIDAD PIEZA '" + pieza.getNombre() + "': " + resolve);
             }
 
-            // al final de todo, success = true para indicar que se ha completado la operacion
+            // consulta 4: contar cantidad facturas
+            statement = connect.prepareStatement("SELECT count(*) FROM factura;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+
+            // ejecutar consulta
+            resultado = statement.executeQuery();
+
+            // asegurar que 'resultado' apunte a la primera fila
+            if (!resultado.isBeforeFirst()) {resultado.beforeFirst();}
+            resultado.next();
+
+            // guardar cantidad facturas
+            cantFacturas = resultado.getInt(1);
+
+            // consulta 5: generar factura nueva
+            statement = connect.prepareStatement("INSERT INTO factura(id_factura, iva, precio_bruto, precio_total, fecha_pago) VALUES (?, ?, ?, ?, ?);");
+            statement.setInt(1, cantFacturas);
+            statement.setInt(2, 10);
+            statement.setFloat(3, obj.getPrecio());
+            statement.setFloat(4, (float) (obj.getPrecio() * 1.1)); // 1 + (iva / 100)
+            statement.setDate(5, Date.valueOf(obj.getSalida()));
+
+            // ejecutar insercion
+            resolve = statement.executeUpdate();
+            System.out.println("CREAR FACTURA NUEVA: " + resolve);
+
+            // consulta 6: asignar factura nueva a averia
+            statement = connect.prepareStatement("UPDATE averia ave SET ave.fk_factura = ? WHERE ave.id_averia = ?;");
+            statement.setInt(1, cantFacturas);
+            statement.setInt(2, obj.getId());
+
+            // ejecutar actualizacion
+            resolve = statement.executeUpdate();
+            System.out.println("ASIGNAR FACTURA A AVERIA: " + resolve);
             success = true;
 
         // manejar excepciones
@@ -223,67 +258,53 @@ public class DAO_Averia extends DAO implements DAO_Interface<Averia, Integer> {
         // variables internas
         PreparedStatement statement = null;
         ResultSet resultado = null;
-        int idFactura = -1;
         int delete;
-        Float precio = -1.0f;
+        boolean zeroFactura;
         boolean success = false;
 
         // (intentar) ejecutar borrado
         try{
-            // consulta 1: guardar id_factura y precio
-            statement = connect.prepareStatement("SELECT ave.fk_factura, ave.precio_averia FROM averia ave WHERE ave.id_averia = ? AND ave.fk_factura <> ?;", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            // consulta 1: comprobar que la averia no pertenezca a ninguna factura
+            statement = connect.prepareStatement("SELECT ave.fk_factura FROM averia ave WHERE ave.id_averia = ?", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setInt(1, obj.getId());
-            statement.setInt(2, 0);
 
             // ejecutar consulta
             resultado = statement.executeQuery();
 
-            // asegurar que 'resultado' apunte anted de la primera fila
+            // asegurar que 'resultado' apunte a la primera fila
             if (!(resultado.isBeforeFirst())) {
                 resultado.beforeFirst();
             }
+            resultado.next();
 
-            // recopilar atributos (si los hay)
-            if (resultado.next()) {
-                idFactura = resultado.getInt(1);
-                precio = resultado.getFloat(2);
-            }
+            // materializar 'resultado' en booleano
+            zeroFactura = (resultado.getInt(1) <= 0);
 
-            // consulta 2: borrar averia
-            statement = connect.prepareStatement("DELETE FROM averia ave WHERE ave.id_averia = ?;");
-            statement.setInt(1, obj.getId());
+            if (zeroFactura) {
+                // consulta 2: borrar piezas asignadas a la averia
+                statement = connect.prepareStatement("DELETE FROM pieza_has_averia has WHERE has.averia = ?;");
+                statement.setInt(1, obj.getId());
 
-            // ejecutar borrado
-            delete = statement.executeUpdate();
-            System.out.println("ELIMINAR AVERÍA: " + delete);
+                // ejecutar borrado
+                delete = statement.executeUpdate();
+                System.out.println("ELIMINAR REF. PIEZAS: " + delete);
 
-            // consulta 3: reorganizar IDs manualmente
-            statement = connect.prepareStatement("UPDATE averia ave SET ave.id_averia = ave.id_averia + 1 WHERE ave.id_averia > ?;");
-            statement.setInt(1, obj.getId());
+                // consulta 3: borrar averia
+                statement = connect.prepareStatement("DELETE FROM averia ave WHERE ave.id_averia = ?;");
+                statement.setInt(1, obj.getId());
 
-            // ejecutar actualizacion
-            delete = statement.executeUpdate();
-            System.out.println("REORGANIZAR IDs: " + delete);
-            success = true;
+                // ejecutar borrado
+                delete = statement.executeUpdate();
+                System.out.println("ELIMINAR AVERÍA: " + delete);
 
-            if (idFactura > -1) {
-                // consulta 4: restar precio a precio_bruto factura
-                statement = connect.prepareStatement("UPDATE factura fac SET fac.precio_bruto = fac.precio_bruto - ? WHERE fac.id_factura = ?;");
-                statement.setFloat(1, precio);
-                statement.setInt(2, idFactura);
+                // consulta 4: reorganizar IDs manualmente
+                statement = connect.prepareStatement("UPDATE averia ave SET ave.id_averia = ave.id_averia - 1 WHERE ave.id_averia > ?;");
+                statement.setInt(1, obj.getId());
 
                 // ejecutar actualizacion
                 delete = statement.executeUpdate();
-                System.out.println("RESTAR PRECIO BRUTO: " + delete);
-
-                // consulta 5: actualizar precio_total factura
-                statement = connect.prepareStatement("UPDATE factura fac SET fac.precio_total = fac.precio_bruto * (fac.iva / 100) WHERE fac.id_factura = ?;");
-                statement.setFloat(1, precio);
-                statement.setInt(2, idFactura);
-
-                // ejecutar actualizacion
-                delete = statement.executeUpdate();
-                System.out.println("ACTUALIZAR PRECIO TOTAL: " + delete);
+                System.out.println("REORGANIZAR IDs: " + delete);
+                success = true;
             }
 
         // manejar excepciones
@@ -303,7 +324,7 @@ public class DAO_Averia extends DAO implements DAO_Interface<Averia, Integer> {
             }
         }
 
-        // devolver 'success', para indicar si se ha completado la actualizacion
+        // devolver 'success', para indicar si se ha completado el borrado
         return success;
     }
 

@@ -8,6 +8,7 @@ import java.util.function.Predicate;
 import com.App;
 import com.almacen.controller.DAO_Pieza;
 import com.almacen.model.Pieza;
+import com.facturacion.controller.DAO_Cliente;
 import com.facturacion.controller.DAO_Venta;
 import com.facturacion.model.Venta;
 import com.menu.middleware.MainMiddleWare;
@@ -38,11 +39,13 @@ public class ListaVentasSubMenuWare extends SubMenuWare {
     private FilteredList<Venta> filterVentas;
     private List<Pieza> listPiezas;
     private ObservableList<Pieza> obserPiezas;
+    private Venta venta;
 
     // DAOs
 
     private DAO_Venta daoVenta;
     private DAO_Pieza daoPieza;
+    private DAO_Cliente daoCliente;
 
     // CONSTRUCTORES
 
@@ -54,6 +57,30 @@ public class ListaVentasSubMenuWare extends SubMenuWare {
     }
 
     // GETTERS Y SETTERS
+
+    public DAO_Venta getDaoVenta() {
+        return daoVenta;
+    }
+
+    public void setDaoVenta(DAO_Venta daoVenta) {
+        this.daoVenta = daoVenta;
+    }
+
+    public DAO_Pieza getDaoPieza() {
+        return daoPieza;
+    }
+
+    public void setDaoPieza(DAO_Pieza daoPieza) {
+        this.daoPieza = daoPieza;
+    }
+
+    public DAO_Cliente getDaoCliente(){
+        return daoCliente;
+    }
+
+    public void setDaoCliente(DAO_Cliente daoCliente) {
+        this.daoCliente = daoCliente;
+    }
 
     // ELEMENTOS UI
 
@@ -110,6 +137,7 @@ public class ListaVentasSubMenuWare extends SubMenuWare {
         // inicializar DAOs
         daoVenta = (DAO_Venta) daoHashMap.get("venta");
         daoPieza = (DAO_Pieza) daoHashMap.get("pieza");
+        daoCliente = (DAO_Cliente) daoHashMap.get("cliente");
 
         // recopilar todas las ventas y piezas
         listVentas = daoVenta.searchAll();
@@ -157,6 +185,22 @@ public class ListaVentasSubMenuWare extends SubMenuWare {
             if (newSelection != null) {
                 Func_Calculate_Predicate();
             }
+        });
+        // al pulsar 'Buton_Agregar', invocar 'Func_Insert_Venta'
+        Buton_Agregar.setOnAction((action) -> {
+            Func_Insert_Pieza();
+        });
+        // al pulsar 'Buton_Editar', invocar 'Func_Update_Venta'
+        Buton_Editar.setOnAction((action) -> {
+            Func_Update_Venta();
+        });
+        // al pulsar 'Buton_List_Piezas', invocar 'Func_List_Piezas'
+        Buton_List_Piezas.setOnAction((action) -> {
+            Func_List_Piezas();
+        });
+        // al pulsar 'Buton_Borrar', invocar 'Func_Delete_Venta'
+        Buton_Borrar.setOnAction((action) -> {
+            Func_Delete_Venta();
         });
         // al pulsar 'Buton_Clear_Venta_Max', limpiar 'Dpick_Venta_Max'
         Buton_Clear_Venta_Max.setOnAction((action) -> {
@@ -222,8 +266,25 @@ public class ListaVentasSubMenuWare extends SubMenuWare {
                 }
             }
         });
+        // al seleccionar fila 'TablV_Venta', habilitar botones
+        TablV_Ventas.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            Buton_Editar.setDisable(true);
+            Buton_Borrar.setDisable(true);
+            Buton_List_Piezas.setDisable(true);
+            if (newSelection != null) {
+                Buton_Editar.setDisable(false);
+                Buton_Borrar.setDisable(false);
+                Buton_List_Piezas.setDisable(false);
+                venta = newSelection;
+            }
+        });
 
-        // deshabilitar elementos UI segun si no se tienen permisos:
+        // deshabilitar elementos UI
+        Buton_Editar.setDisable(true);
+        Buton_Borrar.setDisable(true);
+        Buton_List_Piezas.setDisable(true);
+
+        // ocultar elementos UI segun si no se tienen permisos:
         if (!App.checkPermiso(13)){ // 13) agregar venta
             Buton_Agregar.setManaged(false);
         }
@@ -269,5 +330,57 @@ public class ListaVentasSubMenuWare extends SubMenuWare {
 
         // implementar predicado en 'filterAverias'
         filterVentas.setPredicate(pred);
+    }
+
+    // METODO REFRESCAR LISTA VENTAS
+
+    public void Func_Reboot_ObserVentas(){
+        // recopilar Ventas
+        listVentas = daoVenta.searchAll();
+        listPiezas = daoPieza.searchAll();
+
+        // solo 'admin' puede leer objetos undefined
+        boolean prohibited = !(App.checkRol(0));
+        if (prohibited) {
+            listPiezas.removeIf(i -> i.getId() == 0);
+            listVentas.removeIf(i -> i.getId() == 0);
+        }
+
+        // actualizar lista observable
+        obserVentas.clear();
+        obserVentas.setAll(listVentas);
+
+        // limpiar filtros
+        Input_Nombre_Cliente.setText("");
+        Combo_Pieza.getSelectionModel().selectFirst();
+        Dpick_Venta_Max.setValue(null);
+        Dpick_Venta_Min.setValue(null);
+
+        // refrescar TableView
+        TablV_Ventas.refresh();
+    }
+
+    // METODO INSERTAR VENTA
+
+    private void Func_Insert_Pieza(){
+        this.mainController.openFormulary("facturacion", "form_insertar_venta", "Insertar Venta", 480, 360, InsertarVentaFormWare.class, this, null);
+    }
+
+    // METODO ACTUALIZAR VENTA
+
+    private void Func_Update_Venta(){
+
+    }
+
+    // METODO BORRAR VENTA
+
+    private void Func_Delete_Venta(){
+
+    }
+
+    // METODO LISTAR PIEZAS VENTA
+
+    private void Func_List_Piezas(){
+
     }
 }

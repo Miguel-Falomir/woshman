@@ -347,6 +347,8 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
         // al seleccionar averia en 'TablV_Averia':
         TablV_Averia.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
+                // asignar seleccion a 'averia'
+                averia = newSelection;
                 // deshabilitar botones
                 Buton_Asignar.setDisable(true);
                 Buton_Resolver.setDisable(true);
@@ -497,6 +499,12 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
     // METODO BORRAR AVERIA
 
     private void Func_Delete_Averia(){
+        // desactivar 'Central_Box'
+        this.mainController.setCentralBox(true);
+
+        // guardar id averia
+        int idAveria = averia.getId();
+
         // inicializar ventana alert
         Alert alert = new Alert(AlertType.NONE);
 
@@ -517,22 +525,31 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
                 if (completed){
                     alert.setAlertType(AlertType.INFORMATION);
                     alert.setHeaderText("OPERACIÓN COMPLETADA");
-                    alert.setContentText("La avería ha sido eliminada de la base de datos.");
+                    alert.setContentText("La avería '" + idAveria + "' ha sido eliminada de la base de datos.");
                 } else {
                     alert.setAlertType(AlertType.ERROR);
                     alert.setHeaderText("ERROR SQL");
-                    alert.setContentText("No se puede eliminar la avería");
+                    alert.setContentText("No se puede borrar la avería '" + idAveria + "' porque tiene asignada una factura.");
                 }
                 // reiniciar lista piezas
-                alert.showAndWait();
                 Func_Reboot_ObserAverias();
             } else {
-                // mostrar advertencia pieza no elegida
+                // mostrar advertencia operacion cancelada
                 alert.setAlertType(AlertType.WARNING);
-                alert.setHeaderText("ELIGE UNA AVERÍA");
+                alert.setHeaderText("OPERACIÓN CANCELADA");
                 alert.setContentText("");
+                alert.showAndWait();
             }
+        } else {
+            // mostrar advertencia pieza no elegida
+            alert.setAlertType(AlertType.WARNING);
+            alert.setHeaderText("ELIGE UNA AVERÍA");
+            alert.setContentText("");
+            alert.showAndWait();
         }
+
+        // reactivar 'Central_Box'
+        this.mainController.setCentralBox(false);
     }
 
     // METODO REFRESCAR LISTA
@@ -557,7 +574,7 @@ public class ListaAveriasSubMenuWare extends SubMenuWare {
             listTipos.removeIf(i -> i.getId() == 0);
         }
 
-        // acutalizar lista observable
+        // actualizar lista observable
         obserAverias.clear();
         obserAverias.setAll(listAverias);
         
