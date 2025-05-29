@@ -2,7 +2,6 @@ package com.facturacion.middleware;
 
 import java.util.List;
 
-import com.App;
 import com.almacen.model.Pieza;
 import com.facturacion.controller.DAO_Averia;
 import com.facturacion.model.Averia;

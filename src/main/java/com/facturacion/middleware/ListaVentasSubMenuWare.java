@@ -23,6 +23,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.SelectionMode;
@@ -80,6 +81,10 @@ public class ListaVentasSubMenuWare extends SubMenuWare {
 
     public void setDaoCliente(DAO_Cliente daoCliente) {
         this.daoCliente = daoCliente;
+    }
+
+    public Venta getVenta(){
+        return venta;
     }
 
     // ELEMENTOS UI
@@ -375,12 +380,47 @@ public class ListaVentasSubMenuWare extends SubMenuWare {
     // METODO BORRAR VENTA
 
     private void Func_Delete_Venta(){
+        // inicializar ventana alert
+        Alert alert = new Alert(AlertType.NONE);
 
+        // comprobar seleccion
+        boolean selected = !(TablV_Ventas.getSelectionModel().isEmpty());
+        if (selected) {
+            // tomar valores
+            venta = TablV_Ventas.getSelectionModel().getSelectedItem();
+            // pregunta seguridad
+            alert.setAlertType(AlertType.CONFIRMATION);
+            alert.setHeaderText("¿ESTÁ SEGURO?");
+            alert.setContentText("Esta acción borrará la venta seleccionada");
+            alert.showAndWait();
+            boolean confirm = alert.getResult().equals(ButtonType.OK);
+            if (confirm) {
+                boolean completed = daoVenta.delete(venta);
+                if (completed) {
+                    alert.setAlertType(AlertType.INFORMATION);
+                    alert.setHeaderText("OPERACIÓN COMPLETADA");
+                } else {
+                    alert.setAlertType(AlertType.ERROR);
+                    alert.setHeaderText("ERROR SQL");
+                    alert.setContentText("No se puede borrar la venta " + venta.getId() + " porque tiene asignada una factura.");
+                }
+            } else {
+                // mostrar mensaje cancelacion
+                alert.setAlertType(AlertType.WARNING);
+                alert.setHeaderText("OPERACIÓN CANCELADA");
+                alert.setContentText("");
+            }
+        } else {
+            // mostrar advertencia venta no elegida
+            alert.setAlertType(AlertType.WARNING);
+            alert.setHeaderText("ELIGE UNA VENT");
+            alert.setContentText("");
+        }
     }
 
     // METODO LISTAR PIEZAS VENTA
 
     private void Func_List_Piezas(){
-
+        this.mainController.openFormulary("facturacion", "form_piezas_venta", "Listar piezas venta", 480, 360, ListarPiezasVentaFormWare.class, this, venta);
     }
 }

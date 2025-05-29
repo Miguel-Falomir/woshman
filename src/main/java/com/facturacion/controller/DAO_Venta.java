@@ -383,7 +383,7 @@ public class DAO_Venta extends DAO implements DAO_Interface<Venta, Integer> {
         return respuesta;
     }
 
-    private List<Pieza> searchListPiezas(Integer id) {
+    public List<Pieza> searchListPiezas(Integer id) {
         // variables internas
         PreparedStatement statement = null;
         ResultSet resultado = null;

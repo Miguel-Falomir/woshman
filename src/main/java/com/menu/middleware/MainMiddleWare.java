@@ -28,9 +28,11 @@ import com.facturacion.middleware.InsertarVentaFormWare;
 import com.facturacion.middleware.ListaAveriasSubMenuWare;
 import com.facturacion.middleware.ListaClientesSubMenuWare;
 import com.facturacion.middleware.ListaVentasSubMenuWare;
+import com.facturacion.middleware.ListarPiezasVentaFormWare;
 import com.facturacion.middleware.ResolverAveriaFormWare;
 import com.facturacion.model.Averia;
 import com.facturacion.model.Cliente;
+import com.facturacion.model.Venta;
 import com.utilities.DAO;
 import com.utilities.FormWare;
 import com.utilities.MiddleWare;
@@ -437,9 +439,12 @@ public class MainMiddleWare extends MiddleWare {
                     loader.setControllerFactory(lambda -> {
                         return new InsertarVentaFormWare(menuWare);
                     });
+                } else if (formWareClass.equals(ListarPiezasVentaFormWare.class) && obj instanceof Venta) {
+                    Venta venta = (Venta) obj;
+                    loader.setControllerFactory(lambda -> {
+                        return new ListarPiezasVentaFormWare(menuWare);
+                    });
                 }
-            } else {
-
             }
 
             // cargar escena y archivo .fxml

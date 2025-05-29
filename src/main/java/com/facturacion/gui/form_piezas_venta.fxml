@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="360.0" prefWidth="480.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.facturacion.middleware.ListarPiezasVentaFormWare">
+   <children>
+      <TableView fx:id="TablV_Piezas" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+        <columns>
+          <TableColumn fx:id="TVcol_Nombre" prefWidth="75.0" text="Pieza" />
+          <TableColumn fx:id="TVcol_Proveedor" prefWidth="75.0" text="Proveedor" />
+            <TableColumn fx:id="TVcol_Precio" prefWidth="75.0" text="Precio" />
+            <TableColumn fx:id="TVcol_Cantidad" prefWidth="75.0" text="Cantidad" />
+            <TableColumn fx:id="TVcol_Total" prefWidth="75.0" text="Total" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>
